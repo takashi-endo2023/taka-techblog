@@ -1,0 +1,223 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BlogCard from '../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const recentPosts = allPosts
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
+---
+
+<BaseLayout title="Takashi.dev | テックリードのエンジニアブログ">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-badge">
+        <span class="tag">AWS Certified / Tech Lead</span>
+      </div>
+      <h1 class="hero-title">
+        現場で得た<br />
+        <span class="gradient-text">エンジニアリング知識</span>を<br />
+        言語化する
+      </h1>
+      <p class="hero-subtitle">
+        テックリードとしての実務経験をもとに、AWS・Terraform・TypeScript・Astroなど
+        モダンな技術スタックを「なぜその選択か」まで踏み込んで解説します。
+      </p>
+      <div class="hero-actions">
+        <a href="/blog" class="btn btn-primary">記事を読む</a>
+        <a href="/portfolios" class="btn btn-outline">実績を見る</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Posts -->
+  <section class="section container">
+    <div class="section-header">
+      <h2>最近の記事</h2>
+      <a href="/blog" class="section-link">すべて見る →</a>
+    </div>
+    <div class="card-grid">
+      {recentPosts.map((post) => (
+        <BlogCard
+          title={post.data.title}
+          description={post.data.description}
+          pubDate={post.data.pubDate}
+          slug={post.slug}
+          tags={post.data.tags}
+        />
+      ))}
+    </div>
+  </section>
+
+  <!-- Tech Stack -->
+  <section class="section section-dark">
+    <div class="container">
+      <h2 class="section-title-center">Tech Stack</h2>
+      <div class="stack-grid">
+        {[
+          { name: 'Astro', desc: 'SSG フレームワーク' },
+          { name: 'TypeScript', desc: '型安全な開発' },
+          { name: 'AWS S3 + CloudFront', desc: '静的ホスティング・CDN' },
+          { name: 'Terraform', desc: 'IaC によるインフラ管理' },
+          { name: 'GitHub Actions', desc: 'OIDC 認証 CI/CD' },
+          { name: 'IndexedDB', desc: 'ブラウザ完結 CRUD' },
+        ].map(({ name, desc }) => (
+          <div class="stack-item">
+            <p class="stack-name">{name}</p>
+            <p class="stack-desc">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio CTA -->
+  <section class="section container cta-section">
+    <div class="cta-box">
+      <h2>IndexedDB CRUD ラボ</h2>
+      <p>
+        サーバーサイドDB不要の「ブラウザ完結CRUD」アプリケーション。
+        IndexedDB を使った非同期・大容量・型安全な設計を体験できます。
+      </p>
+      <a href="/portfolio" class="btn btn-primary">デモを試す →</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: 5rem 0 4rem;
+    background: radial-gradient(ellipse at 60% 0%, rgba(124, 106, 247, 0.12) 0%, transparent 60%);
+  }
+
+  .hero-inner {
+    max-width: 640px;
+  }
+
+  .hero-badge {
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #7c6af7, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+    max-width: 520px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .section {
+    padding: 4rem 0;
+  }
+
+  .section-dark {
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .section-link {
+    font-size: 0.9rem;
+    color: var(--color-accent);
+  }
+
+  .card-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .section-title-center {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .stack-item {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.25rem;
+    transition: border-color 0.15s;
+  }
+
+  .stack-item:hover {
+    border-color: var(--color-accent);
+  }
+
+  .stack-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    font-family: var(--font-mono);
+    color: var(--color-accent-hover);
+    margin-bottom: 0.3rem;
+  }
+
+  .stack-desc {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .cta-section {
+    padding-bottom: 5rem;
+  }
+
+  .cta-box {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: calc(var(--radius) * 2);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .cta-box h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-box p {
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+  }
+</style>

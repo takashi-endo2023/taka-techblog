@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const posts = allPosts.sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+
+const allTags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
+---
+
+<BaseLayout
+  title="Blog | Takashi.dev"
+  description="AWS・Terraform・TypeScript・Astroなどモダン技術スタックの実務知見を発信する技術ブログ。"
+>
+  <div class="container page-content">
+    <header class="page-header">
+      <h1>Blog</h1>
+      <p class="page-subtitle">現場で得た技術知見を言語化した記事一覧</p>
+    </header>
+
+    {allTags.length > 0 && (
+      <div class="tag-filter">
+        {allTags.map((tag) => (
+          <span class="tag">{tag}</span>
+        ))}
+      </div>
+    )}
+
+    {posts.length === 0 ? (
+      <p class="empty-state">記事はまだありません。</p>
+    ) : (
+      <div class="post-list">
+        {posts.map((post) => (
+          <BlogCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            slug={post.slug}
+            tags={post.data.tags}
+          />
+        ))}
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .page-content {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+  }
+
+  .page-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+  }
+
+  .tag-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .post-list {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .empty-state {
+    color: var(--color-text-muted);
+    text-align: center;
+    padding: 4rem 0;
+  }
+</style>

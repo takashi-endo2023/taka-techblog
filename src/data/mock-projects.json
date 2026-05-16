@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "title": "技術ブログ・ポートフォリオサイト",
+    "tech": ["Astro", "TypeScript", "AWS", "Terraform"],
+    "description": "WordPress から Astro SSG + AWS S3/CloudFront へ移行した個人技術ブログ。IaC・OIDCデプロイ・CloudFrontキャッシュ戦略まで一貫して自前実装。",
+    "createdAt": "2026-05-01T00:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "title": "GitHub Actions OIDC デプロイパイプライン",
+    "tech": ["GitHub Actions", "AWS IAM", "OIDC", "S3", "CloudFront"],
+    "description": "長期IAMキー不要のOIDC認証でS3+CloudFrontへ自動デプロイ。アセット別キャッシュ戦略（immutable/no-cache）を実装。",
+    "createdAt": "2026-05-10T00:00:00.000Z"
+  },
+  {
+    "id": 3,
+    "title": "IndexedDB 疑似CRUD アプリケーション",
+    "tech": ["TypeScript", "IndexedDB", "idb", "Astro"],
+    "description": "サーバーサイドDB不要のブラウザ完結CRUDアプリ。LocalStorageより大容量・非同期・型安全なIndexedDBを採用した設計判断を解説。",
+    "createdAt": "2026-05-15T00:00:00.000Z"
+  }
+]

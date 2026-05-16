@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const portfolios = [
+  {
+    title: '技術ブログ・ポートフォリオサイト',
+    tech: ['Astro', 'TypeScript', 'AWS', 'Terraform'],
+    description:
+      'WordPress から Astro SSG + AWS S3/CloudFront へ移行。IaC管理・OIDC認証デプロイ・CloudFrontキャッシュ戦略まで一貫して実装。月額コストを約600円→120円に削減。',
+    points: [
+      'Terraform で S3・CloudFront・ACM・Route 53 を IaC 管理',
+      'GitHub Actions OIDC 認証（長期キー不要）で自動デプロイ',
+      'アセット別キャッシュ戦略（immutable / no-cache）',
+      'CloudFront OAC による S3 のパブリック非公開配信',
+    ],
+    github: 'https://github.com/yourname/engineer-blog',
+  },
+  {
+    title: 'IndexedDB 疑似CRUD アプリケーション',
+    tech: ['TypeScript', 'IndexedDB', 'idb', 'Astro'],
+    description:
+      'サーバーサイドDB契約ゼロでCRUD操作を完全再現するブラウザアプリ。LocalStorageでなくIndexedDBを採用した理由を設計レベルで説明できるポートフォリオ。',
+    points: [
+      '非同期 API・大容量・構造化データに対応した IndexedDB を採用',
+      'idb ライブラリで型安全な CRUD リポジトリを実装',
+      '初期シードデータと永続化の状態管理を分離',
+      'リロード後もデータが復元されるサーバーレス体験',
+    ],
+    github: 'https://github.com/yourname/engineer-blog',
+    demo: '/portfolio',
+  },
+];
+---
+
+<BaseLayout
+  title="Portfolios | Takashi.dev"
+  description="テックリードとしての実績とアーキテクチャ解説。AWSインフラ設計からフロントエンド実装まで。"
+>
+  <div class="container page-content">
+    <header class="page-header">
+      <h1>Portfolios</h1>
+      <p class="page-subtitle">設計意図まで語れる実績一覧</p>
+    </header>
+
+    <div class="portfolio-list">
+      {portfolios.map((item) => (
+        <article class="portfolio-card">
+          <header class="card-header">
+            <h2>{item.title}</h2>
+            <div class="tech-list">
+              {item.tech.map((t) => <span class="tag">{t}</span>)}
+            </div>
+          </header>
+          <p class="card-desc">{item.description}</p>
+          <ul class="point-list">
+            {item.points.map((point) => <li>{point}</li>)}
+          </ul>
+          <footer class="card-footer">
+            {item.github && (
+              <a href={item.github} target="_blank" rel="noopener" class="btn btn-outline">
+                GitHub
+              </a>
+            )}
+            {item.demo && (
+              <a href={item.demo} class="btn btn-primary">
+                デモを試す →
+              </a>
+            )}
+          </footer>
+        </article>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-content {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+
+  .page-header {
+    margin-bottom: 3rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-subtitle {
+    color: var(--color-text-muted);
+  }
+
+  .portfolio-list {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .portfolio-card {
+    border: 1px solid var(--color-border);
+    border-radius: calc(var(--radius) * 1.5);
+    padding: 2rem;
+    background: var(--color-surface);
+    transition: border-color 0.15s;
+  }
+
+  .portfolio-card:hover {
+    border-color: var(--color-accent);
+  }
+
+  .card-header {
+    margin-bottom: 1rem;
+  }
+
+  .card-header h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .tech-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .card-desc {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .point-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 1.5rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .point-list li {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    padding-left: 1.2rem;
+    position: relative;
+  }
+
+  .point-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+  }
+
+  .card-footer {
+    display: flex;
+    gap: 0.75rem;
+  }
+</style>

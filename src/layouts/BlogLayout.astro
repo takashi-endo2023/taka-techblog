@@ -1,0 +1,128 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, updatedDate, tags } = post.data;
+
+const formattedPubDate = pubDate.toLocaleDateString('ja-JP', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+const formattedUpdatedDate = updatedDate?.toLocaleDateString('ja-JP', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={`${title} | エンジニアブログ`} description={description}>
+  <article class="blog-post container">
+    <header class="post-header">
+      <div class="post-meta">
+        <time datetime={pubDate.toISOString()}>{formattedPubDate}</time>
+        {updatedDate && (
+          <span class="updated-date">（{formattedUpdatedDate} 更新）</span>
+        )}
+      </div>
+      <h1>{title}</h1>
+      <p class="post-description">{description}</p>
+      <div class="tag-list">
+        {tags.map((tag) => <span class="tag">{tag}</span>)}
+      </div>
+    </header>
+    <div class="post-body">
+      <slot />
+    </div>
+    <footer class="post-footer">
+      <a href="/blog" class="btn btn-outline">← 記事一覧へ戻る</a>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .blog-post {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+  }
+
+  .post-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .post-meta {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+    font-family: var(--font-mono);
+  }
+
+  .updated-date {
+    margin-left: 0.5rem;
+  }
+
+  h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    margin-bottom: 1rem;
+    line-height: 1.25;
+  }
+
+  .post-description {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1.25rem;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .post-body {
+    max-width: 720px;
+  }
+
+  .post-body :global(h2) {
+    font-size: 1.5rem;
+    margin: 2.5rem 0 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .post-body :global(h3) {
+    font-size: 1.2rem;
+    margin: 2rem 0 0.75rem;
+  }
+
+  .post-body :global(p) {
+    margin-bottom: 1.25rem;
+    color: var(--color-text);
+  }
+
+  .post-body :global(a) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .post-body :global(blockquote) {
+    border-left: 3px solid var(--color-accent);
+    padding-left: 1.25rem;
+    margin: 1.5rem 0;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .post-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+</style>

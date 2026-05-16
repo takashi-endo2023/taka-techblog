@@ -1,0 +1,423 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="CRUD Lab | Takashi.dev"
+  description="IndexedDB を使ったブラウザ完結CRUDアプリケーション。サーバーサイドDB不要でCreate・Read・Update・Deleteを体験。"
+>
+  <div class="container page-content">
+    <header class="page-header">
+      <h1>CRUD Lab</h1>
+      <p class="page-subtitle">
+        IndexedDB によるブラウザ完結 CRUD — サーバーDB契約ゼロで永続化を実現
+      </p>
+    </header>
+
+    <!-- Stats bar -->
+    <div class="stats-bar">
+      <div class="stat">
+        <span class="stat-label">ストレージ</span>
+        <span class="stat-value" id="stat-storage">IndexedDB</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">総プロジェクト</span>
+        <span class="stat-value" id="stat-count">—</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">サーバー通信</span>
+        <span class="stat-value zero">0回</span>
+      </div>
+    </div>
+
+    <!-- Create form -->
+    <section class="form-section">
+      <h2>新規プロジェクト追加</h2>
+      <form id="create-form" class="create-form">
+        <div class="form-row">
+          <label for="title">タイトル <span class="required">*</span></label>
+          <input type="text" id="title" name="title" required placeholder="プロジェクト名を入力" />
+        </div>
+        <div class="form-row">
+          <label for="tech">技術スタック <span class="required">*</span></label>
+          <input type="text" id="tech" name="tech" required placeholder="カンマ区切り（例: Astro, TypeScript, AWS）" />
+        </div>
+        <div class="form-row">
+          <label for="description">説明</label>
+          <textarea id="description" name="description" rows="3" placeholder="プロジェクトの概要を入力"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">追加する</button>
+      </form>
+    </section>
+
+    <!-- Project list -->
+    <section class="list-section">
+      <h2>プロジェクト一覧</h2>
+      <div id="project-list" class="project-grid">
+        <p class="loading-state">読み込み中...</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Edit modal -->
+  <div id="edit-modal" class="modal-overlay" hidden>
+    <div class="modal">
+      <h2>編集</h2>
+      <form id="edit-form" class="create-form">
+        <input type="hidden" id="edit-id" />
+        <div class="form-row">
+          <label for="edit-title">タイトル <span class="required">*</span></label>
+          <input type="text" id="edit-title" required />
+        </div>
+        <div class="form-row">
+          <label for="edit-tech">技術スタック <span class="required">*</span></label>
+          <input type="text" id="edit-tech" required />
+        </div>
+        <div class="form-row">
+          <label for="edit-description">説明</label>
+          <textarea id="edit-description" rows="3"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="modal-cancel" class="btn btn-outline">キャンセル</button>
+          <button type="submit" class="btn btn-primary">更新する</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import { projectsRepository, type Project } from '../../lib/db';
+  import mockData from '../../data/mock-projects.json';
+
+  const projectList = document.getElementById('project-list')!;
+  const statCount = document.getElementById('stat-count')!;
+  const createForm = document.getElementById('create-form') as HTMLFormElement;
+  const editModal = document.getElementById('edit-modal')!;
+  const editForm = document.getElementById('edit-form') as HTMLFormElement;
+  const modalCancel = document.getElementById('modal-cancel')!;
+
+  function renderProject(project: Project): string {
+    const techTags = project.tech.map((t) => `<span class="tag">${t}</span>`).join('');
+    const date = new Date(project.createdAt).toLocaleDateString('ja-JP', {
+      year: 'numeric', month: 'short', day: 'numeric',
+    });
+    return `
+      <article class="project-card" data-id="${project.id}">
+        <div class="project-header">
+          <h3 class="project-title">${project.title}</h3>
+          <div class="project-actions">
+            <button class="btn btn-outline btn-sm edit-btn" data-id="${project.id}">編集</button>
+            <button class="btn btn-danger btn-sm delete-btn" data-id="${project.id}">削除</button>
+          </div>
+        </div>
+        <div class="project-tech">${techTags}</div>
+        ${project.description ? `<p class="project-desc">${project.description}</p>` : ''}
+        <time class="project-date">${date}</time>
+      </article>
+    `;
+  }
+
+  async function loadProjects() {
+    // Seed initial data if DB is empty
+    const seedData = mockData.map((p) => ({
+      title: p.title,
+      tech: p.tech,
+      description: p.description,
+      createdAt: new Date(p.createdAt),
+    }));
+    await projectsRepository.seed(seedData);
+
+    const projects = await projectsRepository.getAll();
+    statCount.textContent = String(projects.length);
+
+    if (projects.length === 0) {
+      projectList.innerHTML = '<p class="empty-state">プロジェクトはまだありません。</p>';
+      return;
+    }
+    projectList.innerHTML = projects
+      .slice()
+      .reverse()
+      .map(renderProject)
+      .join('');
+  }
+
+  // Create
+  createForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = new FormData(createForm);
+    await projectsRepository.create({
+      title: String(data.get('title')),
+      tech: String(data.get('tech')).split(',').map((t) => t.trim()).filter(Boolean),
+      description: String(data.get('description') ?? ''),
+      createdAt: new Date(),
+    });
+    createForm.reset();
+    await loadProjects();
+  });
+
+  // Delete (event delegation)
+  projectList.addEventListener('click', async (e) => {
+    const target = e.target as HTMLElement;
+
+    if (target.classList.contains('delete-btn')) {
+      const id = Number(target.dataset.id);
+      if (confirm('このプロジェクトを削除しますか？')) {
+        await projectsRepository.delete(id);
+        await loadProjects();
+      }
+    }
+
+    if (target.classList.contains('edit-btn')) {
+      const id = Number(target.dataset.id);
+      const projects = await projectsRepository.getAll();
+      const project = projects.find((p) => p.id === id);
+      if (!project) return;
+
+      (document.getElementById('edit-id') as HTMLInputElement).value = String(id);
+      (document.getElementById('edit-title') as HTMLInputElement).value = project.title;
+      (document.getElementById('edit-tech') as HTMLInputElement).value = project.tech.join(', ');
+      (document.getElementById('edit-description') as HTMLTextAreaElement).value = project.description;
+      editModal.removeAttribute('hidden');
+    }
+  });
+
+  // Edit submit
+  editForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = Number((document.getElementById('edit-id') as HTMLInputElement).value);
+    await projectsRepository.update(id, {
+      title: (document.getElementById('edit-title') as HTMLInputElement).value,
+      tech: (document.getElementById('edit-tech') as HTMLInputElement).value
+        .split(',').map((t) => t.trim()).filter(Boolean),
+      description: (document.getElementById('edit-description') as HTMLTextAreaElement).value,
+    });
+    editModal.setAttribute('hidden', '');
+    await loadProjects();
+  });
+
+  // Cancel modal
+  modalCancel.addEventListener('click', () => {
+    editModal.setAttribute('hidden', '');
+  });
+
+  editModal.addEventListener('click', (e) => {
+    if (e.target === editModal) editModal.setAttribute('hidden', '');
+  });
+
+  loadProjects();
+</script>
+
+<style>
+  .page-content {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+
+  .page-header {
+    margin-bottom: 2rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-subtitle {
+    color: var(--color-text-muted);
+    max-width: 560px;
+  }
+
+  .stats-bar {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+
+  .stat {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .stat-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--color-accent-hover);
+  }
+
+  .stat-value.zero {
+    color: #34d399;
+  }
+
+  .form-section,
+  .list-section {
+    margin-bottom: 3rem;
+  }
+
+  .form-section h2,
+  .list-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .create-form {
+    display: grid;
+    gap: 1rem;
+    max-width: 600px;
+  }
+
+  .form-row {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .form-row label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+  }
+
+  .required {
+    color: #f87171;
+  }
+
+  .form-row input,
+  .form-row textarea {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.6rem 0.9rem;
+    color: var(--color-text);
+    font-size: 0.95rem;
+    font-family: var(--font-sans);
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+
+  .form-row input:focus,
+  .form-row textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+
+  .project-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  :global(.project-card) {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    transition: border-color 0.15s;
+  }
+
+  :global(.project-card:hover) {
+    border-color: var(--color-accent);
+  }
+
+  :global(.project-header) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  :global(.project-title) {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  :global(.project-actions) {
+    display: flex;
+    gap: 0.4rem;
+    flex-shrink: 0;
+  }
+
+  :global(.btn-sm) {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  :global(.project-tech) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
+  }
+
+  :global(.project-desc) {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  :global(.project-date) {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .loading-state,
+  .empty-state {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    padding: 2rem 0;
+    grid-column: 1 / -1;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 1rem;
+  }
+
+  .modal-overlay[hidden] {
+    display: none;
+  }
+
+  .modal {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: calc(var(--radius) * 1.5);
+    padding: 2rem;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .modal h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+  }
+</style>

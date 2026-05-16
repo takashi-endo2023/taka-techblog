@@ -1,0 +1,90 @@
+---
+const navLinks = [
+  { href: '/blog', label: 'Blog' },
+  { href: '/portfolios', label: 'Portfolios' },
+  { href: '/portfolio', label: 'CRUD Lab' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <div class="header-inner container">
+    <a href="/" class="site-logo">
+      <span class="logo-icon">&lt;/&gt;</span>
+      <span class="logo-text">Takashi.dev</span>
+    </a>
+    <nav class="site-nav">
+      {navLinks.map(({ href, label }) => (
+        <a
+          href={href}
+          class:list={['nav-link', { active: currentPath.startsWith(href) }]}
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: var(--header-height);
+    background: rgba(15, 17, 23, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .header-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .site-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text);
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-decoration: none;
+  }
+
+  .site-logo:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .logo-icon {
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .nav-link {
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    transition: all 0.15s;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--color-text);
+    background: var(--color-surface);
+  }
+
+  .nav-link.active {
+    color: var(--color-accent-hover);
+  }
+</style>
