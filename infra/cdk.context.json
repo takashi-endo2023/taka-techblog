@@ -1,0 +1,10 @@
+{
+  "hosted-zone:account=332486110996:domainName=taka-techblog.com:region=us-east-1": {
+    "Id": "/hostedzone/Z0156352H9YX1U50N7MB",
+    "Name": "taka-techblog.com."
+  },
+  "hosted-zone:account=332486110996:domainName=taka-techblog.com:region=ap-northeast-1": {
+    "Id": "/hostedzone/Z0156352H9YX1U50N7MB",
+    "Name": "taka-techblog.com."
+  }
+}

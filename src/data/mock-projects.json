@@ -2,7 +2,7 @@
   {
     "id": 1,
     "title": "技術ブログ・ポートフォリオサイト",
-    "tech": ["Astro", "TypeScript", "AWS", "Terraform"],
+    "tech": ["Astro", "TypeScript", "AWS", "AWS CDK"],
     "description": "WordPress から Astro SSG + AWS S3/CloudFront へ移行した個人技術ブログ。IaC・OIDCデプロイ・CloudFrontキャッシュ戦略まで一貫して自前実装。",
     "createdAt": "2026-05-01T00:00:00.000Z"
   },

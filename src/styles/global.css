@@ -12,6 +12,7 @@
   --radius: 8px;
   --max-width: 860px;
   --header-height: 60px;
+  --glow-accent: 0 0 0 1px rgba(124, 106, 247, 0.3), 0 8px 32px rgba(124, 106, 247, 0.14);
 }
 
 *, *::before, *::after {
@@ -121,11 +122,17 @@ th {
   display: inline-block;
   font-size: 0.75rem;
   font-family: var(--font-mono);
-  background: rgba(124, 106, 247, 0.15);
+  background: rgba(124, 106, 247, 0.12);
   color: var(--color-accent-hover);
-  border: 1px solid rgba(124, 106, 247, 0.3);
+  border: 1px solid rgba(124, 106, 247, 0.25);
   padding: 0.2em 0.6em;
   border-radius: 4px;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.tag:hover {
+  background: rgba(124, 106, 247, 0.2);
+  border-color: rgba(124, 106, 247, 0.5);
 }
 
 .btn {
@@ -137,18 +144,21 @@ th {
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.2s;
   border: none;
 }
 
 .btn-primary {
   background: var(--color-accent);
   color: #fff;
+  box-shadow: 0 0 0 0 rgba(124, 106, 247, 0);
 }
 
 .btn-primary:hover {
   background: var(--color-accent-hover);
   color: #fff;
+  box-shadow: 0 4px 20px rgba(124, 106, 247, 0.4);
+  transform: translateY(-1px);
 }
 
 .btn-outline {
@@ -160,6 +170,7 @@ th {
 .btn-outline:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
+  box-shadow: 0 0 0 1px rgba(124, 106, 247, 0.15);
 }
 
 .btn-danger {
@@ -170,4 +181,78 @@ th {
 
 .btn-danger:hover {
   background: rgba(248, 113, 113, 0.1);
+}
+
+/* ── Animations ── */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(124, 106, 247, 0.4); }
+  70%  { transform: scale(1);    box-shadow: 0 0 0 8px rgba(124, 106, 247, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(124, 106, 247, 0); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.55s ease both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease both;
+}
+
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.35s; }
+.delay-4 { animation-delay: 0.5s; }
+
+/* ── Back to top ── */
+
+.back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 44px;
+  height: 44px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.25s, transform 0.25s, border-color 0.15s, box-shadow 0.15s;
+  z-index: 50;
+  color: var(--color-text-muted);
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  box-shadow: var(--glow-accent);
 }

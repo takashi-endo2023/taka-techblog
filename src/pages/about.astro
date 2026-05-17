@@ -1,0 +1,369 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const skills = [
+  { category: 'Frontend', items: ['TypeScript', 'React', 'Next.js', 'HTML/CSS'] },
+  { category: 'Backend', items: ['NestJS', 'Node.js', 'SQL'] },
+  { category: 'AI / LLM', items: ['LangChain', 'Claude Code', 'Cursor', 'OpenAI API'] },
+  { category: 'Infrastructure', items: ['AWS (S3/CloudFront/EC2/RDS/Lambda)', 'Docker', 'GitLab CI/CD', 'GitHub Actions'] },
+  { category: 'Management', items: ['採用・面接', 'エンジニア育成', '組織設計', 'CSV・監査対応'] },
+];
+
+const timeline = [
+  {
+    period: '2023.02 – 現在',
+    role: 'システム開発部 → 主任 → 係長（テックリード）',
+    company: '医療関連スタートアップ',
+    highlights: [
+      '外部ベンダーからシステム引き継ぎ、1年で完全内製化を完遂',
+      '年間保守費用を約500万円削減（月40万のベンダー委託費を内製化で排除）',
+      'LangChain × NestJS による自社CRMへのAI連携機能を主導',
+      'Claude Code 導入でレビュー工数を大幅削減・品質管理体制を強化',
+      '未経験エンジニア2名をコーチング型で育成',
+      '係長として技術ガバナンス・組織再編・採用要件定義を推進中',
+    ],
+  },
+  {
+    period: '2022.04 – 2023.01',
+    role: '社内SE（インフラ・ヘルプデスク）',
+    company: '人材開発・派遣業（246名規模）',
+    highlights: [
+      '全国拠点のVPN運用・Active Directory管理（数百名規模）',
+      'クラウドサービスのアカウント管理・権限設計',
+    ],
+  },
+  {
+    period: '2021.07 – 2022.01',
+    role: '社内SE（EC・Webサイト運用）',
+    company: '製造・販売業',
+    highlights: [
+      'WordPress / EC-CUBEを用いた自社サイト運用・改善',
+      'ノーコードツールによる業務デジタル化',
+    ],
+  },
+  {
+    period: '2017.11 – 2020.12',
+    role: '店舗スタッフ → 主任',
+    company: '小売業（医薬品・化粧品）',
+    highlights: [
+      '店舗運営の標準化・マニュアル作成',
+      '主任として新人教育を担当（現在の育成スタイルの原点）',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="About | Taka Tech Blog"
+  description="接客業から転身し、医療系スタートアップでシステム内製化を完遂したテックリード・係長。TypeScript / React / NestJS / LangChain / AWS を主軸に開発・組織設計・AI活用を実践中。"
+>
+  <div class="container about-page">
+
+    <!-- Profile -->
+    <section class="profile animate-fade-in-up">
+      <div class="profile-avatar">
+        <span class="avatar-icon">&lt;/&gt;</span>
+      </div>
+      <div class="profile-info">
+        <div class="profile-badges">
+          <span class="tag">Medical IT</span>
+          <span class="tag">Tech Lead</span>
+          <span class="tag">係長</span>
+        </div>
+        <h1 class="profile-name">Taka</h1>
+        <p class="profile-role">フルスタックエンジニア / テックリード / 係長</p>
+        <p class="profile-bio">
+          接客業から転身し、医療系スタートアップのシステム内製化をゼロから完遂。
+          外部ベンダーを1年で脱却し年間<strong>500万円のコスト削減</strong>を達成。
+          現在は係長として技術ガバナンス・組織設計を担いながら、
+          LangChain と Claude Code による AI 開発フローの標準化を推進中。
+        </p>
+        <a
+          href="https://github.com/takashi-endo"
+          target="_blank"
+          rel="noopener"
+          class="btn btn-outline"
+        >
+          GitHub
+        </a>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="section">
+      <h2 class="section-title">Skills</h2>
+      <div class="skills-grid">
+        {skills.map(({ category, items }) => (
+          <div class="skill-card">
+            <p class="skill-category">{category}</p>
+            <div class="skill-tags">
+              {items.map((item) => <span class="tag">{item}</span>)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="section">
+      <h2 class="section-title">Career</h2>
+      <div class="timeline">
+        {timeline.map((item, i) => (
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <p class="timeline-period">{item.period}</p>
+              <p class="timeline-role">{item.role}</p>
+              <p class="timeline-company">{item.company}</p>
+              <ul class="timeline-highlights">
+                {item.highlights.map((h) => <li>{h}</li>)}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- This Blog -->
+    <section class="section">
+      <h2 class="section-title">このブログについて</h2>
+      <div class="blog-about-box">
+        <p>
+          「現場で考えたことを言語化する場所」として開設。
+          フルスタック開発・AI活用・チームビルディングの3軸で、
+          実務で得た技術判断と組織づくりのノウハウを発信します。
+        </p>
+        <p>
+          技術スタックは <strong>Astro + AWS CDK</strong>（どちらも初挑戦）で構築。
+          このブログ自体が学習ログでもあります。
+        </p>
+        <a href="/blog" class="btn btn-primary">記事を読む</a>
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>
+
+<style>
+  .about-page {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+
+  /* Profile */
+  .profile {
+    display: flex;
+    gap: 2.5rem;
+    align-items: flex-start;
+    margin-bottom: 4rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .profile-avatar {
+    flex-shrink: 0;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(124,106,247,0.2), rgba(96,165,250,0.2));
+    border: 2px solid rgba(124,106,247,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .avatar-icon {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+
+  .profile-badges {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .profile-name {
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.25rem;
+  }
+
+  .profile-role {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+    font-family: var(--font-mono);
+  }
+
+  .profile-bio {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--color-text-muted);
+    max-width: 560px;
+    margin-bottom: 1.5rem;
+  }
+
+  .profile-bio strong {
+    color: var(--color-text);
+  }
+
+  @media (max-width: 600px) {
+    .profile {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+  }
+
+  /* Sections */
+  .section {
+    margin-bottom: 4rem;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* Skills */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .skill-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    transition: border-color 0.2s;
+  }
+
+  .skill-card:hover {
+    border-color: var(--color-accent);
+  }
+
+  .skill-category {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  /* Timeline */
+  .timeline {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 0;
+    width: 1px;
+    background: var(--color-border);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 2.5rem;
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -1.5rem;
+    top: 6px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    transform: translateX(-4px);
+    box-shadow: 0 0 0 3px rgba(124,106,247,0.2);
+  }
+
+  .timeline-period {
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    margin-bottom: 0.25rem;
+  }
+
+  .timeline-role {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.15rem;
+  }
+
+  .timeline-company {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .timeline-highlights {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .timeline-highlights li {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    padding-left: 1rem;
+    position: relative;
+  }
+
+  .timeline-highlights li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--color-border);
+  }
+
+  /* Blog about */
+  .blog-about-box {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 2rem;
+  }
+
+  .blog-about-box p {
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  .blog-about-box p strong {
+    color: var(--color-text);
+  }
+
+  .blog-about-box .btn {
+    margin-top: 0.5rem;
+  }
+</style>

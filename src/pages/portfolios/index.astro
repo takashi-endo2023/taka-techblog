@@ -4,16 +4,32 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 const portfolios = [
   {
     title: '技術ブログ・ポートフォリオサイト',
-    tech: ['Astro', 'TypeScript', 'AWS', 'Terraform'],
+    tech: ['Astro', 'TypeScript', 'AWS CDK', 'GitHub Actions', 'CloudFront', 'S3'],
     description:
-      'WordPress から Astro SSG + AWS S3/CloudFront へ移行。IaC管理・OIDC認証デプロイ・CloudFrontキャッシュ戦略まで一貫して実装。月額コストを約600円→120円に削減。',
+      'WordPress + さくらサーバーから Astro SSG + AWS へ移行。IaC・OIDC認証・CloudFrontキャッシュ戦略まで一貫して実装。月額コストを約600円→250円に削減。',
     points: [
-      'Terraform で S3・CloudFront・ACM・Route 53 を IaC 管理',
-      'GitHub Actions OIDC 認証（長期キー不要）で自動デプロイ',
-      'アセット別キャッシュ戦略（immutable / no-cache）',
+      'AWS CDK（TypeScript）で S3・CloudFront・ACM・Route 53 を IaC 管理',
+      'GitHub Actions OIDC 認証（長期IAMキー不要）で自動デプロイ',
+      'アセット別キャッシュ戦略（immutable / no-cache）でパフォーマンス最適化',
       'CloudFront OAC による S3 のパブリック非公開配信',
+      'www・portfolio・utagoe サブドメインをワイルドカード証明書で一括管理',
     ],
-    github: 'https://github.com/yourname/engineer-blog',
+    github: 'https://github.com/takashi-endo2023/taka-techblog',
+    demo: 'https://taka-techblog.com',
+  },
+  {
+    title: '歌声くらぶ 公式サイト',
+    tech: ['React 19', 'TypeScript', 'Vite', 'React Router', 'Swiper'],
+    description:
+      '地域の合唱サークルから依頼を受けて設計・実装・納品した実案件。ライブラリ依存を最小限に抑えながら、保守しやすいコンポーネント設計とアクセシビリティ対応を両立。',
+    points: [
+      'IntersectionObserver を使った useFadeIn カスタムフックを自前実装',
+      'お知らせデータを型付き JSON で UI から分離し、担当者が更新しやすい構造に',
+      'スキップナビゲーション実装によるキーボードアクセシビリティ対応',
+      'React Router v7 による SPA ルーティング（直リンク・ブラウザバック対応）',
+    ],
+    github: 'https://github.com/takashi-endo2023/utagoe_club',
+    demo: 'https://utagoe.taka-techblog.com',
   },
   {
     title: 'IndexedDB 疑似CRUD アプリケーション',
@@ -26,15 +42,15 @@ const portfolios = [
       '初期シードデータと永続化の状態管理を分離',
       'リロード後もデータが復元されるサーバーレス体験',
     ],
-    github: 'https://github.com/yourname/engineer-blog',
+    github: 'https://github.com/takashi-endo2023/taka-techblog',
     demo: '/portfolio',
   },
 ];
 ---
 
 <BaseLayout
-  title="Portfolios | Takashi.dev"
-  description="テックリードとしての実績とアーキテクチャ解説。AWSインフラ設計からフロントエンド実装まで。"
+  title="Portfolios | Taka Tech Blog"
+  description="設計意図まで語れる実績一覧。AWSインフラ設計からフロントエンド実装まで。"
 >
   <div class="container page-content">
     <header class="page-header">
@@ -62,8 +78,8 @@ const portfolios = [
               </a>
             )}
             {item.demo && (
-              <a href={item.demo} class="btn btn-primary">
-                デモを試す →
+              <a href={item.demo} target={item.demo.startsWith('http') ? '_blank' : undefined} rel="noopener" class="btn btn-primary">
+                デモを見る →
               </a>
             )}
           </footer>

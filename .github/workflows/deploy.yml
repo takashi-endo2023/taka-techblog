@@ -1,0 +1,73 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # OIDC 認証に必須
+  contents: read
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # ── ビルド ──────────────────────────────────────────────
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run check
+
+      - name: Build
+        run: npm run build
+
+      # ── AWS 認証（OIDC）────────────────────────────────────
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ap-northeast-1
+
+      # ── S3 デプロイ（アセット別キャッシュ戦略）──────────────
+      # 1. JS・CSS → 1年間 immutable キャッシュ
+      - name: Deploy static assets
+        run: |
+          aws s3 sync dist/_astro "s3://${{ secrets.S3_BUCKET }}/_astro" \
+            --cache-control "max-age=31536000,immutable" \
+            --delete
+
+      # 2. 画像・フォント等 → 1日キャッシュ
+      - name: Deploy public assets
+        run: |
+          aws s3 sync dist/ "s3://${{ secrets.S3_BUCKET }}/" \
+            --cache-control "max-age=86400" \
+            --exclude "*.html" \
+            --exclude "_astro/*" \
+            --delete
+
+      # 3. HTML → no-cache（デプロイ直後に最新版を配信）
+      - name: Deploy HTML files
+        run: |
+          aws s3 sync dist/ "s3://${{ secrets.S3_BUCKET }}/" \
+            --cache-control "max-age=0,no-cache" \
+            --exclude "*" \
+            --include "*.html" \
+            --delete
+
+      # ── CloudFront キャッシュ無効化 ─────────────────────────
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" \
+            --paths "/*"

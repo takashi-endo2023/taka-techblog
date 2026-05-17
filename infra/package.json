@@ -1,0 +1,20 @@
+{
+  "name": "taka-techblog-infra",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+    "deploy": "cdk deploy --all",
+    "diff": "cdk diff --all",
+    "destroy": "cdk destroy --all",
+    "synth": "cdk synth"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.154.0",
+    "constructs": "^10.3.0"
+  },
+  "devDependencies": {
+    "aws-cdk": "^2.154.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.5.0"
+  }
+}

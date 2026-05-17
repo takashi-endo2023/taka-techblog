@@ -1,0 +1,13 @@
+{
+  "app": "npx ts-node bin/app.ts",
+  "context": {
+    "domainName": "taka-techblog.com",
+    "portfolioSubdomain": "portfolio.taka-techblog.com",
+    "utagoeSubdomain": "utagoe.taka-techblog.com",
+    "bucketName": "taka-techblog-com",
+    "utagoeBucketName": "utagoe-taka-techblog",
+    "githubRepo": "takashi-endo2023/taka-techblog",
+    "utagoeGithubRepo": "takashi-endo2023/utagoe_club",
+    "alertEmail": "your-email@example.com"
+  }
+}

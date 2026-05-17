@@ -141,9 +141,191 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"blog": {
+"ai-meeting-notes-structured.md": {
+	id: "ai-meeting-notes-structured.md";
+  slug: "ai-meeting-notes-structured";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"astro-s3-cache-strategy.md": {
+	id: "astro-s3-cache-strategy.md";
+  slug: "astro-s3-cache-strategy";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"aws-cdk-first-pitfalls.md": {
+	id: "aws-cdk-first-pitfalls.md";
+  slug: "aws-cdk-first-pitfalls";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"career-change-to-engineer.md": {
+	id: "career-change-to-engineer.md";
+  slug: "career-change-to-engineer";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"claude-code-as-design-partner.md": {
+	id: "claude-code-as-design-partner.md";
+  slug: "claude-code-as-design-partner";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"claude-code-workflow.md": {
+	id: "claude-code-workflow.md";
+  slug: "claude-code-workflow";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"coaching-junior-engineers.md": {
+	id: "coaching-junior-engineers.md";
+  slug: "coaching-junior-engineers";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"communicating-it-value-to-executives.md": {
+	id: "communicating-it-value-to-executives.md";
+  slug: "communicating-it-value-to-executives";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"csv-validation-guide.md": {
+	id: "csv-validation-guide.md";
+  slug: "csv-validation-guide";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"cursor-review-2025.md": {
+	id: "cursor-review-2025.md";
+  slug: "cursor-review-2025";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"docker-dev-environment.md": {
+	id: "docker-dev-environment.md";
+  slug: "docker-dev-environment";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"engineer-hiring-lessons.md": {
+	id: "engineer-hiring-lessons.md";
+  slug: "engineer-hiring-lessons";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "first-post.md": {
 	id: "first-post.md";
   slug: "first-post";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"github-actions-oidc-aws.md": {
+	id: "github-actions-oidc-aws.md";
+  slug: "github-actions-oidc-aws";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"gitlab-cicd-patterns.md": {
+	id: "gitlab-cicd-patterns.md";
+  slug: "gitlab-cicd-patterns";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"langchain-js-2025.md": {
+	id: "langchain-js-2025.md";
+  slug: "langchain-js-2025";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"langchain-nestjs-ai-integration.md": {
+	id: "langchain-nestjs-ai-integration.md";
+  slug: "langchain-nestjs-ai-integration";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"makeshop-technical-notes.md": {
+	id: "makeshop-technical-notes.md";
+  slug: "makeshop-technical-notes";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"naisei-kansei.md": {
+	id: "naisei-kansei.md";
+  slug: "naisei-kansei";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"nestjs-crm-design.md": {
+	id: "nestjs-crm-design.md";
+  slug: "nestjs-crm-design";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"nestjs-langchain-crm-architecture.md": {
+	id: "nestjs-langchain-crm-architecture.md";
+  slug: "nestjs-langchain-crm-architecture";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"playing-manager-reality.md": {
+	id: "playing-manager-reality.md";
+  slug: "playing-manager-reality";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"react-nextjs-selection.md": {
+	id: "react-nextjs-selection.md";
+  slug: "react-nextjs-selection";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"release-flow-regulated-industry.md": {
+	id: "release-flow-regulated-industry.md";
+  slug: "release-flow-regulated-industry";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"small-elite-team-design.md": {
+	id: "small-elite-team-design.md";
+  slug: "small-elite-team-design";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"system-audit-experience.md": {
+	id: "system-audit-experience.md";
+  slug: "system-audit-experience";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"typescript-langchain-type-safe.md": {
+	id: "typescript-langchain-type-safe.md";
+  slug: "typescript-langchain-type-safe";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">

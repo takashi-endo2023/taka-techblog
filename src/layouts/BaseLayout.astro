@@ -7,15 +7,20 @@ interface Props {
   title: string;
   description?: string;
   ogImage?: string;
+  ogType?: 'website' | 'article';
+  pubDate?: Date;
 }
 
 const {
   title,
-  description = 'テックリードのエンジニアブログ。AWS・Terraform・TypeScript・Astroなどモダンな技術スタックを実務視点で解説します。',
-  ogImage = '/og-default.png',
+  description = '接客業から転身し医療系スタートアップの内製化を完遂したテックリード・係長が、TypeScript / React / NestJS / LangChain / Claude Code の現場知識とチームビルディングを発信するブログ。',
+  ogImage = '/og-default.svg',
+  ogType = 'website',
+  pubDate,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(ogImage, Astro.site);
 ---
 
 <!doctype html>
@@ -26,13 +31,50 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link rel="canonical" href={canonicalURL} />
     <title>{title}</title>
     <meta name="description" content={description} />
+
+    <!-- OGP -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={ogImageURL} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Taka Tech Blog" />
+    {ogType === 'article' && pubDate && (
+      <meta property="article:published_time" content={pubDate.toISOString()} />
+    )}
+
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <!-- RSS -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="Taka Tech Blog RSS"
+      href="/blog/rss.xml"
+    />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SSWBR8E9JH"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-SSWBR8E9JH');
+    </script>
   </head>
   <body>
     <Header />
@@ -40,5 +82,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       <slot />
     </main>
     <Footer />
+
+    <a href="#" class="back-to-top" id="back-to-top" aria-label="ページ上部へ戻る">↑</a>
   </body>
 </html>
+
+<script>
+  const btn = document.getElementById('back-to-top')!;
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  }, { passive: true });
+</script>

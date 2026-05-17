@@ -7,25 +7,33 @@ const allPosts = await getCollection('blog');
 const recentPosts = allPosts
   .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
   .slice(0, 3);
+
+function getReadingTime(body: string): number {
+  return Math.max(1, Math.ceil(body.length / 500));
+}
 ---
 
-<BaseLayout title="Takashi.dev | テックリードのエンジニアブログ">
+<BaseLayout title="Taka Tech Blog | フルスタック × AI × チームビルディング">
   <!-- Hero -->
   <section class="hero">
+    <div class="hero-bg-grid" aria-hidden="true"></div>
     <div class="container hero-inner">
-      <div class="hero-badge">
-        <span class="tag">AWS Certified / Tech Lead</span>
+      <div class="hero-badge animate-fade-in-up">
+        <span class="badge-dot"></span>
+        <span class="tag">Medical IT / 係長・テックリード / 転身エンジニア</span>
       </div>
-      <h1 class="hero-title">
-        現場で得た<br />
-        <span class="gradient-text">エンジニアリング知識</span>を<br />
-        言語化する
+      <h1 class="hero-title animate-fade-in-up delay-1">
+        フルスタックで作り、<br />
+        AIで加速させ、<br />
+        <span class="gradient-text">チームで届ける</span>
       </h1>
-      <p class="hero-subtitle">
-        テックリードとしての実務経験をもとに、AWS・Terraform・TypeScript・Astroなど
-        モダンな技術スタックを「なぜその選択か」まで踏み込んで解説します。
+      <p class="hero-subtitle animate-fade-in-up delay-2">
+        接客業から転身し、医療系スタートアップでシステム内製化をゼロから完遂。
+        外部ベンダーを1年で脱却し年間500万円のコスト削減を達成。
+        現在は係長として技術ガバナンス・組織設計を担いながら、LangChain と Claude Code による
+        AI開発フローの標準化を推進中。現場で得た技術判断と組織づくりを言語化します。
       </p>
-      <div class="hero-actions">
+      <div class="hero-actions animate-fade-in-up delay-3">
         <a href="/blog" class="btn btn-primary">記事を読む</a>
         <a href="/portfolios" class="btn btn-outline">実績を見る</a>
       </div>
@@ -44,8 +52,9 @@ const recentPosts = allPosts
           title={post.data.title}
           description={post.data.description}
           pubDate={post.data.pubDate}
-          slug={post.slug}
+          slug={post.id}
           tags={post.data.tags}
+          readingTime={getReadingTime(post.body)}
         />
       ))}
     </div>
@@ -57,14 +66,17 @@ const recentPosts = allPosts
       <h2 class="section-title-center">Tech Stack</h2>
       <div class="stack-grid">
         {[
-          { name: 'Astro', desc: 'SSG フレームワーク' },
-          { name: 'TypeScript', desc: '型安全な開発' },
-          { name: 'AWS S3 + CloudFront', desc: '静的ホスティング・CDN' },
-          { name: 'Terraform', desc: 'IaC によるインフラ管理' },
-          { name: 'GitHub Actions', desc: 'OIDC 認証 CI/CD' },
-          { name: 'IndexedDB', desc: 'ブラウザ完結 CRUD' },
-        ].map(({ name, desc }) => (
+          { name: 'TypeScript',        desc: '型安全なフルスタック開発',               icon: '⚡' },
+          { name: 'React / Next.js',   desc: 'フロントエンド・SSR',                  icon: '⚛️' },
+          { name: 'NestJS / Node.js',  desc: 'バックエンドAPI設計',                  icon: '🛡️' },
+          { name: 'AWS',               desc: 'EC2 / S3 / RDS / Lambda の運用・監視', icon: '☁️' },
+          { name: 'LangChain',         desc: '自社CRMへのAI連携実装',                icon: '🔗' },
+          { name: 'Claude Code / Cursor', desc: 'AI駆動の高速開発・レビュー効率化',  icon: '🧠' },
+          { name: 'Docker / GitLab',   desc: 'コンテナ・業務CI/CDパイプライン',          icon: '🐳' },
+          { name: 'Astro / AWS CDK',   desc: 'このブログで初挑戦 — SSG × IaC',          icon: '🚀' },
+        ].map(({ name, desc, icon }) => (
           <div class="stack-item">
+            <span class="stack-icon">{icon}</span>
             <p class="stack-name">{name}</p>
             <p class="stack-desc">{desc}</p>
           </div>
@@ -76,10 +88,12 @@ const recentPosts = allPosts
   <!-- Portfolio CTA -->
   <section class="section container cta-section">
     <div class="cta-box">
+      <div class="cta-glow" aria-hidden="true"></div>
+      <p class="cta-eyebrow">実装デモ</p>
       <h2>IndexedDB CRUD ラボ</h2>
       <p>
         サーバーサイドDB不要の「ブラウザ完結CRUD」アプリケーション。
-        IndexedDB を使った非同期・大容量・型安全な設計を体験できます。
+        NestJS × IndexedDB × TypeScript の型安全な設計を実際に触って体験できます。
       </p>
       <a href="/portfolio" class="btn btn-primary">デモを試す →</a>
     </div>
@@ -87,27 +101,53 @@ const recentPosts = allPosts
 </BaseLayout>
 
 <style>
+  /* ── Hero ── */
   .hero {
-    padding: 5rem 0 4rem;
-    background: radial-gradient(ellipse at 60% 0%, rgba(124, 106, 247, 0.12) 0%, transparent 60%);
+    position: relative;
+    padding: 5.5rem 0 4.5rem;
+    overflow: hidden;
+  }
+
+  .hero-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse at 65% 0%, rgba(124, 106, 247, 0.18) 0%, transparent 55%),
+      radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.055) 1px, transparent 0);
+    background-size: 100% 100%, 30px 30px;
+    pointer-events: none;
   }
 
   .hero-inner {
-    max-width: 640px;
+    position: relative;
+    max-width: 660px;
   }
 
   .hero-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     margin-bottom: 1.5rem;
+  }
+
+  .badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4);
+    animation: pulse-ring 2.5s ease-in-out infinite;
   }
 
   .hero-title {
     font-size: clamp(2rem, 5vw, 3.25rem);
     line-height: 1.2;
     margin-bottom: 1.25rem;
+    letter-spacing: -0.02em;
   }
 
   .gradient-text {
-    background: linear-gradient(135deg, #7c6af7, #a78bfa);
+    background: linear-gradient(135deg, #7c6af7 0%, #a78bfa 50%, #60a5fa 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -116,8 +156,9 @@ const recentPosts = allPosts
   .hero-subtitle {
     font-size: 1.05rem;
     color: var(--color-text-muted);
-    margin-bottom: 2rem;
+    margin-bottom: 2.25rem;
     max-width: 520px;
+    line-height: 1.8;
   }
 
   .hero-actions {
@@ -126,6 +167,7 @@ const recentPosts = allPosts
     flex-wrap: wrap;
   }
 
+  /* ── Sections ── */
   .section {
     padding: 4rem 0;
   }
@@ -145,11 +187,17 @@ const recentPosts = allPosts
 
   .section-header h2 {
     font-size: 1.5rem;
+    letter-spacing: -0.01em;
   }
 
   .section-link {
     font-size: 0.9rem;
     color: var(--color-accent);
+    transition: color 0.15s, gap 0.15s;
+  }
+
+  .section-link:hover {
+    color: var(--color-accent-hover);
   }
 
   .card-grid {
@@ -158,15 +206,17 @@ const recentPosts = allPosts
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
 
+  /* ── Tech Stack ── */
   .section-title-center {
     font-size: 1.5rem;
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
+    letter-spacing: -0.01em;
   }
 
   .stack-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
     gap: 1rem;
   }
 
@@ -174,20 +224,29 @@ const recentPosts = allPosts
     background: var(--color-bg);
     border: 1px solid var(--color-border);
     border-radius: var(--radius);
-    padding: 1.1rem 1.25rem;
-    transition: border-color 0.15s;
+    padding: 1.25rem;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
   }
 
   .stack-item:hover {
     border-color: var(--color-accent);
+    box-shadow: var(--glow-accent);
+    transform: translateY(-2px);
+  }
+
+  .stack-icon {
+    display: block;
+    font-size: 1.4rem;
+    margin-bottom: 0.6rem;
+    line-height: 1;
   }
 
   .stack-name {
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-family: var(--font-mono);
     color: var(--color-accent-hover);
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.25rem;
   }
 
   .stack-desc {
@@ -196,28 +255,55 @@ const recentPosts = allPosts
     margin: 0;
   }
 
+  /* ── CTA ── */
   .cta-section {
     padding-bottom: 5rem;
   }
 
   .cta-box {
+    position: relative;
     background: var(--color-surface);
-    border: 1px solid var(--color-border);
+    border: 1px solid rgba(124, 106, 247, 0.35);
     border-radius: calc(var(--radius) * 2);
-    padding: 2.5rem 2rem;
+    padding: 3rem 2rem;
     text-align: center;
     max-width: 560px;
     margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .cta-glow {
+    position: absolute;
+    top: -40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 200px;
+    background: radial-gradient(ellipse, rgba(124, 106, 247, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-eyebrow {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
   }
 
   .cta-box h2 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
   }
 
   .cta-box p {
     color: var(--color-text-muted);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.75rem;
     font-size: 0.95rem;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
   }
 </style>

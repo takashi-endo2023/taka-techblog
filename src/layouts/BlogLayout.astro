@@ -9,6 +9,8 @@ interface Props {
 const { post } = Astro.props;
 const { title, description, pubDate, updatedDate, tags } = post.data;
 
+const readingTime = Math.max(1, Math.ceil(post.body.length / 500));
+
 const formattedPubDate = pubDate.toLocaleDateString('ja-JP', {
   year: 'numeric',
   month: 'long',
@@ -21,7 +23,15 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('ja-JP', {
 });
 ---
 
-<BaseLayout title={`${title} | エンジニアブログ`} description={description}>
+<BaseLayout
+  title={`${title} | Taka Tech Blog`}
+  description={description}
+  ogType="article"
+  pubDate={pubDate}
+>
+  <!-- Reading progress bar -->
+  <div class="progress-bar" id="progress-bar" aria-hidden="true"></div>
+
   <article class="blog-post container">
     <header class="post-header">
       <div class="post-meta">
@@ -29,6 +39,7 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('ja-JP', {
         {updatedDate && (
           <span class="updated-date">（{formattedUpdatedDate} 更新）</span>
         )}
+        <span class="reading-time">{readingTime} min read</span>
       </div>
       <h1>{title}</h1>
       <p class="post-description">{description}</p>
@@ -45,7 +56,35 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('ja-JP', {
   </article>
 </BaseLayout>
 
+<script>
+  const bar = document.getElementById('progress-bar')!;
+  const article = document.querySelector<HTMLElement>('.post-body');
+
+  if (article) {
+    window.addEventListener('scroll', () => {
+      const rect = article.getBoundingClientRect();
+      const articleHeight = article.offsetHeight;
+      const scrolled = -rect.top;
+      const progress = Math.min(1, Math.max(0, scrolled / (articleHeight - window.innerHeight)));
+      bar.style.transform = `scaleX(${progress})`;
+    }, { passive: true });
+  }
+</script>
+
 <style>
+  .progress-bar {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #7c6af7, #a78bfa, #60a5fa);
+    transform: scaleX(0);
+    transform-origin: left;
+    z-index: 99;
+    transition: transform 0.05s linear;
+  }
+
   .blog-post {
     padding-top: 3rem;
     padding-bottom: 4rem;
@@ -58,6 +97,10 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('ja-JP', {
   }
 
   .post-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
     font-size: 0.85rem;
     color: var(--color-text-muted);
     margin-bottom: 1rem;
@@ -65,13 +108,22 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('ja-JP', {
   }
 
   .updated-date {
-    margin-left: 0.5rem;
+    color: var(--color-text-muted);
+  }
+
+  .reading-time {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 0.15em 0.55em;
+    border-radius: 4px;
+    font-size: 0.78rem;
   }
 
   h1 {
     font-size: clamp(1.75rem, 4vw, 2.5rem);
     margin-bottom: 1rem;
     line-height: 1.25;
+    letter-spacing: -0.02em;
   }
 
   .post-description {
@@ -95,6 +147,7 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('ja-JP', {
     margin: 2.5rem 0 1rem;
     padding-bottom: 0.4rem;
     border-bottom: 1px solid var(--color-border);
+    letter-spacing: -0.01em;
   }
 
   .post-body :global(h3) {
@@ -110,6 +163,12 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('ja-JP', {
   .post-body :global(a) {
     text-decoration: underline;
     text-underline-offset: 3px;
+  }
+
+  .post-body :global(img) {
+    border-radius: var(--radius);
+    border: 1px solid var(--color-border);
+    margin: 1.5rem 0;
   }
 
   .post-body :global(blockquote) {

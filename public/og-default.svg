@@ -1,0 +1,46 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="glow" cx="70%" cy="15%" r="50%">
+      <stop offset="0%" stop-color="#7c6af7" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#0f1117" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c6af7"/>
+      <stop offset="50%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#60a5fa"/>
+    </linearGradient>
+    <pattern id="dots" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="1" fill="white" opacity="0.06"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0f1117"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Border -->
+  <rect x="1" y="1" width="1198" height="628" rx="0" fill="none" stroke="#2a2d3a" stroke-width="2"/>
+
+  <!-- Logo mark -->
+  <text x="72" y="116" font-family="monospace" font-size="32" font-weight="700" fill="#7c6af7">&lt;/&gt;</text>
+  <text x="120" y="116" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="#e2e8f0">Taka Tech Blog</text>
+
+  <!-- Divider -->
+  <line x1="72" y1="140" x2="1128" y2="140" stroke="#2a2d3a" stroke-width="1"/>
+
+  <!-- Main tagline -->
+  <text x="72" y="290" font-family="system-ui, sans-serif" font-size="64" font-weight="700" fill="url(#textGrad)">フルスタックで作り、</text>
+  <text x="72" y="370" font-family="system-ui, sans-serif" font-size="64" font-weight="700" fill="url(#textGrad)">AIで加速させ、</text>
+  <text x="72" y="450" font-family="system-ui, sans-serif" font-size="64" font-weight="700" fill="#e2e8f0">チームで届ける</text>
+
+  <!-- Tags -->
+  <rect x="72" y="510" width="160" height="36" rx="6" fill="rgba(124,106,247,0.15)" stroke="rgba(124,106,247,0.35)" stroke-width="1"/>
+  <text x="152" y="533" font-family="monospace" font-size="16" fill="#a78bfa" text-anchor="middle">Medical IT</text>
+
+  <rect x="248" y="510" width="130" height="36" rx="6" fill="rgba(124,106,247,0.15)" stroke="rgba(124,106,247,0.35)" stroke-width="1"/>
+  <text x="313" y="533" font-family="monospace" font-size="16" fill="#a78bfa" text-anchor="middle">Tech Lead</text>
+
+  <rect x="394" y="510" width="170" height="36" rx="6" fill="rgba(124,106,247,0.15)" stroke="rgba(124,106,247,0.35)" stroke-width="1"/>
+  <text x="479" y="533" font-family="monospace" font-size="16" fill="#a78bfa" text-anchor="middle">Full-stack × AI</text>
+</svg>

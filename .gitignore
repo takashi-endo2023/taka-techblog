@@ -1,0 +1,13 @@
+dist/
+node_modules/
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+
+# CDK
+infra/node_modules/
+infra/dist/
+infra/cdk.out/
+infra/.cdk.staging/

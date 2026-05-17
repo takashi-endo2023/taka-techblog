@@ -1,8 +1,8 @@
 ---
-title: "AstroとAWS S3+CloudFrontで技術ブログを構築した話"
-description: "WordPressからモダンなSSGアーキテクチャへ移行し、月額コストを約600円→120円に削減。IaC・OIDC認証・CloudFrontキャッシュ戦略まで一貫して自前実装した記録。"
+title: "AstroとAWS CDK + CloudFrontで技術ブログを構築した話"
+description: "WordPressからモダンなSSGアーキテクチャへ移行し、月額コストを約600円→120円に削減。AWS CDKによるIaC・OIDC認証・CloudFrontキャッシュ戦略まで一貫して自前実装した記録。"
 pubDate: "2026-05-16"
-tags: ["Astro", "AWS", "Terraform", "DevOps", "GitHub Actions"]
+tags: ["Astro", "AWS", "AWS CDK", "DevOps", "GitHub Actions"]
 ---
 
 ## なぜWordPressをやめたのか
@@ -14,7 +14,7 @@ tags: ["Astro", "AWS", "Terraform", "DevOps", "GitHub Actions"]
 - **メンテナンスコスト**: WordPressコア・プラグインの更新管理
 - **DevOpsスキルのアピール不足**: インフラをコードで管理していない
 
-これらを一気に解決するため、**Astro SSG + AWS S3 + CloudFront + Terraform** の構成へ移行しました。
+これらを一気に解決するため、**Astro SSG + AWS S3 + CloudFront + AWS CDK** の構成へ移行しました。AstroもAWS CDKも今回が初挑戦です。
 
 ## アーキテクチャの全体像
 
@@ -25,25 +25,32 @@ GitHub → GitHub Actions → S3 → CloudFront → ユーザー
 
 コードをmainブランチにpushするだけで、自動ビルドからデプロイまで完結します。
 
-## Terraformでインフラをコード管理する
+## AWS CDKでインフラをコード管理する
 
-最大のこだわりは**インフラをTerraformで完全管理すること**です。
+最大のこだわりは**インフラをAWS CDK（TypeScript）で完全管理すること**です。HCL（Terraform）ではなくTypeScriptで書けるので、普段の開発言語と統一できる点が気に入っています。
 
-```hcl
-resource "aws_s3_bucket" "blog" {
-  bucket = var.bucket_name
-}
+```typescript
+// lib/blog-stack.ts
+const bucket = new s3.Bucket(this, 'BlogBucket', {
+  blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+  removalPolicy: cdk.RemovalPolicy.RETAIN,
+});
 
-resource "aws_s3_bucket_public_access_block" "blog" {
-  bucket                  = aws_s3_bucket.blog.id
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
+const distribution = new cloudfront.Distribution(this, 'BlogDistribution', {
+  defaultBehavior: {
+    origin: origins.S3BucketOrigin.withOriginAccessControl(bucket),
+    viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+    compress: true,
+  },
+  domainNames: [process.env.DOMAIN_NAME!],
+  certificate,
+  defaultRootObject: 'index.html',
+});
 ```
 
-S3バケットは**完全プライベート**に設定し、CloudFront OAC（Origin Access Control）経由でのみアクセスを許可します。これにより、S3のURLを直接叩いてもアクセスできない安全な構成になります。
+S3バケットは**完全プライベート**に設定し、CloudFront OAC（Origin Access Control）経由でのみアクセスを許可します。S3のURLを直接叩いてもアクセスできない安全な構成です。
+
+CDKを初めて使ってみて最初に詰まったのは `cdk bootstrap` の存在を知らなかったことと、ACM証明書を `us-east-1` で作らないといけないという CloudFront の制約です。この辺は別記事で詳しく書きます。
 
 ## OIDC認証でキーレスデプロイを実現
 
@@ -95,11 +102,11 @@ aws s3 sync dist/ s3://$BUCKET/ \
 
 ## まとめ
 
-Astro + AWS の構成に移行したことで、以下を一挙に実現できました：
+Astro + AWS CDK の構成に移行したことで、以下を一挙に実現できました：
 
 1. **固定費の削減**: 月600円 → 約120円（約80%削減）
 2. **パフォーマンス向上**: Astro SSG + CloudFront CDN で Core Web Vitals が大幅改善
-3. **DevOpsスキルの可視化**: TerraformのコードがそのままポートフォリオになるIaC管理
+3. **DevOpsスキルの可視化**: CDKのTypeScriptコードがそのままポートフォリオになるIaC管理
 4. **セキュリティ強化**: S3パブリック非公開・OIDC認証・OAC配信
 
-「なぜこの技術を選んだか」を言語化できる設計判断こそが、エンジニアとしての市場価値につながると考えています。
+AstroもCDKも初挑戦でしたが、どちらもTypeScriptで書けるため思った以上にスムーズでした。「なぜこの技術を選んだか」を言語化できる設計判断こそが、エンジニアとしての市場価値につながると考えています。
