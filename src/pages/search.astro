@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Search | taka-techblog"
+  description="taka-techblog の記事をキーワードで検索できます"
+>
+  <div class="container page-content">
+    <header class="page-header animate-fade-in-up">
+      <h1>Search</h1>
+      <p class="page-subtitle">記事をキーワードで全文検索</p>
+    </header>
+
+    <!-- Pagefind UI がマウントされるコンテナ -->
+    <div id="search" class="animate-fade-in-up delay-1"></div>
+
+    <!-- 開発環境向けメッセージ（ビルド後は非表示） -->
+    <p class="dev-note" id="dev-note">
+      ※ 検索機能は <code>npm run build</code> 後に動作します（開発サーバーでは利用不可）
+    </p>
+  </div>
+</BaseLayout>
+
+<!--
+  Pagefind の CSS は静的アセットとして参照するだけなのでそのまま読み込む。
+  JS は Vite のバンドル対象外にするため is:inline + 動的 script 生成で読み込む。
+-->
+<link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+
+<script is:inline>
+  // pagefind-ui.js はビルド後に dist/pagefind/ に生成される外部アセット。
+  // Vite のモジュール解析をバイパスするため script タグを動的生成して読み込む。
+  (function () {
+    var script = document.createElement('script');
+    script.src = '/pagefind/pagefind-ui.js';
+    script.onload = function () {
+      var note = document.getElementById('dev-note');
+      if (note) note.style.display = 'none';
+      // pagefind-ui.js は window.PagefindUI をグローバルに公開する
+      new window.PagefindUI({
+        element: '#search',
+        showImages: false,
+        showEmptyFilters: false,
+        resetStyles: false,
+        translations: {
+          placeholder: 'キーワードを入力...',
+          zero_results: '"[QUERY]" に一致する記事はありません',
+          many_results: '[COUNT] 件の記事が見つかりました',
+          one_result: '1 件の記事が見つかりました',
+          searching: '検索中...',
+        },
+      });
+    };
+    // pagefind 未生成（開発環境）の場合は dev-note がそのまま表示される
+    document.head.appendChild(script);
+  })();
+</script>
+
+<style>
+  .page-content {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+
+  .page-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .page-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+  }
+
+  .dev-note {
+    margin-top: 1.5rem;
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+  }
+
+  .dev-note code {
+    font-family: var(--font-mono);
+    color: var(--color-accent-hover);
+  }
+
+  /* ── Pagefind UI テーマ上書き（ダークテーマに合わせる） ── */
+  #search {
+    --pagefind-ui-scale: 0.95;
+    --pagefind-ui-primary: #7c6af7;
+    --pagefind-ui-text: #e2e4ea;
+    --pagefind-ui-background: #13151e;
+    --pagefind-ui-border: #2a2d38;
+    --pagefind-ui-tag: #1e2130;
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 8px;
+    --pagefind-ui-image-border-radius: 6px;
+    --pagefind-ui-font: inherit;
+  }
+</style>

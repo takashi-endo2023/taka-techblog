@@ -1,11 +1,11 @@
 ---
-title: "医療系CRMにLangChain × NestJSでAI連携を実装した話"
+title: "医療系CRMにLangChain×NestJSでAI連携を実装した話"
 description: "治験CRMにLangChain.jsとNestJSを使ったAI機能を実装した実録。Chain・Agent・RAGの選択判断から医療データのセキュリティ考慮、LangChainで詰まったポイントまで解説します。"
-pubDate: "2026-02-10"
+pubDate: "2025-08-05"
 tags: ["LangChain", "NestJS", "TypeScript", "AI連携", "医療IT"]
 ---
 
-治験CRMにAI機能を入れようと動き出したのは去年の秋だった。「LangChain × NestJS でやってみる」と宣言してから実装完了まで約3ヶ月。その経緯と詰まったポイントを記録しておく。
+治験CRMにAI機能を入れようと動き出したのは去年の秋だった。「LangChain×NestJSでやってみる」と宣言してから実装完了まで約3ヶ月。その経緯と詰まったポイントを記録しておく。
 
 ## なぜ医療系でAI機能が必要になったか
 
@@ -17,7 +17,7 @@ tags: ["LangChain", "NestJS", "TypeScript", "AI連携", "医療IT"]
 
 これらは全部「社内に蓄積されたドキュメントを賢く検索・活用する」ユースケースだ。LangChain + RAGが向いている領域だと判断した。
 
-## アーキテクチャ設計：Chain vs Agent vs RAG の選択
+## アーキテクチャ設計：Chain vs Agent vs RAGの選択
 
 最初に悩んだのがどのアプローチを使うかだ。
 
@@ -89,11 +89,11 @@ export function sanitizeForLLM(text: string): string {
 
 ## LangChain.jsで詰まったポイント
 
-**1. バージョン変更が激しすぎる問題**
+**1.バージョン変更が激しすぎる問題**
 
 LangChain.jsは破壊的変更が多い。`langchain` と `@langchain/core`、`@langchain/openai` が分離されたタイミングでインポートパスが全部変わって半日溶かした。`package.json` で厳密にバージョン固定することをおすすめする。
 
-**2. ストリーミングレスポンスをNestJSで返す方法**
+**2.ストリーミングレスポンスをNestJSで返す方法**
 
 LangChainのストリーミングをNestJSのSSEで返す際、`StreamableFile` と組み合わせる実装が公式ドキュメントに載っていなくて詰まった。
 
@@ -113,10 +113,10 @@ async streamQuery(@Query('q') query: string, @Res() res: Response) {
 
 ドキュメント検索の精度は想定より高く、現場スタッフからも「探す時間が減った」というフィードバックをもらえた。ただ、ハルシネーション（もっともらしい嘘）のリスクは依然あるため、「AIの回答には必ず元ドキュメントのソースを表示する」というUX設計が重要だと実感している。
 
-次は Agent を使った複数ツール連携と、ファインチューニングへの挑戦を考えている。
+次はAgentを使った複数ツール連携と、ファインチューニングへの挑戦を考えている。
 
 ## まとめ
 
-LangChain × NestJSの組み合わせはTypeScriptで完結できる点が大きな強みだ。医療データを扱う際のポイントは「LLMに何を送らないか」を設計の中心に置くこと。
+LangChain×NestJSの組み合わせはTypeScriptで完結できる点が大きな強みだ。医療データを扱う際のポイントは「LLMに何を送らないか」を設計の中心に置くこと。
 
 LangChainのバージョン変化には心理的に慣れるしかないが、RAGの実装体験としては非常に学びが多かった。AI機能を業務システムに組み込みたい人の参考になれば嬉しい。

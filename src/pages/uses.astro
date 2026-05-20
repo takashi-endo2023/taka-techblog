@@ -1,0 +1,202 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const sections = [
+  {
+    title: 'マシン',
+    items: [
+      {
+        name: 'MacBook Pro M1',
+        description:
+          'メイン開発マシン。M1チップの恩恵でビルドやDockerの動作が快適。外部モニター1枚と組み合わせて使用。',
+      },
+    ],
+  },
+  {
+    title: 'キーボード・マウス',
+    items: [
+      {
+        name: 'Logicool MX KEYS S（KX800sGR）',
+        description:
+          'ワイヤレスキーボード。キーのストロークが適度で長時間の入力でも疲れにくい。複数デバイスの切り替えも快適。',
+      },
+      {
+        name: 'Logicool MX Master 2',
+        description:
+          '多ボタン・高精度トラッキングのワイヤレスマウス。ホイールのフリースピンモードが地味に便利で、長いコードのスクロールが快適になった。',
+      },
+    ],
+  },
+  {
+    title: 'エディタ',
+    items: [
+      {
+        name: 'Cursor',
+        description:
+          'VS Codeベースのエディタ。AIによるコード補完・インラインChat・Composerが強力で、普段の開発速度が体感で変わった。Claude Code と組み合わせて使うのが最近の標準スタイル。',
+      },
+    ],
+  },
+  {
+    title: 'ターミナル',
+    items: [
+      {
+        name: 'Terminal.app（macOS標準）',
+        description:
+          'サードパーティ製に乗り換える理由が今のところない。シンプルで十分。',
+      },
+    ],
+  },
+  {
+    title: 'ブラウザ',
+    items: [
+      {
+        name: 'Google Chrome',
+        description:
+          'DevTools の使い勝手が一番慣れている。拡張機能も含めて開発用途はChrome一択。',
+      },
+    ],
+  },
+  {
+    title: 'AI ツール',
+    items: [
+      {
+        name: 'Claude / Claude Code',
+        description:
+          'コードレビュー・設計議論・ドキュメント整理など、開発フロー全体に組み込んでいる。Claude Code はデスクトップアプリで使用。画面設計には Claude の UI デザイン機能も活用。チームへの導入も推進中。',
+      },
+      {
+        name: 'Cursor（AI機能）',
+        description:
+          'ファイル内のインライン補完はCursorで、より広い文脈の判断はClaude Codeで、という使い分けが定着している。',
+      },
+    ],
+  },
+  {
+    title: 'タスク管理・ドキュメント',
+    items: [
+      {
+        name: 'Notion',
+        description:
+          'タスク管理・議事録・仕様書まとめをNotionで一元管理。チームの情報共有基盤としても活用。',
+      },
+    ],
+  },
+  {
+    title: '技術スタック（日常的に触るもの）',
+    items: [
+      {
+        name: 'TypeScript',
+        description: 'フロント・バック問わず型安全に書くのが前提。any は原則禁止。',
+      },
+      {
+        name: 'React / Next.js',
+        description: 'フロントエンドの主力。業務ではNext.js、個人ではReact + Viteを使い分け。',
+      },
+      {
+        name: 'NestJS',
+        description: 'バックエンドAPIのデファクト。DIやデコレータの設計が気に入っている。',
+      },
+      {
+        name: 'LangChain（TypeScript）',
+        description: '自社CRMへのAI連携に実務導入済み。RAG・Agent・ツール呼び出しを実装している。',
+      },
+      {
+        name: 'AWS（S3 / CloudFront / EC2 / RDS / Lambda）',
+        description: 'インフラは基本AWS。CDKでIaC管理するスタイルに移行中。',
+      },
+      {
+        name: 'Docker',
+        description: '開発環境の統一とCI/CDに使用。本番はECSではなくEC2運用が多い。',
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Uses | taka-techblog"
+  description="普段の開発で使っているマシン・エディタ・ツール・技術スタックの一覧。"
+>
+  <div class="container uses-page">
+    <header class="page-header animate-fade-in-up">
+      <h1>Uses</h1>
+      <p class="page-subtitle">普段の開発で使っているもの一覧</p>
+    </header>
+
+    <div class="uses-content">
+      {sections.map((section) => (
+        <section class="uses-section animate-fade-in-up">
+          <h2 class="section-title">{section.title}</h2>
+          <ul class="item-list">
+            {section.items.map((item) => (
+              <li class="item">
+                <p class="item-name">{item.name}</p>
+                <p class="item-desc">{item.description}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .uses-page {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+
+  .page-header {
+    margin-bottom: 3rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .page-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+  }
+
+  .uses-content {
+    display: grid;
+    gap: 3rem;
+    max-width: 720px;
+  }
+
+  .section-title {
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .item-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .item-name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    color: var(--color-text);
+  }
+
+  .item-desc {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.75;
+  }
+</style>

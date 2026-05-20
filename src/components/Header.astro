@@ -1,8 +1,8 @@
 ---
 const navLinks = [
-  { href: '/blog', label: 'Blog' },
+  { href: '/blog/1', label: 'Blog' },
   { href: '/portfolios', label: 'Portfolios' },
-  { href: '/portfolio', label: 'CRUD Lab' },
+  { href: '/uses', label: 'Uses' },
   { href: '/about', label: 'About' },
 ];
 
@@ -10,6 +10,8 @@ const currentPath = Astro.url.pathname;
 
 function isActive(href: string): boolean {
   if (href === '/') return currentPath === '/';
+  // /blog/1 のリンクは /blog/* すべてでアクティブにする
+  if (href === '/blog/1') return currentPath.startsWith('/blog');
   return currentPath.startsWith(href);
 }
 ---
@@ -17,8 +19,8 @@ function isActive(href: string): boolean {
 <header class="site-header">
   <div class="header-inner container">
     <a href="/" class="site-logo">
-      <span class="logo-icon">&lt;/&gt;</span>
-      <span class="logo-text">Taka Tech Blog</span>
+      <img src="/logo.png" alt="" class="logo-img" width="72" height="50" aria-hidden="true" />
+      <span class="logo-text">taka-techblog</span>
     </a>
 
     <nav class="site-nav" id="site-nav">
@@ -30,6 +32,18 @@ function isActive(href: string): boolean {
           {label}
         </a>
       ))}
+      <!-- 検索アイコン -->
+      <a
+        href="/search"
+        class:list={['nav-search', { active: currentPath === '/search' }]}
+        aria-label="記事を検索"
+        title="Search"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </a>
     </nav>
 
     <button
@@ -55,6 +69,12 @@ function isActive(href: string): boolean {
         {label}
       </a>
     ))}
+    <a
+      href="/search"
+      class:list={['mobile-nav-link', { active: currentPath === '/search' }]}
+    >
+      Search
+    </a>
   </div>
 </header>
 
@@ -104,18 +124,26 @@ function isActive(href: string): boolean {
     gap: 0.5rem;
     color: var(--color-text);
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     text-decoration: none;
-    transition: color 0.15s;
+    transition: opacity 0.15s;
   }
 
   .site-logo:hover {
-    color: var(--color-accent-hover);
+    opacity: 0.8;
   }
 
-  .logo-icon {
+  /* 猫シルエットを白抜きでアイコン表示 */
+  .logo-img {
+    display: block;
+    height: 32px;
+    width: auto;
+    filter: brightness(0) invert(1);
+  }
+
+  .logo-text {
     font-family: var(--font-mono);
-    color: var(--color-accent);
+    letter-spacing: -0.01em;
   }
 
   /* Desktop nav */
@@ -141,6 +169,25 @@ function isActive(href: string): boolean {
 
   .nav-link.active {
     color: var(--color-accent-hover);
+  }
+
+  /* 検索アイコン */
+  .nav-search {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    color: var(--color-text-muted);
+    transition: all 0.15s;
+    margin-left: 0.25rem;
+  }
+
+  .nav-search:hover,
+  .nav-search.active {
+    color: var(--color-accent-hover);
+    background: var(--color-surface);
   }
 
   /* Hamburger button */

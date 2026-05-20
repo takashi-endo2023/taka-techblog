@@ -1,0 +1,153 @@
+---
+interface Props {
+  currentPage: number;
+  lastPage: number;
+  prevUrl?: string;
+  nextUrl?: string;
+  totalPosts?: number;
+}
+
+const { currentPage, lastPage, prevUrl, nextUrl, totalPosts } = Astro.props;
+
+// 現在ページの前後 2 ページ + 先頭・末尾を表示し、隙間は "…" で補完
+const delta = 2;
+const pages: (number | '...')[] = [];
+for (let i = 1; i <= lastPage; i++) {
+  if (
+    i === 1 ||
+    i === lastPage ||
+    (i >= currentPage - delta && i <= currentPage + delta)
+  ) {
+    pages.push(i);
+  } else if (pages[pages.length - 1] !== '...') {
+    pages.push('...');
+  }
+}
+---
+
+<nav class="pagination" aria-label="ページナビゲーション">
+  <!-- 前へ -->
+  {prevUrl ? (
+    <a href={prevUrl} class="page-btn" aria-label="前のページへ">← 前へ</a>
+  ) : (
+    <span class="page-btn disabled" aria-disabled="true">← 前へ</span>
+  )}
+
+  <!-- ページ番号 -->
+  <div class="page-numbers">
+    {pages.map((p) =>
+      p === '...' ? (
+        <span class="page-ellipsis" aria-hidden="true">…</span>
+      ) : (
+        <a
+          href={`/blog/${p}`}
+          class:list={['page-num', { active: p === currentPage }]}
+          aria-current={p === currentPage ? 'page' : undefined}
+        >
+          {p}
+        </a>
+      )
+    )}
+  </div>
+
+  <!-- 次へ -->
+  {nextUrl ? (
+    <a href={nextUrl} class="page-btn" aria-label="次のページへ">次へ →</a>
+  ) : (
+    <span class="page-btn disabled" aria-disabled="true">次へ →</span>
+  )}
+</nav>
+
+{totalPosts && (
+  <p class="pagination-meta">
+    全 {totalPosts} 件 — {currentPage} / {lastPage} ページ
+  </p>
+)}
+
+<style>
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+  }
+
+  /* 前へ・次へ */
+  .page-btn {
+    font-size: 0.88rem;
+    font-family: var(--font-mono);
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  a.page-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-hover);
+    background: rgba(124, 106, 247, 0.08);
+  }
+
+  .page-btn.disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  /* ページ番号群 */
+  .page-numbers {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .page-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 0.4rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+
+  .page-num:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-hover);
+    background: rgba(124, 106, 247, 0.08);
+  }
+
+  .page-num.active {
+    background: rgba(124, 106, 247, 0.15);
+    color: var(--color-accent-hover);
+    border-color: rgba(124, 106, 247, 0.4);
+    font-weight: 600;
+  }
+
+  .page-ellipsis {
+    color: var(--color-text-muted);
+    padding: 0 0.2rem;
+    font-size: 0.88rem;
+    user-select: none;
+  }
+
+  /* 件数メタ情報 */
+  .pagination-meta {
+    text-align: center;
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    margin-top: 1rem;
+    opacity: 0.7;
+  }
+</style>

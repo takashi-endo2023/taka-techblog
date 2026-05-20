@@ -1,0 +1,254 @@
+---
+title: "JavaScriptのクラスとモジュールを理解する——TypeScriptに活きるOOPの基礎"
+description: "classはシンタックスシュガーという基礎から、カプセル化・継承・ESモジュールまで。TypeScriptのinterface・abstractとの対応も含め実務目線で整理する。"
+pubDate: "2023-10-03"
+tags: ["JavaScript", "TypeScript", "オブジェクト指向", "ESモジュール"]
+---
+
+import AmazonCard from '../../components/AmazonCard.astro';
+
+TypeScriptを書いていると `class`・`interface`・`abstract class` を使う場面がある。しかし「なぜそう書くのか」を説明できるかというと、転職直後の自分には自信がなかった。
+
+JavaScriptの `class` 構文を理解すると、TypeScriptのクラスまわりの設計が腑に落ちる。「改訂3版JavaScript本格入門」でプロトタイプとクラスを体系的に学び直し、実務での設計判断が変わった。
+
+## classはシンタックスシュガー——プロトタイプの話
+
+JavaScriptの `class` 構文はES2015で導入されたが、これはプロトタイプベースの継承モデルをわかりやすく書くためのシンタックスシュガーに過ぎない。
+
+```js
+// クラス構文
+class Animal {
+  constructor(name) {
+    this.name = name;
+  }
+  speak() {
+    return `${this.name}が鳴いた`;
+  }
+}
+
+// 内部的にはこれと同じ（ES5以前の書き方）
+function Animal(name) {
+  this.name = name;
+}
+Animal.prototype.speak = function() {
+  return `${this.name}が鳴いた`;
+};
+```
+
+`class` のメソッドはプロトタイプに追加される。`new` でインスタンスを作ると、そのインスタンスはプロトタイプチェーンを通じてメソッドを参照する。この仕組みを知っておくと、Javaなどと比べたときのJavaScriptのクラスの「ちょっとした違い」に気づきやすくなる。
+
+とはいえ実務では `class` 構文をそのまま使えばいいので、「プロトタイプで書けること」より「classの挙動を理解すること」の方が重要だ。
+
+## コンストラクタ・メソッド・static・getter
+
+基本の構成要素を確認する。
+
+```ts
+class User {
+  // フィールド宣言（TypeScriptでは型も指定）
+  name: string;
+  private _email: string;
+
+  constructor(name: string, email: string) {
+    this.name = name;
+    this._email = email;
+  }
+
+  // インスタンスメソッド
+  greet(): string {
+    return `こんにちは、${this.name}です`;
+  }
+
+  // getter：プロパティとして読めるが処理を内包できる
+  get displayName(): string {
+    return `[${this.name}]`;
+  }
+
+  // staticメソッド：インスタンスなしで呼び出せる
+  static create(name: string, email: string): User {
+    return new User(name.trim(), email.toLowerCase());
+  }
+}
+
+const user = User.create("  Alice  ", "ALICE@example.com");
+console.log(user.greet());       // "こんにちは、Aliceです"
+console.log(user.displayName);  // "[Alice]"
+```
+
+`static` はファクトリメソッドやユーティリティ関数的に使うことが多い。`getter` は計算結果をプロパティのように扱いたいときに便利で、React Componentのクラス（現在は少ないが）でも見かける。
+
+## カプセル化——privateフィールド `#` の使い方
+
+外部から変更されたくないフィールドは隠蔽する。TypeScriptには `private` キーワードがあるが、これはコンパイル時の型チェックのみで、JavaScriptにトランスパイルされると普通のプロパティになる。
+
+JavaScriptのネイティブなプライベートフィールドは `#` を使う。
+
+```ts
+class BankAccount {
+  readonly owner: string;
+  #balance: number; // JavaScriptレベルで本当にprivate
+
+  constructor(owner: string, initial: number) {
+    this.owner = owner;
+    this.#balance = initial;
+  }
+
+  deposit(amount: number): void {
+    if (amount <= 0) throw new Error("正の金額を指定してください");
+    this.#balance += amount;
+  }
+
+  withdraw(amount: number): void {
+    if (amount > this.#balance) throw new Error("残高不足");
+    this.#balance -= amount;
+  }
+
+  get balance(): number {
+    return this.#balance;
+  }
+}
+
+const account = new BankAccount("Alice", 1000);
+account.deposit(500);
+console.log(account.balance); // 1500
+// account.#balance = 99999;  // SyntaxError（クラス外からアクセス不可）
+```
+
+TypeScriptを使うプロジェクトなら `private` で十分なことが多いが、ライブラリ開発など「JavaScriptとして実行される環境でも隠蔽したい」場合は `#` を使う。
+
+## 継承（extends・super）と使いすぎの危険性
+
+`extends` で親クラスを継承し、`super` で親のコンストラクタやメソッドを呼び出す。
+
+```ts
+class Animal {
+  constructor(public name: string) {}
+  speak(): string {
+    return `${this.name}が音を出した`;
+  }
+}
+
+class Dog extends Animal {
+  constructor(name: string, private breed: string) {
+    super(name); // 必ず親のconstructorを呼ぶ
+  }
+
+  speak(): string {
+    return `${this.name}（${this.breed}）がワンと鳴いた`;
+  }
+}
+
+const dog = new Dog("ポチ", "柴犬");
+console.log(dog.speak()); // "ポチ（柴犬）がワンと鳴いた"
+```
+
+ただし継承は慎重に使うべきだ。継承の階層が深くなるほどコードの見通しが悪くなり、親クラスの変更が子クラスに波及しやすくなる。
+
+実務では「継承より合成（コンポジション）」という原則が重要で、共通の振る舞いをinterfaceで定義し、それを実装するパターンの方が変更に強い。
+
+```ts
+// 継承よりこちらの方がシンプルになりやすい
+interface Logger {
+  log(message: string): void;
+}
+
+class ConsoleLogger implements Logger {
+  log(message: string): void {
+    console.log(`[LOG] ${message}`);
+  }
+}
+
+class UserService {
+  constructor(private logger: Logger) {}
+  createUser(name: string): void {
+    // ... 処理
+    this.logger.log(`ユーザー作成: ${name}`);
+  }
+}
+```
+
+## ESモジュール——named exportとdefault exportの使い分け
+
+モダンJavaScript（ESモジュール）では `import`/`export` を使う。種類は主に2つだ。
+
+```ts
+// named export：複数をエクスポートできる
+// utils.ts
+export function formatDate(date: Date): string {
+  return date.toLocaleDateString("ja-JP");
+}
+export const MAX_RETRY = 3;
+
+// named import：波括弧で指定
+import { formatDate, MAX_RETRY } from "./utils";
+
+// default export：1ファイル1つまで
+// UserCard.tsx
+export default function UserCard({ name }: { name: string }) {
+  return <div>{name}</div>;
+}
+
+// default import：名前は自由に付けられる
+import UserCard from "./UserCard";
+import MyUserCard from "./UserCard"; // 同じものを別名でimportできる
+```
+
+チームで使う場合、default exportは「import時に名前が統一されない」という問題がある。ESLintのルール `import/no-default-export` で縛るプロジェクトも多い。一方でReactコンポーネントはdefault exportが慣習的に使われることも多く、プロジェクトの規約に合わせるのが実際のところだ。
+
+## TypeScriptのclass・interface・abstractとの対応
+
+TypeScriptはJavaScriptのクラスに型システムを加えた構文を持つ。
+
+| 構文 | 用途 |
+|---|---|
+| `class` | 実装を持つオブジェクトの設計図 |
+| `interface` | 型の形を定義する（実装なし） |
+| `abstract class` | 実装を一部持つが、直接インスタンス化できないクラス |
+
+```ts
+// interfaceは型の形だけを定義する
+interface Drawable {
+  draw(): void;
+  readonly id: string;
+}
+
+// abstract classは共通の実装を持てる
+abstract class Shape implements Drawable {
+  constructor(readonly id: string) {}
+  abstract draw(): void; // サブクラスに実装を強制
+  describe(): string {
+    return `Shape ID: ${this.id}`;
+  }
+}
+
+class Circle extends Shape {
+  constructor(id: string, private radius: number) {
+    super(id);
+  }
+  draw(): void {
+    console.log(`円を描く（半径: ${this.radius}）`);
+  }
+}
+```
+
+「共通の振る舞いと実装を持つ基底クラスが必要」なら `abstract class`、「型の契約だけ定義してインジェクションしたい」なら `interface` を選ぶ。実務では `interface` の出番の方が圧倒的に多い。
+
+## まとめ
+
+- `class` はプロトタイプベースのシンタックスシュガー。仕組みを知ると挙動の予測が立てやすくなる
+- カプセル化は `private`（TypeScript）または `#`（JavaScriptネイティブ）で実現する
+- 継承（`extends`）は便利だが多用しない。合成・interfaceを先に検討する
+- モジュールはnamed/default exportを使い分け、チームの規約に合わせる
+- TypeScriptの `interface`・`abstract class` はJavaScriptのクラスへの理解の上に成り立つ
+
+クラスやモジュールはNext.jsのapp routerでもapi routeの設計などで登場する。「なぜこう書くのか」が腑に落ちると、設計の選択肢が広がる。
+
+---
+
+「改訂3版JavaScript本格入門」はクラス・モジュールだけでなく、プロトタイプ・クロージャ・非同期処理まで一気通貫で体系化されている。TypeScriptを書いていて「JSの仕組みからわかり直したい」と感じたら、手に取る価値がある一冊だ。
+
+<AmazonCard
+  asin="4297132885"
+  title="改訂3版JavaScript本格入門 ～モダンスタイルによる基礎から現場での応用まで"
+  description="山田祥寛 著 ／ 技術評論社 —ES6+・非同期処理・クロージャ・クラスまで体系的に学べる決定版"
+/>

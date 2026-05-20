@@ -1,0 +1,201 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Contact | taka-techblog"
+  description="副業・技術顧問・取材・登壇・採用スカウトなどのお問い合わせはこちらからどうぞ。"
+>
+  <div class="container contact-page">
+
+    <header class="page-header animate-fade-in-up">
+      <h1>Contact</h1>
+      <p class="page-subtitle">お気軽にご連絡ください</p>
+    </header>
+
+    <div class="contact-layout animate-fade-in-up delay-1">
+
+      <!-- 左：受付内容 -->
+      <aside class="contact-info">
+        <div class="info-card">
+          <h2 class="info-title">受け付けている依頼</h2>
+          <ul class="inquiry-list">
+            <li>
+              <span class="inquiry-icon">💼</span>
+              <div>
+                <p class="inquiry-label">副業・技術顧問</p>
+                <p class="inquiry-desc">TypeScript / React / NestJS / AWS / LangChain などの技術支援・設計相談</p>
+              </div>
+            </li>
+            <li>
+              <span class="inquiry-icon">🎤</span>
+              <div>
+                <p class="inquiry-label">取材・登壇依頼</p>
+                <p class="inquiry-desc">AI活用・内製化・チームビルディングに関する執筆・講演・インタビュー</p>
+              </div>
+            </li>
+            <li>
+              <span class="inquiry-icon">🔍</span>
+              <div>
+                <p class="inquiry-label">採用・スカウト</p>
+                <p class="inquiry-desc">興味のあるポジションはカジュアルにお声がけください</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="info-card sns-card">
+          <h2 class="info-title">SNS でも受け付けています</h2>
+          <a
+            href="https://x.com/taka_tech1988"
+            target="_blank"
+            rel="noopener"
+            class="x-link"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            @taka_tech1988 にDM
+          </a>
+        </div>
+      </aside>
+
+      <!-- 右：Googleフォーム -->
+      <div class="form-wrapper">
+        <iframe
+          src="https://docs.google.com/forms/d/e/1FAIpQLSfl_Mn8hizApA7d5acA4GQnwdg30tTTNO-sRdg9HKwY79HCWA/viewform?embedded=true"
+          width="100%"
+          frameborder="0"
+          marginheight="0"
+          marginwidth="0"
+          title="お問い合わせフォーム"
+          loading="lazy"
+        >
+          読み込んでいます…
+        </iframe>
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .contact-page {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+
+  .page-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.5rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .page-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+  }
+
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* 左カラム */
+  .info-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .info-title {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.25rem;
+  }
+
+  .inquiry-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .inquiry-list li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  .inquiry-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .inquiry-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .inquiry-desc {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    line-height: 1.65;
+  }
+
+  .sns-card {
+    margin-bottom: 0;
+  }
+
+  .x-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    transition: color 0.15s;
+  }
+
+  .x-link:hover {
+    color: var(--color-accent-hover);
+  }
+
+  /* 右カラム：フォーム */
+  .form-wrapper {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .form-wrapper iframe {
+    display: block;
+    width: 100%;
+    min-height: 860px;
+  }
+
+  @media (max-width: 768px) {
+    .contact-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .form-wrapper iframe {
+      min-height: 920px;
+    }
+  }
+</style>

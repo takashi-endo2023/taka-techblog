@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+
+// タグごとに記事数を集計し、記事数降順でソート
+const tagCounts = allPosts
+  .flatMap((p) => p.data.tags)
+  .reduce<Record<string, number>>((acc, tag) => {
+    acc[tag] = (acc[tag] ?? 0) + 1;
+    return acc;
+  }, {});
+
+const tags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout
+  title="タグ一覧 | taka-techblog"
+  description="taka-techblog の記事をタグで探せます。"
+>
+  <div class="container page-content">
+    <header class="page-header animate-fade-in-up">
+      <a href="/blog/1" class="back-link">← Blog 一覧へ戻る</a>
+      <h1>タグ一覧</h1>
+      <p class="page-subtitle">{tags.length} 件のタグ</p>
+    </header>
+
+    <div class="tag-grid animate-fade-in-up delay-1">
+      {tags.map(([tag, count]) => (
+        <a href={`/blog/tags/${tag}`} class="tag-card">
+          <span class="tag-name">{tag}</span>
+          <span class="tag-count">{count}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-content {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+    transition: color 0.15s;
+  }
+
+  .back-link:hover {
+    color: var(--color-accent);
+  }
+
+  .page-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .page-subtitle {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    font-family: var(--font-mono);
+  }
+
+  /* タグカードグリッド */
+  .tag-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .tag-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4em 0.85em;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.15s;
+    background: var(--color-surface);
+  }
+
+  .tag-card:hover {
+    border-color: var(--color-accent);
+    background: rgba(124, 106, 247, 0.08);
+    transform: translateY(-1px);
+  }
+
+  .tag-name {
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    color: var(--color-text);
+  }
+
+  .tag-count {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0.05em 0.45em;
+    line-height: 1.6;
+  }
+</style>

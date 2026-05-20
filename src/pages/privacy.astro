@@ -1,0 +1,153 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const lastUpdated = '2026年5月18日';
+---
+
+<BaseLayout
+  title="プライバシーポリシー | taka-techblog"
+  description="taka-techblog のプライバシーポリシー。個人情報の取り扱い、Cookie・アクセス解析ツールの使用について説明します。"
+>
+  <div class="container privacy-page">
+    <header class="page-header animate-fade-in-up">
+      <h1>プライバシーポリシー</h1>
+      <p class="page-subtitle">最終更新日：{lastUpdated}</p>
+    </header>
+
+    <div class="privacy-body animate-fade-in-up">
+
+      <section class="privacy-section">
+        <h2>個人情報の収集について</h2>
+        <p>
+          当ブログ（taka-techblog）では、お問い合わせフォームをご利用の際に、お名前・メールアドレス等の個人情報をご提供いただく場合があります。
+          収集した個人情報は、お問い合わせへの回答のみに使用し、第三者への提供は行いません。
+        </p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>アクセス解析ツールについて</h2>
+        <p>
+          当ブログでは、Googleが提供するアクセス解析ツール「Google Analytics」を使用しています。
+          Google Analyticsは、トラフィックデータの収集のためにCookieを使用しています。
+          このトラフィックデータは匿名で収集されており、個人を特定するものではありません。
+        </p>
+        <p>
+          Cookieを無効にすることで収集を拒否できます。詳細は
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Googleのプライバシーポリシー</a>
+          をご確認ください。
+        </p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>広告・アフィリエイトについて</h2>
+        <p>
+          当ブログでは、Googleが提供する広告配信サービス「Google AdSense」を使用しています（または使用する予定です）。
+          Google AdSenseは、ユーザーの興味に応じた広告を表示するためにCookieを使用しています。
+          Cookieを使用することでGoogleがブラウザを識別し、適切な広告を配信します。
+        </p>
+        <p>
+          Cookieを無効にする方法や、Google AdSenseに関する詳細は
+          <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer">Googleの広告に関するポリシー</a>
+          をご確認ください。
+        </p>
+        <p>
+          当ブログは、Amazon.co.jpのアソシエイトとして、適格販売により収入を得ています。
+          記事内に「PR」と表記されたリンクはアフィリエイトリンクを含みます。
+          紹介している商品・サービスは実際に使用・調査した上で掲載しており、
+          アフィリエイト収益はブログ運営費に充てています。
+        </p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>Cookieについて</h2>
+        <p>
+          当ブログでは、アクセス解析および広告配信の目的でCookieを使用しています。
+          ブラウザの設定からCookieを無効にすることが可能ですが、一部の機能が正常に動作しない場合があります。
+        </p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>免責事項</h2>
+        <p>
+          当ブログの記事内容は、個人的な見解・経験に基づくものであり、正確性・完全性を保証するものではありません。
+          記事の内容によって生じた損害について、当ブログは一切の責任を負いかねます。
+          また、当ブログからリンクされた外部サイトの内容については、当ブログは責任を負いません。
+        </p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>プライバシーポリシーの変更</h2>
+        <p>
+          本プライバシーポリシーは、必要に応じて予告なく変更することがあります。
+          最新の内容は本ページにてご確認ください。
+        </p>
+      </section>
+
+      <section class="privacy-section">
+        <h2>お問い合わせ</h2>
+        <p>
+          個人情報の取り扱いに関するお問い合わせは、
+          <a href="/contact">お問い合わせページ</a>よりご連絡ください。
+        </p>
+      </section>
+
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .privacy-page {
+    padding-top: 3rem;
+    padding-bottom: 5rem;
+  }
+
+  .page-header {
+    margin-bottom: 3rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .page-subtitle {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    font-family: var(--font-mono);
+  }
+
+  .privacy-body {
+    max-width: 720px;
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .privacy-section h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .privacy-section p {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.85;
+    margin-bottom: 0.75rem;
+  }
+
+  .privacy-section p:last-child {
+    margin-bottom: 0;
+  }
+
+  .privacy-section a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .privacy-section a:hover {
+    color: var(--color-accent-hover);
+  }
+</style>

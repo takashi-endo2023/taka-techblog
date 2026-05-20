@@ -7,16 +7,28 @@ import * as targets from 'aws-cdk-lib/aws-route53-targets';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as budgets from 'aws-cdk-lib/aws-budgets';
+import * as lambda_ from 'aws-cdk-lib/aws-lambda';
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import { Construct } from 'constructs';
 
 interface BlogStackProps extends cdk.StackProps {
   domainName: string;
   portfolioSubdomain: string;
   utagoeSubdomain: string;
+  ecSubdomain: string;
+  aiAdsSubdomain: string;
+  gameSubdomain: string;
   bucketName: string;
   utagoeBucketName: string;
+  ecBucketName: string;
+  aiAdsBucketName: string;
+  gameBucketName: string;
   githubRepo: string;
   utagoeGithubRepo: string;
+  ecGithubRepo: string;
+  aiAdsGithubRepo: string;
+  gameGithubRepo: string;
+  aiAdsLambdaName: string;
   certificate: acm.ICertificate;
   alertEmail: string;
 }
@@ -202,8 +214,217 @@ export class BlogStack extends cdk.Stack {
     });
 
     // ════════════════════════════════════════════════════════
+    // EC サイト（ec.taka-techblog.com）React SPA
+    // ════════════════════════════════════════════════════════
+
+    const ecBucket = new s3.Bucket(this, 'EcBucket', {
+      bucketName: props.ecBucketName,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+    });
+
+    const ecAssetsPolicy = new cloudfront.CachePolicy(this, 'EcAssetsPolicy', {
+      cachePolicyName: `${props.ecBucketName}-assets`,
+      defaultTtl: cdk.Duration.days(365),
+      maxTtl: cdk.Duration.days(365),
+      minTtl: cdk.Duration.days(365),
+      enableAcceptEncodingGzip: true,
+      enableAcceptEncodingBrotli: true,
+    });
+
+    const ecDistribution = new cloudfront.Distribution(this, 'EcDistribution', {
+      defaultBehavior: {
+        origin: origins.S3BucketOrigin.withOriginAccessControl(ecBucket),
+        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+        compress: true,
+        responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS,
+      },
+      additionalBehaviors: {
+        'assets/*': {
+          origin: origins.S3BucketOrigin.withOriginAccessControl(ecBucket),
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          cachePolicy: ecAssetsPolicy,
+          compress: true,
+        },
+      },
+      domainNames: [props.ecSubdomain],
+      certificate: props.certificate,
+      defaultRootObject: 'index.html',
+      errorResponses: [
+        {
+          httpStatus: 403,
+          responseHttpStatus: 200,
+          responsePagePath: '/index.html',
+          ttl: cdk.Duration.seconds(0),
+        },
+        {
+          httpStatus: 404,
+          responseHttpStatus: 200,
+          responsePagePath: '/index.html',
+          ttl: cdk.Duration.seconds(0),
+        },
+      ],
+      priceClass: cloudfront.PriceClass.PRICE_CLASS_200,
+    });
+
+    new route53.ARecord(this, 'EcRecord', {
+      zone: hostedZone,
+      recordName: props.ecSubdomain,
+      target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(ecDistribution)),
+    });
+
+    // ════════════════════════════════════════════════════════
+    // Game Portfolio（game.taka-techblog.com）Next.js SPA
+    // ════════════════════════════════════════════════════════
+
+    const gameBucket = new s3.Bucket(this, 'GameBucket', {
+      bucketName: props.gameBucketName,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+    });
+
+    const gameAssetsPolicy = new cloudfront.CachePolicy(this, 'GameAssetsPolicy', {
+      cachePolicyName: `${props.gameBucketName}-assets`,
+      defaultTtl: cdk.Duration.days(365),
+      maxTtl: cdk.Duration.days(365),
+      minTtl: cdk.Duration.days(365),
+      enableAcceptEncodingGzip: true,
+      enableAcceptEncodingBrotli: true,
+    });
+
+    const gameDistribution = new cloudfront.Distribution(this, 'GameDistribution', {
+      defaultBehavior: {
+        origin: origins.S3BucketOrigin.withOriginAccessControl(gameBucket),
+        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+        compress: true,
+        responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS,
+      },
+      additionalBehaviors: {
+        '_next/static/*': {
+          origin: origins.S3BucketOrigin.withOriginAccessControl(gameBucket),
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          cachePolicy: gameAssetsPolicy,
+          compress: true,
+        },
+      },
+      domainNames: [props.gameSubdomain],
+      certificate: props.certificate,
+      defaultRootObject: 'index.html',
+      errorResponses: [
+        {
+          httpStatus: 403,
+          responseHttpStatus: 200,
+          responsePagePath: '/index.html',
+          ttl: cdk.Duration.seconds(0),
+        },
+        {
+          httpStatus: 404,
+          responseHttpStatus: 200,
+          responsePagePath: '/index.html',
+          ttl: cdk.Duration.seconds(0),
+        },
+      ],
+      priceClass: cloudfront.PriceClass.PRICE_CLASS_200,
+    });
+
+    new route53.ARecord(this, 'GameRecord', {
+      zone: hostedZone,
+      recordName: props.gameSubdomain,
+      target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(gameDistribution)),
+    });
+
+    // ════════════════════════════════════════════════════════
+    // AI Ads Dashboard Frontend（ai-ads.taka-techblog.com）
+    // ════════════════════════════════════════════════════════
+
+    const aiAdsBucket = new s3.Bucket(this, 'AiAdsBucket', {
+      bucketName: props.aiAdsBucketName,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+    });
+
+    const aiAdsAssetsPolicy = new cloudfront.CachePolicy(this, 'AiAdsAssetsPolicy', {
+      cachePolicyName: `${props.aiAdsBucketName}-assets`,
+      defaultTtl: cdk.Duration.days(365),
+      maxTtl: cdk.Duration.days(365),
+      minTtl: cdk.Duration.days(365),
+      enableAcceptEncodingGzip: true,
+      enableAcceptEncodingBrotli: true,
+    });
+
+    const aiAdsDistribution = new cloudfront.Distribution(this, 'AiAdsDistribution', {
+      defaultBehavior: {
+        origin: origins.S3BucketOrigin.withOriginAccessControl(aiAdsBucket),
+        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+        compress: true,
+        responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS,
+      },
+      additionalBehaviors: {
+        '_next/static/*': {
+          origin: origins.S3BucketOrigin.withOriginAccessControl(aiAdsBucket),
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          cachePolicy: aiAdsAssetsPolicy,
+          compress: true,
+        },
+      },
+      domainNames: [props.aiAdsSubdomain],
+      certificate: props.certificate,
+      defaultRootObject: 'index.html',
+      errorResponses: [
+        {
+          httpStatus: 403,
+          responseHttpStatus: 200,
+          responsePagePath: '/index.html',
+          ttl: cdk.Duration.seconds(0),
+        },
+        {
+          httpStatus: 404,
+          responseHttpStatus: 200,
+          responsePagePath: '/index.html',
+          ttl: cdk.Duration.seconds(0),
+        },
+      ],
+      priceClass: cloudfront.PriceClass.PRICE_CLASS_200,
+    });
+
+    new route53.ARecord(this, 'AiAdsRecord', {
+      zone: hostedZone,
+      recordName: props.aiAdsSubdomain,
+      target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(aiAdsDistribution)),
+    });
+
+    // ════════════════════════════════════════════════════════
+    // AI Ads Dashboard Backend（NestJS on Lambda + API Gateway）
+    // ════════════════════════════════════════════════════════
+
+    const aiAdsLambda = new lambda_.Function(this, 'AiAdsLambda', {
+      functionName: props.aiAdsLambdaName,
+      runtime: lambda_.Runtime.NODEJS_20_X,
+      handler: 'lambda.handler',
+      code: lambda_.Code.fromInline(
+        'exports.handler = async () => ({ statusCode: 200, body: "initializing" });'
+      ),
+      timeout: cdk.Duration.seconds(30),
+      memorySize: 512,
+    });
+
+    const aiAdsApi = new apigateway.LambdaRestApi(this, 'AiAdsApi', {
+      handler: aiAdsLambda,
+      restApiName: 'ai-ads-dashboard-api',
+      proxy: true,
+      defaultCorsPreflightOptions: {
+        allowOrigins: [`https://${props.aiAdsSubdomain}`],
+        allowMethods: apigateway.Cors.ALL_METHODS,
+        allowHeaders: ['Content-Type', 'Authorization'],
+      },
+    });
+
+    // ════════════════════════════════════════════════════════
     // GitHub Actions OIDC
-    // taka-techblog と utagoe_club の両リポジトリを許可
+    // taka-techblog / utagoe_club / ec の3リポジトリを許可
     // ════════════════════════════════════════════════════════
 
     const githubProvider = new iam.OpenIdConnectProvider(this, 'GithubOidc', {
@@ -228,6 +449,9 @@ export class BlogStack extends cdk.Stack {
             'token.actions.githubusercontent.com:sub': [
               `repo:${props.githubRepo}:ref:refs/heads/main`,
               `repo:${props.utagoeGithubRepo}:ref:refs/heads/main`,
+              `repo:${props.ecGithubRepo}:ref:refs/heads/main`,
+              `repo:${props.aiAdsGithubRepo}:ref:refs/heads/main`,
+              `repo:${props.gameGithubRepo}:ref:refs/heads/main`,
             ],
           },
         }
@@ -257,6 +481,54 @@ export class BlogStack extends cdk.Stack {
       actions: ['cloudfront:CreateInvalidation'],
       resources: [
         `arn:aws:cloudfront::${this.account}:distribution/${utagoeDistribution.distributionId}`,
+      ],
+    }));
+
+    // EC S3 + CloudFront
+    githubRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['s3:PutObject', 's3:GetObject', 's3:DeleteObject', 's3:ListBucket'],
+      resources: [ecBucket.bucketArn, `${ecBucket.bucketArn}/*`],
+    }));
+
+    githubRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['cloudfront:CreateInvalidation'],
+      resources: [
+        `arn:aws:cloudfront::${this.account}:distribution/${ecDistribution.distributionId}`,
+      ],
+    }));
+
+    // AI Ads S3 + CloudFront + Lambda
+    githubRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['s3:PutObject', 's3:GetObject', 's3:DeleteObject', 's3:ListBucket'],
+      resources: [aiAdsBucket.bucketArn, `${aiAdsBucket.bucketArn}/*`],
+    }));
+
+    githubRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['cloudfront:CreateInvalidation'],
+      resources: [
+        `arn:aws:cloudfront::${this.account}:distribution/${aiAdsDistribution.distributionId}`,
+      ],
+    }));
+
+    githubRole.addToPolicy(new iam.PolicyStatement({
+      actions: [
+        'lambda:UpdateFunctionCode',
+        'lambda:UpdateFunctionConfiguration',
+        'lambda:GetFunctionConfiguration',
+      ],
+      resources: [aiAdsLambda.functionArn],
+    }));
+
+    // Game Portfolio S3 + CloudFront
+    githubRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['s3:PutObject', 's3:GetObject', 's3:DeleteObject', 's3:ListBucket'],
+      resources: [gameBucket.bucketArn, `${gameBucket.bucketArn}/*`],
+    }));
+
+    githubRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['cloudfront:CreateInvalidation'],
+      resources: [
+        `arn:aws:cloudfront::${this.account}:distribution/${gameDistribution.distributionId}`,
       ],
     }));
 
@@ -313,6 +585,46 @@ export class BlogStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'UtagoeDistributionId', {
       description: 'GitHub Secrets: UTAGOE_CLOUDFRONT_DISTRIBUTION_ID',
       value: utagoeDistribution.distributionId,
+    });
+
+    new cdk.CfnOutput(this, 'EcBucketName', {
+      description: 'GitHub Secrets: EC_S3_BUCKET',
+      value: ecBucket.bucketName,
+    });
+
+    new cdk.CfnOutput(this, 'EcDistributionId', {
+      description: 'GitHub Secrets: EC_CLOUDFRONT_DISTRIBUTION_ID',
+      value: ecDistribution.distributionId,
+    });
+
+    new cdk.CfnOutput(this, 'AiAdsBucketName', {
+      description: 'GitHub Secrets: AI_ADS_S3_BUCKET',
+      value: aiAdsBucket.bucketName,
+    });
+
+    new cdk.CfnOutput(this, 'AiAdsDistributionId', {
+      description: 'GitHub Secrets: AI_ADS_CLOUDFRONT_DISTRIBUTION_ID',
+      value: aiAdsDistribution.distributionId,
+    });
+
+    new cdk.CfnOutput(this, 'AiAdsApiUrl', {
+      description: 'GitHub Secrets: AI_ADS_API_URL（NEXT_PUBLIC_API_URLに設定）',
+      value: aiAdsApi.url.replace(/\/$/, ''),
+    });
+
+    new cdk.CfnOutput(this, 'AiAdsLambdaArn', {
+      description: 'AI Ads Lambda ARN',
+      value: aiAdsLambda.functionArn,
+    });
+
+    new cdk.CfnOutput(this, 'GameBucketName', {
+      description: 'GitHub Secrets: GAME_S3_BUCKET',
+      value: gameBucket.bucketName,
+    });
+
+    new cdk.CfnOutput(this, 'GameDistributionId', {
+      description: 'GitHub Secrets: GAME_CLOUDFRONT_DISTRIBUTION_ID',
+      value: gameDistribution.distributionId,
     });
   }
 }

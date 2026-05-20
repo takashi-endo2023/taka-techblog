@@ -27,7 +27,14 @@ const formattedDate = pubDate.toLocaleDateString('ja-JP', {
           <span class="card-reading-time">{readingTime} min read</span>
         )}
         <div class="card-tags">
-          {tags.slice(0, 3).map((tag) => <span class="tag">{tag}</span>)}
+          {tags.slice(0, 3).map((tag) => (
+            <span
+              class="tag tag-link"
+              data-href={`/blog/tags/${tag}`}
+              role="link"
+              tabindex="0"
+            >{tag}</span>
+          ))}
         </div>
       </div>
       <h2 class="card-title">{title}</h2>
@@ -136,4 +143,33 @@ const formattedDate = pubDate.toLocaleDateString('ja-JP', {
     color: var(--color-accent);
     transition: gap 0.15s;
   }
+
+  .tag-link {
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tag-link:hover {
+    background: rgba(124, 106, 247, 0.25);
+  }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.tag-link').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const href = el.dataset.href;
+      if (href) window.location.href = href;
+    });
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        e.stopPropagation();
+        const href = el.dataset.href;
+        if (href) window.location.href = href;
+      }
+    });
+  });
+</script>

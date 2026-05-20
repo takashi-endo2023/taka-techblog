@@ -1,0 +1,149 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import Pagination from '../../components/Pagination.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths({ paginate }: { paginate: Function }) {
+  const allPosts = await getCollection('blog');
+  const sorted = allPosts.sort(
+    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+  );
+  return paginate(sorted, { pageSize: 12 });
+}
+
+const { page } = Astro.props;
+
+function getReadingTime(body: string): number {
+  return Math.max(1, Math.ceil(body.length / 500));
+}
+
+// タグ一覧（使用頻度上位15件のみ表示）
+const allPosts = await getCollection('blog');
+const tagCounts = allPosts.flatMap((p) => p.data.tags).reduce<Record<string, number>>((acc, tag) => {
+  acc[tag] = (acc[tag] ?? 0) + 1;
+  return acc;
+}, {});
+const topTags = Object.entries(tagCounts)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 15)
+  .map(([tag]) => tag);
+---
+
+<BaseLayout
+  title={page.currentPage > 1
+    ? `Blog — ${page.currentPage}ページ目 | taka-techblog`
+    : 'Blog | taka-techblog'}
+  description="フルスタック・AI・チームビルディングの現場知識を言語化した記事一覧"
+>
+  <div class="container page-content">
+    <header class="page-header animate-fade-in-up">
+      <h1>Blog</h1>
+      <p class="page-subtitle">
+        フルスタック・AI・チームビルディングの現場知識を言語化した記事一覧
+      </p>
+    </header>
+
+    <!-- タグナビ（使用頻度上位15件 ＋ 全タグリンク） -->
+    <nav class="tag-nav animate-fade-in-up delay-1" aria-label="タグで絞り込む">
+      <a href="/blog/1" class="tag-btn active">すべて</a>
+      {topTags.map((tag) => (
+        <a href={`/blog/tags/${tag}`} class="tag-btn">{tag}</a>
+      ))}
+      <a href="/blog/tags" class="tag-btn tag-btn--more">すべてのタグ →</a>
+    </nav>
+
+    <!-- 記事一覧 -->
+    <div class="post-list animate-fade-in-up delay-2">
+      {page.data.map((post) => (
+        <BlogCard
+          title={post.data.title}
+          description={post.data.description}
+          pubDate={post.data.pubDate}
+          slug={post.id}
+          tags={post.data.tags}
+          readingTime={getReadingTime(post.body)}
+        />
+      ))}
+    </div>
+
+    <!-- ページネーション -->
+    <Pagination
+      currentPage={page.currentPage}
+      lastPage={page.lastPage}
+      prevUrl={page.url.prev}
+      nextUrl={page.url.next}
+      totalPosts={allPosts.length}
+    />
+  </div>
+</BaseLayout>
+
+<style>
+  .page-content {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+  }
+
+  .page-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .page-subtitle {
+    color: var(--color-text-muted);
+    font-size: 1rem;
+  }
+
+  /* タグナビ */
+  .tag-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .tag-btn {
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    padding: 0.3em 0.75em;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+
+  .tag-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-hover);
+    background: rgba(124, 106, 247, 0.08);
+  }
+
+  .tag-btn.active {
+    background: rgba(124, 106, 247, 0.15);
+    color: var(--color-accent-hover);
+    border-color: rgba(124, 106, 247, 0.4);
+  }
+
+  .tag-btn--more {
+    color: var(--color-accent);
+    border-style: dashed;
+  }
+
+  .tag-btn--more:hover {
+    background: rgba(124, 106, 247, 0.08);
+    border-style: solid;
+  }
+
+  /* 記事グリッド */
+  .post-list {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+</style>

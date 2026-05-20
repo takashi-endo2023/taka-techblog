@@ -1,7 +1,7 @@
 ---
 title: "AWS CDKを初めて使って詰まった5つのこと"
 description: "IaC初挑戦でAWS CDKを選んでこのブログのインフラを構築した際に直面した5つの壁と、その解決策をまとめました。CDK初心者が同じ穴にはまらないように。"
-pubDate: "2026-05-10"
+pubDate: "2025-11-18"
 tags: ["AWS CDK", "AWS", "IaC", "初心者", "CloudFront"]
 ---
 

@@ -13,14 +13,14 @@ function getReadingTime(body: string): number {
 }
 ---
 
-<BaseLayout title="Taka Tech Blog | フルスタック × AI × チームビルディング">
+<BaseLayout title="taka-techblog | フルスタック × AI × チームビルディング">
   <!-- Hero -->
   <section class="hero">
     <div class="hero-bg-grid" aria-hidden="true"></div>
     <div class="container hero-inner">
       <div class="hero-badge animate-fade-in-up">
         <span class="badge-dot"></span>
-        <span class="tag">Medical IT / 係長・テックリード / 転身エンジニア</span>
+        <span class="tag">Medical IT / テックリード / 転身エンジニア</span>
       </div>
       <h1 class="hero-title animate-fade-in-up delay-1">
         フルスタックで作り、<br />
@@ -28,10 +28,9 @@ function getReadingTime(body: string): number {
         <span class="gradient-text">チームで届ける</span>
       </h1>
       <p class="hero-subtitle animate-fade-in-up delay-2">
-        接客業から転身し、医療系スタートアップでシステム内製化をゼロから完遂。
-        外部ベンダーを1年で脱却し年間500万円のコスト削減を達成。
-        現在は係長として技術ガバナンス・組織設計を担いながら、LangChain と Claude Code による
-        AI開発フローの標準化を推進中。現場で得た技術判断と組織づくりを言語化します。
+        医療系スタートアップでシステム内製化を完遂し、<br />
+        LangChain × Claude Code で AI 開発を実務に導入。<br />
+        現場の技術判断と組織づくりの知見を発信します。
       </p>
       <div class="hero-actions animate-fade-in-up delay-3">
         <a href="/blog" class="btn btn-primary">記事を読む</a>
@@ -85,19 +84,6 @@ function getReadingTime(body: string): number {
     </div>
   </section>
 
-  <!-- Portfolio CTA -->
-  <section class="section container cta-section">
-    <div class="cta-box">
-      <div class="cta-glow" aria-hidden="true"></div>
-      <p class="cta-eyebrow">実装デモ</p>
-      <h2>IndexedDB CRUD ラボ</h2>
-      <p>
-        サーバーサイドDB不要の「ブラウザ完結CRUD」アプリケーション。
-        NestJS × IndexedDB × TypeScript の型安全な設計を実際に触って体験できます。
-      </p>
-      <a href="/portfolio" class="btn btn-primary">デモを試す →</a>
-    </div>
-  </section>
 </BaseLayout>
 
 <style>
@@ -255,55 +241,4 @@ function getReadingTime(body: string): number {
     margin: 0;
   }
 
-  /* ── CTA ── */
-  .cta-section {
-    padding-bottom: 5rem;
-  }
-
-  .cta-box {
-    position: relative;
-    background: var(--color-surface);
-    border: 1px solid rgba(124, 106, 247, 0.35);
-    border-radius: calc(var(--radius) * 2);
-    padding: 3rem 2rem;
-    text-align: center;
-    max-width: 560px;
-    margin: 0 auto;
-    overflow: hidden;
-  }
-
-  .cta-glow {
-    position: absolute;
-    top: -40%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 300px;
-    height: 200px;
-    background: radial-gradient(ellipse, rgba(124, 106, 247, 0.15) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .cta-eyebrow {
-    font-size: 0.75rem;
-    font-family: var(--font-mono);
-    color: var(--color-accent);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 0.75rem;
-  }
-
-  .cta-box h2 {
-    font-size: 1.6rem;
-    margin-bottom: 0.75rem;
-    letter-spacing: -0.02em;
-  }
-
-  .cta-box p {
-    color: var(--color-text-muted);
-    margin-bottom: 1.75rem;
-    font-size: 0.95rem;
-    max-width: 420px;
-    margin-left: auto;
-    margin-right: auto;
-  }
 </style>

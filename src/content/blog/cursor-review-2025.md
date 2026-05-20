@@ -1,7 +1,7 @@
 ---
 title: "Cursor実務レビュー2025：Claude Codeと使い分けて気づいたこと"
 description: "Cursorを実務で半年使い込んだ正直レビュー。Claude Codeとの使い分け・Agent機能の実力・Composer vs Chat・コスト感・NestJSでの実践まで。"
-pubDate: "2025-12-10"
+pubDate: "2026-03-18"
 tags: ["Cursor", "AI開発", "Claude Code", "開発ツール", "生産性"]
 ---
 
@@ -95,6 +95,6 @@ Claude Codeと組み合わせることで、コーディングから設計相談
 
 - Tab補完の文脈理解はGitHub Copilotより精度が高い
 - Composer/Agentは複数ファイル変更に強いがレビューが必要
-- コスト感（月20ドル）は fast request 上限に注意
-- Claude Codeとは「実装補助 vs 設計相談」で使い分ける
+- コスト感（月20ドル）はfast request上限に注意
+- Claude Codeとは「実装補助vs設計相談」で使い分ける
 - NestJSのボイラープレート生成との相性は特に良い

@@ -9,7 +9,7 @@ export async function GET(context: APIContext) {
   );
 
   return rss({
-    title: 'Taka Tech Blog',
+    title: 'taka-techblog',
     description:
       '接客業から転身し医療系スタートアップの内製化を完遂したテックリード・係長が、TypeScript / React / NestJS / LangChain / Claude Code の現場知識とチームビルディングを発信するブログ。',
     site: context.site!,

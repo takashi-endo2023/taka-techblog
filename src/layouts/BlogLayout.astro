@@ -1,12 +1,16 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import BlogCard from '../components/BlogCard.astro';
+import type { MarkdownHeading } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   post: CollectionEntry<'blog'>;
+  headings?: MarkdownHeading[];
+  allPosts?: CollectionEntry<'blog'>[];
 }
 
-const { post } = Astro.props;
+const { post, headings = [], allPosts = [] } = Astro.props;
 const { title, description, pubDate, updatedDate, tags } = post.data;
 
 const readingTime = Math.max(1, Math.ceil(post.body.length / 500));
@@ -21,14 +25,76 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('ja-JP', {
   month: 'long',
   day: 'numeric',
 });
+
+// TOC: h2 and h3 only, show if 3 or more
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const showToc = tocHeadings.length >= 3;
+
+// Prev / Next navigation
+const sortedPosts = [...allPosts].sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+const currentIndex = sortedPosts.findIndex((p) => p.id === post.id);
+const prevPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
+const nextPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
+
+// Related posts: same tags, sorted by match count then date, max 3
+function getReadingTime(body: string): number {
+  return Math.max(1, Math.ceil(body.length / 500));
+}
+
+const relatedPosts = allPosts
+  .filter((p) => p.id !== post.id)
+  .map((p) => ({
+    post: p,
+    matchCount: p.data.tags.filter((t) => tags.includes(t)).length,
+  }))
+  .filter(({ matchCount }) => matchCount > 0)
+  .sort((a, b) => {
+    if (b.matchCount !== a.matchCount) return b.matchCount - a.matchCount;
+    return b.post.data.pubDate.getTime() - a.post.data.pubDate.getTime();
+  })
+  .slice(0, 3)
+  .map(({ post }) => post);
+
+// JSON-LD
+const siteUrl = 'https://taka-techblog.com';
+const pageUrl = `${siteUrl}/blog/${post.id}`;
+const jsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description: description,
+  url: pageUrl,
+  datePublished: pubDate.toISOString(),
+  ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
+  author: {
+    '@type': 'Person',
+    name: 'Taka',
+    url: siteUrl,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'taka-techblog',
+    url: siteUrl,
+  },
+});
+
+// X share URL
+const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(pageUrl)}&via=taka_tech1988`;
 ---
 
 <BaseLayout
-  title={`${title} | Taka Tech Blog`}
+  title={`${title} | taka-techblog`}
   description={description}
+  ogImage={`/og/${post.id}.png`}
   ogType="article"
   pubDate={pubDate}
 >
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={jsonLd} />
+  </Fragment>
+
   <!-- Reading progress bar -->
   <div class="progress-bar" id="progress-bar" aria-hidden="true"></div>
 
@@ -44,15 +110,85 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('ja-JP', {
       <h1>{title}</h1>
       <p class="post-description">{description}</p>
       <div class="tag-list">
-        {tags.map((tag) => <span class="tag">{tag}</span>)}
+        {tags.map((tag) => <a href={`/blog/tags/${tag}`} class="tag">{tag}</a>)}
       </div>
     </header>
+
+    {showToc && (
+      <nav class="toc" aria-label="目次">
+        <p class="toc-title">目次</p>
+        <ol class="toc-list">
+          {tocHeadings.map((h) => (
+            <li class={h.depth === 3 ? 'toc-item toc-item--h3' : 'toc-item'}>
+              <a href={`#${h.slug}`} class="toc-link">{h.text}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )}
+
     <div class="post-body">
       <slot />
     </div>
+
     <footer class="post-footer">
-      <a href="/blog" class="btn btn-outline">← 記事一覧へ戻る</a>
+      <div class="post-footer-actions">
+        <a href="/blog/1" class="btn btn-outline">← 記事一覧へ戻る</a>
+        <a
+          href={shareUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-share"
+          aria-label="X (Twitter) でシェア"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+          </svg>
+          X でシェア
+        </a>
+      </div>
     </footer>
+
+    {(prevPost || nextPost) && (
+      <nav class="post-nav" aria-label="前後の記事">
+        <div class="post-nav-grid">
+          <div class="post-nav-item post-nav-item--prev">
+            {prevPost && (
+              <>
+                <span class="post-nav-label">← 新しい記事</span>
+                <a href={`/blog/${prevPost.id}`} class="post-nav-link">{prevPost.data.title}</a>
+              </>
+            )}
+          </div>
+          <div class="post-nav-item post-nav-item--next">
+            {nextPost && (
+              <>
+                <span class="post-nav-label">古い記事 →</span>
+                <a href={`/blog/${nextPost.id}`} class="post-nav-link">{nextPost.data.title}</a>
+              </>
+            )}
+          </div>
+        </div>
+      </nav>
+    )}
+
+    {relatedPosts.length > 0 && (
+      <section class="related-posts" aria-label="関連記事">
+        <h2 class="related-posts-title">関連記事</h2>
+        <div class="related-posts-grid">
+          {relatedPosts.map((p) => (
+            <BlogCard
+              title={p.data.title}
+              description={p.data.description}
+              pubDate={p.data.pubDate}
+              slug={p.id}
+              tags={p.data.tags}
+              readingTime={getReadingTime(p.body)}
+            />
+          ))}
+        </div>
+      </section>
+    )}
   </article>
 </BaseLayout>
 
@@ -91,7 +227,7 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('ja-JP', {
   }
 
   .post-header {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     padding-bottom: 2rem;
     border-bottom: 1px solid var(--color-border);
   }
@@ -138,6 +274,54 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('ja-JP', {
     gap: 0.5rem;
   }
 
+  /* TOC */
+  .toc {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2.5rem;
+    max-width: 720px;
+  }
+
+  .toc-title {
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .toc-item {
+    line-height: 1.4;
+  }
+
+  .toc-item--h3 {
+    padding-left: 1.25rem;
+  }
+
+  .toc-link {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .toc-link:hover {
+    color: var(--color-accent-hover);
+  }
+
+  /* Post body */
   .post-body {
     max-width: 720px;
   }
@@ -179,9 +363,104 @@ const formattedUpdatedDate = updatedDate?.toLocaleDateString('ja-JP', {
     font-style: italic;
   }
 
+  /* Post footer */
   .post-footer {
     margin-top: 3rem;
     padding-top: 2rem;
     border-top: 1px solid var(--color-border);
+  }
+
+  .post-footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-share {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.1rem;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .btn-share:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    box-shadow: 0 0 0 1px rgba(124, 106, 247, 0.15);
+  }
+
+  /* Prev / Next nav */
+  .post-nav {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .post-nav-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 600px) {
+    .post-nav-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .post-nav-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .post-nav-item--next {
+    text-align: right;
+  }
+
+  .post-nav-label {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+  }
+
+  .post-nav-link {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    text-decoration: none;
+    line-height: 1.4;
+    transition: color 0.15s;
+  }
+
+  .post-nav-link:hover {
+    color: var(--color-accent-hover);
+  }
+
+  /* Related posts */
+  .related-posts {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .related-posts-title {
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+    color: var(--color-text);
+  }
+
+  .related-posts-grid {
+    display: grid;
+    gap: 1rem;
   }
 </style>

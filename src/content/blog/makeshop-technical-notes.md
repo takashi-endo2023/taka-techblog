@@ -1,7 +1,7 @@
 ---
 title: "MakeShopでECサイトを立ち上げた技術的な話 — ノーコードの限界とJavaScript注入"
 description: "エンジニアがノーコードECプラットフォームのMakeShopを使ってみて気づいた、カスタマイズの限界とJavaScript注入による突破口。GA4連携や動的コンテンツの実例を交えて整理する。"
-pubDate: "2026-05-05"
+pubDate: "2025-06-24"
 tags: ["MakeShop", "EC", "ノーコード", "JavaScript"]
 ---
 

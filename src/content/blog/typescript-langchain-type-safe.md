@@ -1,7 +1,7 @@
 ---
-title: "TypeScriptで型安全なLangChainアプリを作る — LangChain.jsの型定義と実装パターン"
+title: "TypeScriptで型安全なLangChainアプリを作る —LangChain.jsの型定義と実装パターン"
 description: "LangChain.jsの型定義の扱い方からストリーミングレスポンスの型安全な実装、カスタムChainの設計まで、医療系スタートアップのNestJS実務で得た知見をまとめました。"
-pubDate: "2026-01-28"
+pubDate: "2025-08-26"
 tags: ["TypeScript", "LangChain", "AI", "型安全"]
 ---
 
@@ -58,7 +58,7 @@ class MyChain extends BaseChain {
 
 ## ストリーミングレスポンスの型安全な実装
 
-治験データの検索結果をAIで要約するとき、レスポンスが長くなるのでストリーミングは必須です。NestJS + Server-Sent Events で以下のように実装しています。
+治験データの検索結果をAIで要約するとき、レスポンスが長くなるのでストリーミングは必須です。NestJS + Server-Sent Eventsで以下のように実装しています。
 
 ```typescript
 import { ChatOpenAI } from "langchain/chat_models/openai";
@@ -162,7 +162,7 @@ async function safeInvoke(input: ClinicalSummaryInput) {
 
 半年間の運用で定着したパターンを整理すると：
 
-1. **LCEL + ジェネリクス**: 入出力の型を明示してチェーンを組む
+1. **LCEL +ジェネリクス**: 入出力の型を明示してチェーンを組む
 2. **Zodでスキーマ検証**: `StructuredOutputParser`とZodを組み合わせてLLMの出力を型安全にパース
 3. **エラー境界の明確化**: LangChainエラーはサービス層でキャッチしてアプリ独自のエラーに変換
 4. **ストリーミングはObservable**: NestJSとの組み合わせでは`Observable`に変換してSSEで流す

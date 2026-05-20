@@ -54,7 +54,7 @@ const timeline = [
 ---
 
 <BaseLayout
-  title="About | Taka Tech Blog"
+  title="About | taka-techblog"
   description="接客業から転身し、医療系スタートアップでシステム内製化を完遂したテックリード・係長。TypeScript / React / NestJS / LangChain / AWS を主軸に開発・組織設計・AI活用を実践中。"
 >
   <div class="container about-page">
@@ -62,30 +62,42 @@ const timeline = [
     <!-- Profile -->
     <section class="profile animate-fade-in-up">
       <div class="profile-avatar">
-        <span class="avatar-icon">&lt;/&gt;</span>
+        <img src="/logo.png" alt="taka-techblog logo" class="avatar-logo" width="160" height="110" />
       </div>
       <div class="profile-info">
         <div class="profile-badges">
           <span class="tag">Medical IT</span>
           <span class="tag">Tech Lead</span>
-          <span class="tag">係長</span>
         </div>
         <h1 class="profile-name">Taka</h1>
-        <p class="profile-role">フルスタックエンジニア / テックリード / 係長</p>
+        <p class="profile-role">フルスタックエンジニア / テックリード</p>
         <p class="profile-bio">
           接客業から転身し、医療系スタートアップのシステム内製化をゼロから完遂。
           外部ベンダーを1年で脱却し年間<strong>500万円のコスト削減</strong>を達成。
           現在は係長として技術ガバナンス・組織設計を担いながら、
           LangChain と Claude Code による AI 開発フローの標準化を推進中。
         </p>
-        <a
-          href="https://github.com/takashi-endo"
-          target="_blank"
-          rel="noopener"
-          class="btn btn-outline"
-        >
-          GitHub
-        </a>
+        <div class="profile-links">
+          <a
+            href="https://github.com/takashi-endo2023"
+            target="_blank"
+            rel="noopener"
+            class="btn btn-outline"
+          >
+            GitHub
+          </a>
+          <a
+            href="https://x.com/taka_tech1988"
+            target="_blank"
+            rel="noopener"
+            class="btn btn-outline btn-x"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.74l7.73-8.835L1.254 2.25H8.08l4.258 5.63 5.906-5.63Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            @taka_tech1988
+          </a>
+        </div>
       </div>
     </section>
 
@@ -137,7 +149,6 @@ const timeline = [
           技術スタックは <strong>Astro + AWS CDK</strong>（どちらも初挑戦）で構築。
           このブログ自体が学習ログでもあります。
         </p>
-        <a href="/blog" class="btn btn-primary">記事を読む</a>
       </div>
     </section>
 
@@ -162,21 +173,20 @@ const timeline = [
 
   .profile-avatar {
     flex-shrink: 0;
-    width: 88px;
-    height: 88px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(124,106,247,0.2), rgba(96,165,250,0.2));
-    border: 2px solid rgba(124,106,247,0.4);
     display: flex;
     align-items: center;
     justify-content: center;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
   }
 
-  .avatar-icon {
-    font-family: var(--font-mono);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--color-accent);
+  /* 元の色を活かして表示（背景カードで猫の暗い色が見えるようにする） */
+  .avatar-logo {
+    width: 150px;
+    height: auto;
+    display: block;
   }
 
   .profile-badges {
@@ -209,6 +219,18 @@ const timeline = [
 
   .profile-bio strong {
     color: var(--color-text);
+  }
+
+  .profile-links {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-x {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
   }
 
   @media (max-width: 600px) {
@@ -363,7 +385,4 @@ const timeline = [
     color: var(--color-text);
   }
 
-  .blog-about-box .btn {
-    margin-top: 0.5rem;
-  }
 </style>

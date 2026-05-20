@@ -4,10 +4,17 @@ const year = new Date().getFullYear();
 
 <footer class="site-footer">
   <div class="footer-inner container">
-    <p class="footer-copy">&copy; {year} Taka Tech Blog — Built with Astro · Hosted on AWS</p>
+    <p class="footer-copy">&copy; {year} taka-techblog — Built with Astro · Hosted on AWS</p>
     <nav class="footer-nav">
-      <a href="https://github.com/takashi-endo" target="_blank" rel="noopener">GitHub</a>
+      <a href="/blog/1">Blog</a>
+      <a href="/portfolios">Portfolios</a>
+      <a href="/uses">Uses</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+      <a href="https://github.com/takashi-endo2023" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://x.com/taka_tech1988" target="_blank" rel="noopener">X</a>
       <a href="/blog/rss.xml">RSS</a>
+      <a href="/privacy">プライバシーポリシー</a>
     </nav>
   </div>
 </footer>
@@ -36,6 +43,7 @@ const year = new Date().getFullYear();
   .footer-nav {
     display: flex;
     gap: 1.25rem;
+    flex-wrap: wrap;
   }
 
   .footer-nav a {

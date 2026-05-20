@@ -4,10 +4,20 @@
     "domainName": "taka-techblog.com",
     "portfolioSubdomain": "portfolio.taka-techblog.com",
     "utagoeSubdomain": "utagoe.taka-techblog.com",
+    "ecSubdomain": "ec.taka-techblog.com",
+    "aiAdsSubdomain": "ai-ads.taka-techblog.com",
+    "gameSubdomain": "game.taka-techblog.com",
     "bucketName": "taka-techblog-com",
     "utagoeBucketName": "utagoe-taka-techblog",
+    "ecBucketName": "ec-taka-techblog",
+    "aiAdsBucketName": "ai-ads-taka-techblog",
+    "gameBucketName": "game-taka-techblog",
     "githubRepo": "takashi-endo2023/taka-techblog",
     "utagoeGithubRepo": "takashi-endo2023/utagoe_club",
+    "ecGithubRepo": "takashi-endo2023/ec",
+    "aiAdsGithubRepo": "takashi-endo2023/ai-ads-dashboard",
+    "gameGithubRepo": "takashi-endo2023/game-site",
+    "aiAdsLambdaName": "ai-ads-dashboard-api",
     "alertEmail": "your-email@example.com"
   }
 }

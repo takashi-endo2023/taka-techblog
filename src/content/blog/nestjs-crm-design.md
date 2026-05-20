@@ -1,7 +1,7 @@
 ---
 title: "NestJSで治験CRMのバックエンドを設計した — モジュール設計からエラーハンドリングまで"
 description: "治験CRMのバックエンドをNestJSで設計・実装した実録。Expressとの比較、ドメイン駆動モジュール設計、Repositoryパターン、DTOバリデーション、グローバルエラーハンドリングまで解説します。"
-pubDate: "2026-01-20"
+pubDate: "2025-09-16"
 tags: ["NestJS", "TypeScript", "バックエンド設計", "アーキテクチャ"]
 ---
 

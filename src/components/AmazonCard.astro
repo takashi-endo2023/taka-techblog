@@ -1,0 +1,94 @@
+---
+interface Props {
+  asin: string;
+  title: string;
+  description?: string;
+}
+
+const { asin, title, description } = Astro.props;
+const associateId = 'takashi084-22';
+const affiliateUrl = `https://www.amazon.co.jp/dp/${asin}?tag=${associateId}`;
+const imageUrl = `https://images-fe.ssl-images-amazon.com/images/P/${asin}.09._SL160_.jpg`;
+---
+
+<div class="amazon-card">
+  <p class="affiliate-label">PR</p>
+  <a href={affiliateUrl} target="_blank" rel="noopener noreferrer sponsored" class="amazon-link">
+    <img src={imageUrl} alt={title} class="amazon-image" loading="lazy" />
+    <div class="amazon-info">
+      <p class="amazon-title">{title}</p>
+      {description && <p class="amazon-desc">{description}</p>}
+      <span class="amazon-cta">Amazonで見る →</span>
+    </div>
+  </a>
+</div>
+
+<style>
+  .amazon-card {
+    position: relative;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    margin: 1.5rem 0;
+    transition: border-color 0.2s;
+  }
+
+  .amazon-card:hover {
+    border-color: #f59e0b;
+  }
+
+  .affiliate-label {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+  }
+
+  .amazon-link {
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+    padding: 1.25rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .amazon-image {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 4px;
+  }
+
+  .amazon-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .amazon-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.4;
+  }
+
+  .amazon-desc {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .amazon-cta {
+    font-size: 0.85rem;
+    color: #f59e0b;
+    font-weight: 500;
+  }
+</style>

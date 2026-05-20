@@ -3,21 +3,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const portfolios = [
   {
-    title: '技術ブログ・ポートフォリオサイト',
-    tech: ['Astro', 'TypeScript', 'AWS CDK', 'GitHub Actions', 'CloudFront', 'S3'],
-    description:
-      'WordPress + さくらサーバーから Astro SSG + AWS へ移行。IaC・OIDC認証・CloudFrontキャッシュ戦略まで一貫して実装。月額コストを約600円→250円に削減。',
-    points: [
-      'AWS CDK（TypeScript）で S3・CloudFront・ACM・Route 53 を IaC 管理',
-      'GitHub Actions OIDC 認証（長期IAMキー不要）で自動デプロイ',
-      'アセット別キャッシュ戦略（immutable / no-cache）でパフォーマンス最適化',
-      'CloudFront OAC による S3 のパブリック非公開配信',
-      'www・portfolio・utagoe サブドメインをワイルドカード証明書で一括管理',
-    ],
-    github: 'https://github.com/takashi-endo2023/taka-techblog',
-    demo: 'https://taka-techblog.com',
-  },
-  {
     title: '歌声くらぶ 公式サイト',
     tech: ['React 19', 'TypeScript', 'Vite', 'React Router', 'Swiper'],
     description:
@@ -28,28 +13,62 @@ const portfolios = [
       'スキップナビゲーション実装によるキーボードアクセシビリティ対応',
       'React Router v7 による SPA ルーティング（直リンク・ブラウザバック対応）',
     ],
+    screenshot: null,
     github: 'https://github.com/takashi-endo2023/utagoe_club',
     demo: 'https://utagoe.taka-techblog.com',
   },
   {
-    title: 'IndexedDB 疑似CRUD アプリケーション',
-    tech: ['TypeScript', 'IndexedDB', 'idb', 'Astro'],
+    title: 'ECサイト（Rails API × React フロントエンド）',
+    tech: ['React 19', 'TypeScript', 'Vite', 'Tailwind CSS v4', 'TanStack Query', 'Zustand', 'Zod', 'Rails API'],
     description:
-      'サーバーサイドDB契約ゼロでCRUD操作を完全再現するブラウザアプリ。LocalStorageでなくIndexedDBを採用した理由を設計レベルで説明できるポートフォリオ。',
+      'Rails API をバックエンドに持つフルスタック EC サイト。フロントエンドは React + TanStack Query で非同期状態を管理し、Zustand でカートを制御。管理者・ユーザー両面の UI を実装。',
     points: [
-      '非同期 API・大容量・構造化データに対応した IndexedDB を採用',
-      'idb ライブラリで型安全な CRUD リポジトリを実装',
-      '初期シードデータと永続化の状態管理を分離',
-      'リロード後もデータが復元されるサーバーレス体験',
+      'Rails API Mode（JWT認証）と React の完全分離アーキテクチャ',
+      'TanStack Query でサーバー状態キャッシュ・楽観的更新を実装',
+      'Zustand によるカート状態のグローバル管理（セッション永続化）',
+      'React Hook Form + Zod によるスキーマベースのバリデーション',
+      '管理者ダッシュボード・商品管理・注文管理を含む全画面実装',
     ],
-    github: 'https://github.com/takashi-endo2023/taka-techblog',
-    demo: '/portfolio',
+    screenshot: null,
+    github: 'https://github.com/takashi-endo2023/ec',
+    demo: 'https://ec.taka-techblog.com',
+  },
+  {
+    title: 'AI付き広告計測・分析システム',
+    tech: ['NestJS', 'Next.js', 'TypeScript', 'AWS Lambda', 'API Gateway', 'Gemini API'],
+    description:
+      '実務での「Google広告費×CRMデータ突合」の知見をベースに個人開発。複数媒体の広告費とCRMの参加ステータスを結合し、CRA（申込単価）・CRP（完了単価）を自動算出。集計データをGemini APIに渡し、構造化JSON（responseSchema）で改善アクションを自動出力するダッシュボード。',
+    points: [
+      'NestJS の Factory/Strategy パターンで媒体別CSVパーサーを実装・拡張性を確保',
+      'バックエンド側でSQLライクな集計をプレ処理しGemini APIへのトークンを最小化',
+      'Gemini SDK の responseSchema で返却JSONスキーマを完全固定し型安全な構造化出力を実現',
+      'メモリキャッシュによるAPI呼び出し制御（無料枠RPM制限への対策）',
+      '@vendia/serverless-express で NestJS を AWS Lambda 上にサーバーレス配置',
+    ],
+    screenshot: null,
+    github: 'https://github.com/takashi-endo2023/ai-ads-dashboard',
+    demo: 'https://ai-ads.taka-techblog.com',
+  },
+  {
+    title: 'Game Portfolio Site',
+    tech: ['Next.js', 'TypeScript', 'Three.js', 'GSAP', 'Framer Motion'],
+    description:
+      'Three.js パーティクル・GSAP アニメーション・HUD デザインシステムで構築したシネマティックなポートフォリオサイト。ゲームUI/SF的な世界観をWebで表現。',
+    points: [
+      'Three.js + @react-three/fiber でパーティクルフィールドを3D描画',
+      'GSAP ScrollTrigger による高度なスクロール連動アニメーション',
+      'Framer Motion + Lenis スムーススクロールで没入感のあるUXを実現',
+      'HUDインスパイアのデザインシステムをTailwind CSS v4でゼロから設計',
+    ],
+    screenshot: null,
+    github: 'https://github.com/takashi-endo2023/game-site',
+    demo: 'https://game.taka-techblog.com',
   },
 ];
 ---
 
 <BaseLayout
-  title="Portfolios | Taka Tech Blog"
+  title="Portfolios | taka-techblog"
   description="設計意図まで語れる実績一覧。AWSインフラ設計からフロントエンド実装まで。"
 >
   <div class="container page-content">
@@ -61,6 +80,12 @@ const portfolios = [
     <div class="portfolio-list">
       {portfolios.map((item) => (
         <article class="portfolio-card">
+          <div class="card-screenshot">
+            {item.screenshot
+              ? <img src={item.screenshot} alt={`${item.title} スクリーンショット`} loading="lazy" />
+              : <div class="screenshot-placeholder"><span>screenshot coming soon</span></div>
+            }
+          </div>
           <header class="card-header">
             <h2>{item.title}</h2>
             <div class="tech-list">
@@ -116,7 +141,7 @@ const portfolios = [
   .portfolio-card {
     border: 1px solid var(--color-border);
     border-radius: calc(var(--radius) * 1.5);
-    padding: 2rem;
+    overflow: hidden;
     background: var(--color-surface);
     transition: border-color 0.15s;
   }
@@ -125,7 +150,51 @@ const portfolios = [
     border-color: var(--color-accent);
   }
 
+  /* スクリーンショット */
+  .card-screenshot {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .card-screenshot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .portfolio-card:hover .card-screenshot img {
+    transform: scale(1.03);
+  }
+
+  .screenshot-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--color-bg),
+      var(--color-bg) 4px,
+      var(--color-surface) 4px,
+      var(--color-surface) 12px
+    );
+  }
+
+  .screenshot-placeholder span {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    opacity: 0.5;
+    letter-spacing: 0.05em;
+  }
+
   .card-header {
+    padding: 2rem 2rem 0;
     margin-bottom: 1rem;
   }
 
@@ -144,11 +213,12 @@ const portfolios = [
     color: var(--color-text-muted);
     font-size: 0.95rem;
     margin-bottom: 1.25rem;
+    padding: 0 2rem;
   }
 
   .point-list {
     list-style: none;
-    padding: 0;
+    padding: 0 2rem;
     margin-bottom: 1.5rem;
     display: grid;
     gap: 0.5rem;
@@ -171,5 +241,6 @@ const portfolios = [
   .card-footer {
     display: flex;
     gap: 0.75rem;
+    padding: 0 2rem 2rem;
   }
 </style>
