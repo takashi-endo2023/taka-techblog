@@ -32,35 +32,15 @@ const result = await chain.invoke({ input: '...' });
 
 `|` でチェーンをつなぐパイプライン記法は直感的ですが、型の扱いが少し難解で慣れが必要でした。
 
-## 実際に実装したRAG（検索拡張生成）
+## RAGを試みてやめた話
 
-患者情報や過去の問い合わせを検索して回答を生成するRAGシステムを実装しました。
+治験CRMに対して、最初にRAGを試みました。被験者データを自然言語で呼び出せれば現場の操作が楽になるという発想でした。
 
-```typescript
-import { ChatOpenAI } from '@langchain/openai';
-import { MemoryVectorStore } from 'langchain/vectorstores/memory';
-import { OpenAIEmbeddings } from '@langchain/openai';
-import { createRetrievalChain } from 'langchain/chains/retrieval';
-import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
+動かしてみてやめることにしました。CRMは記録システムなので、「それらしい回答」が返ってくるリスクが許容できなかった。来院予定を間違えて返すことは被験者への影響に直結します。
 
-// ベクトルストアのセットアップ
-const vectorStore = await MemoryVectorStore.fromDocuments(
-  documents,
-  new OpenAIEmbeddings()
-);
+代わりに、確定したクエリをツールとして定義してRe-Actエージェントに選ばせる構成にしました。ツールの中身はDBクエリなので、「AIが判断する部分」はツール選択と引数にだけ限定できます。
 
-// RAGチェーンの構築
-const llm = new ChatOpenAI({ modelName: 'gpt-4o', temperature: 0 });
-const combineDocsChain = await createStuffDocumentsChain({ llm, prompt });
-const retrievalChain = await createRetrievalChain({
-  retriever: vectorStore.asRetriever(),
-  combineDocsChain,
-});
-
-const result = await retrievalChain.invoke({ input: userQuery });
-```
-
-本番ではインメモリではなくPgVector（PostgreSQL拡張）を使っています。LangChainのVectorStoreインターフェースが抽象化されているため、ストア実装の差し替えは比較的簡単でした。
+LangChainのRAB実装そのものは、非医療系のドキュメント検索やFAQシステムなら使える場面は多いと思っています。`createRetrievalChain` と `createStuffDocumentsChain` の組み合わせはシンプルで、VectorStoreの差し替えも容易です。ユースケースに合わない場合があるという話であって、RAGの実装品質の問題ではありません。
 
 ## NestJSとの統合パターン
 

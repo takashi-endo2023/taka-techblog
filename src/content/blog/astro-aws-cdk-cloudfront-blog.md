@@ -1,20 +1,31 @@
 ---
 title: "AstroとAWS CDK + CloudFrontで技術ブログを構築した話"
-description: "WordPressからモダンなSSGアーキテクチャへ移行し、月額コストを約600円→120円に削減。AWS CDKによるIaC・OIDC認証・CloudFrontキャッシュ戦略まで一貫して自前実装した記録。"
+description: "放置していたWordPressブログを、AIが面倒を減らしてくれたから再挑戦できた。Astro SSG + AWS CDK + CloudFrontで月120円、AstroもCDKも初挑戦で構築した記録。"
 pubDate: "2025-10-28"
+updatedDate: "2026-05-22"
 tags: ["Astro", "AWS", "AWS CDK", "DevOps", "GitHub Actions"]
 ---
 
-## なぜWordPressをやめたのか
+さくらのレンタルサーバーでWordPressのブログを持っていた。更新もほとんどせず、放置気味になっていた。
 
-さくらのレンタルサーバーで運用していたWordPressブログには、いくつかの課題がありました。
+再挑戦しようと思ったきっかけは、AIだ。
 
-- **固定費**: DBサーバーを含む費用が月額約600円
-- **パフォーマンス**: PHPのサーバーサイドレンダリングによるTTFTの遅さ
-- **メンテナンスコスト**: WordPressコア・プラグインの更新管理
-- **DevOpsスキルのアピール不足**: インフラをコードで管理していない
+記事を書くという面倒な作業が、AIと壁打ちすることで圧倒的に楽になった。「書けない」より「書く場所が古い」という問題が残った。ならついでに作り直そう、という話になった。
 
-これらを一気に解決するため、**Astro SSG + AWS S3 + CloudFront + AWS CDK** の構成へ移行しました。AstroもAWS CDKも今回が初挑戦です。
+AstroもAWS CDKも今回が初挑戦だった。
+
+## なぜWordPressをやめたか
+
+WordPressには不満があった。
+
+- 月額約600円（DBサーバー込み）の固定費
+- PHPのサーバーサイドレンダリングによる遅さ
+- コア・プラグインの更新管理の手間
+- 「インフラをコードで管理していない」という状態
+
+最後の一点は、エンジニアとして気になっていた。業務でAWSを触っているのに、自分のサイトのインフラは手動管理という状態だった。
+
+**Astro SSG + AWS S3 + CloudFront + AWS CDK** の構成に移行した。
 
 ## アーキテクチャの全体像
 
@@ -23,14 +34,13 @@ GitHub → GitHub Actions → S3 → CloudFront → ユーザー
              ↑ OIDC認証（キーレス）
 ```
 
-コードをmainブランチにpushするだけで、自動ビルドからデプロイまで完結します。
+mainブランチにpushするだけで、自動ビルドからデプロイまで完結する。
 
 ## AWS CDKでインフラをコード管理する
 
-最大のこだわりは**インフラをAWS CDK（TypeScript）で完全管理すること**です。HCL（Terraform）ではなくTypeScriptで書けるので、普段の開発言語と統一できる点が気に入っています。
+最大のこだわりはインフラをAWS CDK（TypeScript）で管理することだ。HCLではなくTypeScriptで書けるので、普段の開発言語と統一できる。
 
 ```typescript
-// lib/blog-stack.ts
 const bucket = new s3.Bucket(this, 'BlogBucket', {
   blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
   removalPolicy: cdk.RemovalPolicy.RETAIN,
@@ -48,18 +58,13 @@ const distribution = new cloudfront.Distribution(this, 'BlogDistribution', {
 });
 ```
 
-S3バケットは**完全プライベート**に設定し、CloudFront OAC（Origin Access Control）経由でのみアクセスを許可します。S3のURLを直接叩いてもアクセスできない安全な構成です。
+S3バケットは完全プライベートに設定し、CloudFront OAC経由でのみアクセスを許可する。
 
-CDKを初めて使ってみて最初に詰まったのは `cdk bootstrap` の存在を知らなかったことと、ACM証明書を `us-east-1` で作らないといけないというCloudFrontの制約です。この辺は別記事で詳しく書きます。
+CDKを初めて使って最初に詰まったのは `cdk bootstrap` の存在を知らなかったことと、ACM証明書を `us-east-1` で作らないといけないというCloudFrontの制約だった。
 
-## OIDC認証でキーレスデプロイを実現
+## OIDC認証でキーレスデプロイ
 
-従来のGitHub Actionsでは、AWSアクセスキーをSecretsに保存する必要がありました。しかしこのアプローチには問題があります：
-
-- リポジトリが漏洩した際の認証情報流出リスク
-- キーのローテーション管理が必要
-
-**OIDC（OpenID Connect）認証**を使えば、これらの問題をゼロにできます。
+従来はAWSアクセスキーをGitHub Secretsに保存する必要があった。OIDC認証を使えば長期的なアクセスキーなしでデプロイできる。
 
 ```yaml
 - name: Configure AWS credentials via OIDC
@@ -69,27 +74,16 @@ CDKを初めて使ってみて最初に詰まったのは `cdk bootstrap` の存
     aws-region: ap-northeast-1
 ```
 
-GitHubが発行した一時的なIDトークンをAWS STSと交換することで、**長期的なアクセスキーなし**でデプロイが可能です。
+GitHubが発行した一時的なIDトークンをAWS STSと交換する仕組みだ。
 
 ## CloudFrontキャッシュ戦略
 
-Astroのビルド成果物は2種類に分けてキャッシュ設定します：
+Astroのビルド成果物は2種類に分けてキャッシュ設定する。
 
 | ファイル | Cache-Control | 理由 |
 |---|---|---|
-| `_astro/*`（JS・CSS） | `max-age=31536000,immutable` | ハッシュ付きファイル名のため1年キャッシュしても安全 |
+| `_astro/*`（JS・CSS） | `max-age=31536000,immutable` | ハッシュ付きファイル名のため1年キャッシュ可 |
 | `*.html` | `max-age=0,no-cache` | デプロイ後即時反映のため |
-
-```bash
-# JS/CSS は immutable キャッシュ
-aws s3 sync dist/_astro s3://$BUCKET/_astro \
-  --cache-control "max-age=31536000,immutable"
-
-# HTML は no-cache
-aws s3 sync dist/ s3://$BUCKET/ \
-  --cache-control "max-age=0,no-cache" \
-  --exclude "_astro/*"
-```
 
 ## コスト比較
 
@@ -100,13 +94,18 @@ aws s3 sync dist/ s3://$BUCKET/ \
 | ドメイン | ~100円/月 | Route 53: ~60円/月 |
 | **合計** | **~600円/月** | **~90〜120円/月** |
 
-## まとめ
+## AIがなかったら再挑戦していなかった
 
-Astro + AWS CDKの構成に移行したことで、以下を一挙に実現できました：
+「またブログを始めよう」と思えたのは、書くことへのハードルが下がったからだ。
 
-1. **固定費の削減**: 月600円 → 約120円（約80%削減）
-2. **パフォーマンス向上**: Astro SSG + CloudFront CDNでCore Web Vitalsが大幅改善
-3. **DevOpsスキルの可視化**: CDKのTypeScriptコードがそのままポートフォリオになるIaC管理
-4. **セキュリティ強化**: S3パブリック非公開・OIDC認証・OAC配信
+AIと壁打ちしながら書くと、体験のアウトプットが加速する。面倒だった記事作成の部分が軽くなった分、「どこに書くか」という問題が目立ちはじめた。
 
-AstroもCDKも初挑戦でしたが、どちらもTypeScriptで書けるため思った以上にスムーズでした。「なぜこの技術を選んだか」を言語化できる設計判断こそが、エンジニアとしての市場価値につながると考えています。
+そのタイミングでインフラも作り直した。このブログ自体が、AIがあったから動き出したプロジェクトだ。
+
+AstroもCDKも初挑戦だったが、どちらもTypeScriptで書けるため思った以上にスムーズだった。詰まった部分も、Claude Codeに相談しながら解決していった。
+
+---
+
+**関連記事**:
+- [AIがなかったら死んでた——一人で全部背負うテックリードの現実](/blog/solo-techlead-ai-survival)
+- [AWS CDKを初めて使ってハマったこと](/blog/aws-cdk-first-pitfalls)

@@ -1,217 +1,130 @@
 ---
-title: "少数精鋭チームの技術的工夫：NestJS + LangChainで作るAI搭載CRM"
-description: "エンジニア3名で医療系CRMを内製した技術的工夫の全貌。NestJS + LangChain + PostgreSQL + BullMQのアーキテクチャ設計、AI機能の組み込み方、少人数でスケールする開発体制まで。"
+title: "NestJS + LangChainで治験CRMにAI機能を追加した構成メモ"
+description: "ベンダーから引き継いだNestJS+React+PostgreSQLの治験CRMに、LangChain.jsのRe-Actエージェントを追加した際のモジュール設計と判断の記録。"
 pubDate: "2025-10-07"
-tags: ["NestJS", "LangChain", "アーキテクチャ", "チーム開発", "AI開発"]
+tags: ["NestJS", "LangChain", "アーキテクチャ", "AI開発", "医療IT"]
 ---
 
-## エンジニア3名で医療系CRMを内製した
+引き継いだ治験CRMにAI機能を追加したときの構成と判断を記録しておく。
 
-医療系スタートアップで、外部委託していたCRMシステムの内製化を主導しました。エンジニア3名（うち2名は未経験から育成中）、期間約1年。
+システムのベースはベンダーが構築したものを引き継いでいる。バックエンドはNestJS、フロントエンドはReact、データベースはPostgreSQLという構成だ。そこにLangChain.jsを使ったAIモジュールを追加した。
 
-「少人数でも持続可能な開発体制を作ること」が最優先の制約でした。複雑なアーキテクチャは採用できない。でも、将来のAI機能拡張も見据えた設計が必要でした。
-
-この記事では、その中で選んだ技術的な判断と工夫を記録します。
-
-## アーキテクチャ全体像
+## 既存システムの構成
 
 ```
-フロントエンド（Next.js）
-        ↕ REST API
+フロントエンド（React）
+      ↕ REST API
 バックエンド（NestJS）
     ├── 通常のCRUD処理
-    ├── AI機能モジュール（LangChain）
-    ├── バッチ処理（BullMQ + Redis）
-    └── ファイル管理（S3）
-        ↕
-データベース（PostgreSQL + pgvector）
+    └── AI機能モジュール（LangChain）← 追加
+      ↕
+データベース（PostgreSQL）
 ```
 
-シンプルなモノリスを選択しました。マイクロサービスはチームの学習コストが高く、少人数では運用が重くなると判断。モノリス内でモジュール分割を徹底することで保守性を担保します。
+モノリス構成をそのまま維持した。マイクロサービス化は少人数チームの運用コストに見合わないと判断している。AI機能はNestJSのモジュールとして既存システムに追加している。
 
-## NestJSのモジュール設計
+## NestJSのモジュール構成
 
 ```
 src/
 ├── modules/
 │   ├── auth/           # 認証（JWT + Passport）
-│   ├── users/          # ユーザー管理
-│   ├── customers/      # 顧客管理（CRMのコア）
-│   ├── ai/             # AI機能（LangChain統合）
-│   ├── batch/          # バッチ処理（BullMQ）
-│   └── files/          # ファイル管理（S3）
+│   ├── subjects/       # 被験者管理
+│   ├── visit-schedule/ # 来院スケジュール
+│   ├── ai/             # AI機能（LangChain統合）← 追加
+│   └── ...
 ├── common/
-│   ├── decorators/     # カスタムデコレータ
-│   ├── guards/         # 認証ガード
-│   ├── interceptors/   # ロギング・レスポンス変換
-│   └── pipes/          # バリデーションパイプ
-└── config/             # 環境変数管理
+│   ├── decorators/
+│   ├── guards/
+│   ├── interceptors/
+│   └── pipes/
+└── config/
 ```
 
-各モジュールは独立していて、`ai/` モジュールが `customers/` を参照する一方向の依存にしています。循環参照はCRUDバグと同じくらい怖いので、設計段階で排除します。
+`ai/` モジュールが `subjects/` や `visit-schedule/` のサービスを呼び出す一方向の依存にしている。循環参照はバグと同じくらい厄介なので、設計段階で排除している。
 
 ## AIモジュールの設計
 
-LangChainをNestJSのDIコンテナに統合するパターンです。
+LangChainをNestJSのDIコンテナに統合するときはProviderとして登録するパターンが使いやすい。
 
 ```typescript
 // ai.module.ts
 @Module({
-  imports: [CustomersModule],
+  imports: [SubjectsModule, VisitScheduleModule],
   providers: [
     {
       provide: 'CHAT_MODEL',
       useFactory: () => new ChatOpenAI({
         modelName: 'gpt-4o',
-        temperature: 0.2,
-      }),
-    },
-    {
-      provide: 'EMBEDDINGS',
-      useFactory: () => new OpenAIEmbeddings({
-        modelName: 'text-embedding-3-small',
+        temperature: 0,
       }),
     },
     AiService,
-    RagService,
-    SummaryService,
+    AgentService,
   ],
   exports: [AiService],
 })
 export class AiModule {}
 ```
 
+テスト時にモックに差し替えやすくなる点でこのパターンは重宝している。
+
+## RAGではなくツールベースのRe-Actエージェントを選んだ理由
+
+AI機能の設計で最初にRAGを検討した。被験者データを自然言語で呼び出せれば便利になるという発想だ。
+
+試みたが、やめた。
+
+CRMは「記録システム」だ。ハルシネーション（もっともらしい嘘）のリスクが致命的になる。来院予定を「それらしい」回答で返されると困る。治験管理で間違ったデータが表示されることは、被験者への影響に直結する。
+
+代わりに、確定したクエリをツールとして定義して、エージェントに選ばせる構成にした。LangChain.jsのRe-Actエージェントを使っている。
+
 ```typescript
-// rag.service.ts：顧客関連の情報をRAGで検索
-@Injectable()
-export class RagService {
-  private vectorStore: PGVectorStore;
-
-  constructor(
-    @Inject('EMBEDDINGS') private readonly embeddings: OpenAIEmbeddings,
-    @InjectDataSource() private readonly dataSource: DataSource,
-  ) {}
-
-  async onModuleInit() {
-    this.vectorStore = await PGVectorStore.initialize(this.embeddings, {
-      postgresConnectionOptions: this.dataSource.options as PoolConfig,
-      tableName: 'customer_embeddings',
-      columns: {
-        idColumnName: 'id',
-        vectorColumnName: 'embedding',
-        contentColumnName: 'content',
-        metadataColumnName: 'metadata',
-      },
-    });
+// tools/subject.tool.ts
+const getSubjectTool = tool(
+  async ({ subjectId }: { subjectId: string }) => {
+    return subjectService.findById(subjectId);
+  },
+  {
+    name: 'get_subject',
+    description: '被験者IDを指定して、その被験者の基本情報（氏名・生年月日・有効フラグ）を取得する。来院スケジュールは別ツールを使うこと',
+    schema: z.object({
+      subjectId: z.string(),
+    }),
   }
-
-  async searchSimilarCustomers(query: string, limit = 5) {
-    return this.vectorStore.similaritySearch(query, limit);
-  }
-}
+);
 ```
 
-pgvector（PostgreSQL拡張）をベクトルストアに使っています。別サービスを立てなくてもPostgreSQLに同居できるので、インフラが増えません。少人数チームには重要な判断でした。
+ツールの中身はNestJSのサービスを呼ぶだけだ。SQLは変わらない。エージェントが「どのツールをどんな引数で呼ぶか」を判断する部分だけAIが担う。
 
-## バッチ処理の設計（BullMQ）
+## 医療データの取り扱いで徹底していること
 
-月次CSVインポートとデータ同期はBullMQで非同期処理します。
-
-```typescript
-// batch.module.ts
-@Module({
-  imports: [
-    BullModule.forRoot({
-      connection: {
-        host: process.env.REDIS_HOST,
-        port: parseInt(process.env.REDIS_PORT),
-      },
-    }),
-    BullModule.registerQueue({
-      name: 'csv-import',
-    }),
-  ],
-  providers: [BatchService, CsvImportProcessor],
-})
-export class BatchModule {}
-
-// csv-import.processor.ts
-@Processor('csv-import')
-export class CsvImportProcessor {
-  @Process('import')
-  async handleImport(job: Job<{ fileKey: string; userId: string }>) {
-    const { fileKey, userId } = job.data;
-    
-    // S3からファイルを取得
-    // CSVパース・バリデーション
-    // トランザクションでDB更新
-    // 進捗をjob.updateProgress()で更新
-    await job.updateProgress(50);
-    
-    // 完了通知をSlackに送信
-    await job.updateProgress(100);
-  }
-}
-```
-
-バッチ処理の進捗をフロントエンドから確認できるよう、WebSocketでリアルタイム通知する仕組みも入れています。
-
-## TypeScriptの型でAPIを守る
-
-少人数チームで未経験者が触るコードは、型で守ることが特に重要です。
+- **外部LLMへの個人識別情報の不送信**: ツールの引数・返り値にIDが渡ることはあるが、氏名・生年月日などのPIIはLLMに直接渡さない
+- **監査ログ**: どのツールをいつ誰が呼んだかを記録する
+- **DTO層でのバリデーション徹底**: AIのツール呼び出し経路に入ってくる値も、既存のパイプと同様にバリデーションを通す
 
 ```typescript
-// create-customer.dto.ts
-export class CreateCustomerDto {
+// class-validatorでのバリデーション例
+export class QuerySubjectDto {
   @IsString()
   @IsNotEmpty()
-  @MaxLength(100)
-  name: string;
-
-  @IsEmail()
-  email: string;
-
-  @IsOptional()
-  @IsPhoneNumber('JP')
-  phone?: string;
-
-  @IsEnum(CustomerStatus)
-  status: CustomerStatus;
+  @Matches(/^[A-Z]{2}-\d{4}$/)  // IDフォーマットの検証
+  subjectId: string;
 }
 ```
 
-class-validatorを使い、DTO層でバリデーションを徹底しています。「どんな値が入ってくるか分からない」状態でAI処理に渡すと予期しないエラーが起きやすいので、ここは手を抜きません。
+## 型で守る
 
-## 医療情報の取り扱いで意識したこと
+未経験から育てているメンバーがいるので、型の安全性は特に重要だ。
 
-医療系スタートアップという制約から、データの扱いに特に注意しました：
+- `any` 禁止（ESLintで強制）
+- マジックナンバー禁止（ENUMで定義）
+- コントローラーはシン設計（ビジネスロジックはサービス層のみ）
 
-1. **外部LLMへの個人情報送信の禁止**: RAGで取得した顧客情報の断片をそのままGPTに送らない。要約・匿名化してから送る
-2. **監査ログ**: 誰がいつどのデータにアクセスしたか、全操作をログに残す
-3. **API経由でのみアクセス**: DBへの直接アクセスはアプリサーバーからのみ
+AIモジュールも例外ではなく、ツールの入出力の型はzodで定義して、TypeScriptの型推論が効く状態を維持している。
 
-LangChainのチェーン内でのデータフローを設計段階から確認し、個人情報が外部に出ないことをコードレビューで確認しています。
+## 現状
 
-## 少人数チームのための開発規約
+Re-Actエージェントは動いている。プロンプトとツールのdescriptionのチューニングに時間を溶かすことが多く、「プロンプトエンジニアリング」の地味さを実感している。
 
-未経験者がいるチームで安定した開発を続けるために決めた規約：
-
-- **テストは `*.spec.ts` を必ず書く**（Jestでユニットテスト）
-- **コントローラーはシン設計**（ビジネスロジックはサービス層のみ）
-- **型の `any` 禁止**（ESLintで強制）
-- **マジックナンバー禁止**（定数・ENUMで定義）
-- **PRは300行以内**（大きすぎるPRはレビューの質が下がる）
-
-「300行以内のPR」はときに窮屈ですが、未経験エンジニアのコードを毎回丁寧にレビューするためには必要な制約でした。
-
-## まとめ
-
-少数精鋭チームでのAI搭載システム開発は、「シンプルさ」と「拡張性」のバランスが肝です。
-
-- モノリス +モジュール分割で少人数でも管理しやすく
-- pgvectorでインフラを増やさずRAG実装
-- BullMQで非同期バッチを安全に処理
-- DTO + class-validatorで型の安全性を確保
-- 医療データの外部送信には特別な注意を払う
-
-「全部使いこなす」より「チームが扱える技術で確実に動くものを作る」が少数精鋭チームの原則だと思っています。
+「エージェントに何をさせるか」の設計が一番難しく、コードより自然言語の調整で詰まることが多い。

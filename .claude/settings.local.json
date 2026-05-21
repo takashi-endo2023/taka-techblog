@@ -54,7 +54,9 @@
       "Bash(git commit *)",
       "Bash(grep -iE \"\\\\.\\(png|jpg|jpeg|webp|gif\\)$\")",
       "Bash(npx zenn *)",
-      "Bash(npx zenn-cli *)"
+      "Bash(npx zenn-cli *)",
+      "Bash(xargs -I '{}' sh -c 'title=$\\(grep \"^title:\" \"{}\" | head -1 | sed \"s/title: //\"\\); pub=$\\(grep \"^pubDate:\" \"{}\" | head -1 | sed \"s/pubDate: //\"\\); echo \"$pub | $title\"')",
+      "Bash(node -e \"const c=\\(\\)=>Math.random\\(\\).toString\\(36\\).slice\\(2,9\\); console.log\\(c\\(\\)+c\\(\\)\\)\")"
     ]
   }
 }

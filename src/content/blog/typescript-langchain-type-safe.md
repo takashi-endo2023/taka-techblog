@@ -58,7 +58,7 @@ class MyChain extends BaseChain {
 
 ## ストリーミングレスポンスの型安全な実装
 
-治験データの検索結果をAIで要約するとき、レスポンスが長くなるのでストリーミングは必須です。NestJS + Server-Sent Eventsで以下のように実装しています。
+AIエージェントの応答が長くなるケースではストリーミングが必要です。NestJS + Server-Sent Eventsで以下のように実装しています。
 
 ```typescript
 import { ChatOpenAI } from "langchain/chat_models/openai";
@@ -101,20 +101,20 @@ import { StringOutputParser } from "langchain/schema/output_parser";
 import { PromptTemplate } from "langchain/prompts";
 
 // 入力の型を明示
-interface ClinicalSummaryInput {
-  patientId: string;
-  trialPhase: "I" | "II" | "III";
-  symptoms: string[];
+interface ReportSummaryInput {
+  reportId: string;
+  category: "monthly" | "quarterly" | "annual";
+  items: string[];
 }
 
-const summaryChain = RunnableSequence.from<ClinicalSummaryInput, string>([
+const summaryChain = RunnableSequence.from<ReportSummaryInput, string>([
   (input) => ({
-    patient_id: input.patientId,
-    phase: input.trialPhase,
-    symptoms_text: input.symptoms.join("、"),
+    report_id: input.reportId,
+    category: input.category,
+    items_text: input.items.join("、"),
   }),
   PromptTemplate.fromTemplate(
-    "患者{patient_id}の{phase}相試験における症状: {symptoms_text}\n要約してください。"
+    "{category}レポート（{report_id}）の項目: {items_text}\n要点を3点にまとめてください。"
   ),
   new ChatOpenAI({ modelName: "gpt-4" }),
   new StringOutputParser(),
@@ -122,11 +122,13 @@ const summaryChain = RunnableSequence.from<ClinicalSummaryInput, string>([
 
 // 型付きで呼び出せる
 const result: string = await summaryChain.invoke({
-  patientId: "P-001",
-  trialPhase: "II",
-  symptoms: ["頭痛", "倦怠感"],
+  reportId: "R-2025-04",
+  category: "monthly",
+  items: ["売上前月比+12%", "新規契約3件", "解約1件"],
 });
 ```
+
+医療系システムでLLMに渡すのは匿名化・集計済みのデータだけで、個人識別情報は送らない。コード例はその点を意識して設計している。
 
 ## エラー型の整理
 

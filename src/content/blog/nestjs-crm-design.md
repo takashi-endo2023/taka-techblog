@@ -1,25 +1,28 @@
 ---
-title: "NestJSで治験CRMのバックエンドを設計した — モジュール設計からエラーハンドリングまで"
-description: "治験CRMのバックエンドをNestJSで設計・実装した実録。Expressとの比較、ドメイン駆動モジュール設計、Repositoryパターン、DTOバリデーション、グローバルエラーハンドリングまで解説します。"
+title: "NestJSの治験CRMを引き継いで学んだバックエンド設計"
+description: "ベンダーから引き継いだNestJS製治験CRMの保守・改修を通じて理解したモジュール設計、Repositoryパターン、DTOバリデーション、エラーハンドリングの実際。"
 pubDate: "2025-09-16"
+updatedDate: "2026-05-22"
 tags: ["NestJS", "TypeScript", "バックエンド設計", "アーキテクチャ"]
 ---
 
-治験CRMの内製化を進めるにあたって、バックエンドをフルスクラッチで設計し直した。フレームワークにNestJSを選び、約半年かけてプロダクション運用まで持っていった経験を書いておく。
+ベンダーから引き継いだ治験CRMのバックエンドはNestJSで書かれていた。
 
-## なぜNestJSを選んだか
+最初はコードを舐め回すように読んだ。NestJSの設計思想——DI、モジュール、デコレーター——をコードの中から逆に学んだ。設計した人間ではなく、引き継いだ人間として。
 
-最初の選択肢はExpressとNestJSの2択だった。
+保守・改修を続けながら、このフレームワークの意図が少しずつわかってきた。
 
-**Express**はシンプルで自由度が高い。ただ「自由」は裏を返せば「設計をすべて自分で決める必要がある」ということだ。チームに未経験エンジニアがいる状況で、ルーティング・ミドルウェア・エラーハンドリングの規約を自分たちで作り上げるのはリスクが高いと判断した。
+## なぜNestJSが選ばれていたか
 
-**NestJS**はAngular的な思想でDI（依存性注入）・モジュール・デコレーターが最初から整備されている。「どう書くか」の選択肢が絞られることで、チームのコードが一定の品質に揃いやすい。TypeScriptとの相性も抜群だ。
+後から考えると、NestJSは業務システムには合理的な選択だ。
 
-治験CRMは業務システムである。「自由に作る」より「きちんと型がはまる」設計を優先した結果、NestJSを選んだ。
+Expressはシンプルで自由度が高い。でも「自由」は「設計をすべて自分で決める必要がある」ということでもある。チームに未経験エンジニアがいる環境では、ルーティング・ミドルウェア・エラーハンドリングの規約を自分たちで作り上げるのはリスクが高い。
 
-## モジュール設計の方針（ドメイン駆動で考える）
+NestJSはAngular的な思想で「どう書くか」の選択肢が絞られる。それがチームのコードを一定の品質に揃えやすくする。治験CRMという業務システムに「きちんと型がはまる」設計を選んだのは正しかったと思っている。
 
-NestJSのモジュールはDDDのBounded Contextに近い単位で分割した。
+## モジュール設計の構造
+
+コードを読んで把握したモジュール構成はこうなっていた。
 
 ```
 src/
@@ -38,11 +41,13 @@ src/
     └── storage/           # S3連携
 ```
 
-モジュール間の依存は `imports` で明示的に制御する。横断的な関心事（認証・ロギング）は `common` に集約した。
+DDDのBounded Contextに近い単位でモジュールが分かれている。モジュール間の依存は `imports` で明示的に制御され、横断的な関心事は `common` に集約されていた。
 
-## Repositoryパターンの実装例
+改修するたびにこの構造の意図が見えてくる。設計者の判断をコードから読み解く作業が、NestJSの学習になった。
 
-TypeORMのRepositoryをそのまま使うと、サービス層がORMに強依存してしまう。テスト可能性と交換可能性のためにRepositoryパターンで抽象化した。
+## Repositoryパターンの意図
+
+TypeORMのRepositoryをそのまま使うと、サービス層がORMに強依存する。引き継いだコードにはRepositoryパターンで抽象化された箇所があった。
 
 ```typescript
 // patients/repositories/patient.repository.interface.ts
@@ -52,39 +57,17 @@ export interface IPatientRepository {
   save(patient: Patient): Promise<Patient>;
   delete(id: string): Promise<void>;
 }
-
-// patients/repositories/patient.repository.ts
-@Injectable()
-export class PatientRepository implements IPatientRepository {
-  constructor(
-    @InjectRepository(PatientEntity)
-    private readonly repo: Repository<PatientEntity>,
-  ) {}
-
-  async findById(id: string): Promise<Patient | null> {
-    const entity = await this.repo.findOne({ where: { id } });
-    return entity ? PatientMapper.toDomain(entity) : null;
-  }
-
-  async save(patient: Patient): Promise<Patient> {
-    const entity = PatientMapper.toEntity(patient);
-    const saved = await this.repo.save(entity);
-    return PatientMapper.toDomain(saved);
-  }
-}
 ```
 
-DIコンテナで `IPatientRepository` を注入することで、テスト時にモックに差し替えられる。
+インターフェースを通じてDIコンテナに注入することで、テスト時にモックに差し替えられる。「なぜこう書いてあるか」がわかったとき、設計の深さを感じた。
 
-## DTOバリデーション（class-validatorの活用）
+新規機能を追加するときは、このパターンに揃えるようにしている。
 
-入力値バリデーションは `class-validator` と `class-transformer` で一元管理した。
+## DTOバリデーションの統一
+
+入力値のバリデーションは `class-validator` と `class-transformer` で一元管理されていた。
 
 ```typescript
-// patients/dto/create-patient.dto.ts
-import { IsString, IsDate, IsEnum, IsNotEmpty, Length } from 'class-validator';
-import { Type } from 'class-transformer';
-
 export class CreatePatientDto {
   @IsString()
   @IsNotEmpty()
@@ -103,22 +86,22 @@ export class CreatePatientDto {
 `ValidationPipe` をグローバルに設定することで、全エンドポイントで自動的にバリデーションが走る。
 
 ```typescript
-// main.ts
 app.useGlobalPipes(
   new ValidationPipe({
-    whitelist: true,        // DTOにないプロパティを除去
-    forbidNonWhitelisted: true, // 未知プロパティはエラー
-    transform: true,        // 型変換を有効化
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
   }),
 );
 ```
 
-## グローバルエラーハンドリングの統一
+規制産業のシステムで入力値の整合性を保つには、このくらい統一されている方が安心できる。
 
-業務システムでは「エラーレスポンスの形式が一定」であることが重要だ。フロントエンドとのI/F設計を安定させるために、例外フィルターで統一した。
+## グローバルエラーハンドリング
+
+業務システムはエラーレスポンスの形式が一定であることが重要だ。フロントエンドとのI/Fを安定させるために、例外フィルターで統一されていた。
 
 ```typescript
-// common/filters/http-exception.filter.ts
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
@@ -140,20 +123,18 @@ export class HttpExceptionFilter implements ExceptionFilter {
 }
 ```
 
-これにより、どのエンドポイントでも同じ形式のエラーレスポンスが返る。
+## 引き継いで保守する側が学ぶこと
 
-## 業務システム設計の判断まとめ
+設計した人間と引き継いだ人間では、コードの読み方が違う。
 
-半年設計・実装してきた中での気づきをまとめる。
+設計者は「なぜそうしたか」を知っている。引き継いだ側は「なぜそうなっているか」をコードから推理する。その推理の過程で、設計の意図と自分の理解の差が見える。
 
-- **型を徹底する**: TypeScriptのstrictモードを有効にして、`any` を使わない。業務システムは長く使われるので、型の厳密さは後で必ず返ってくる
-- **ドメインとインフラを分離する**: DBのテーブル構造に引きずられた設計はいつか壊れる。ドメインモデルを中心に設計して、DBはあくまで永続化の手段と割り切る
-- **エラーは早期に明示的に**: 暗黙のエラーを握りつぶさない。Guardで弾けるものはGuardで弾き、Serviceでは業務例外を `throw` する
+NestJSのような思想の強いフレームワークは、その推理がしやすい。「ここにこう書いてあるのはこういう理由のはずだ」という仮説を立てやすい。
 
-## まとめ
+治験CRMという規制が厳しいシステムを保守し続けながら、NestJSの設計思想が少しずつ自分のものになってきた。
 
-NestJSは「思想を押し付けてくる」フレームワークだが、その押し付けが業務システム開発では心強い。
+---
 
-設計で迷ったら「この機能がどのドメインに属するか」を問い直すことで、モジュールの置き場所が決まる。型・バリデーション・エラーハンドリングを最初に統一しておくことで、開発が進んでも品質が崩れにくい。
-
-治験CRMという規制が厳しい業界のシステムを作る上で、NestJSの「型と構造の強制」はむしろ安心感につながっている。
+**関連記事**:
+- [ベンダーからシステムを引き継いで、内製化が完成するまで](/blog/naisei-kansei)
+- [治験システムのパフォーマンス改善——マテリアライズドビューを理解するまで](/blog/clinical-trial-system-performance)

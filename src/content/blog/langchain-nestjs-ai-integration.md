@@ -1,122 +1,91 @@
 ---
-title: "医療系CRMにLangChain×NestJSでAI連携を実装した話"
-description: "治験CRMにLangChain.jsとNestJSを使ったAI機能を実装した実録。Chain・Agent・RAGの選択判断から医療データのセキュリティ考慮、LangChainで詰まったポイントまで解説します。"
+title: "RAGをやめてツールベースに切り替えた話——LangChain.jsとCRMの相性"
+description: "治験CRMへのAI統合でRAGを試みた結果、精度要件と相性が悪いと判断しRe-Actエージェント×ツールベースに切り替えた経緯。プロンプト設計の泥臭さも含めた実録。"
 pubDate: "2025-08-05"
 tags: ["LangChain", "NestJS", "TypeScript", "AI連携", "医療IT"]
 ---
 
-治験CRMにAI機能を入れようと動き出したのは去年の秋だった。「LangChain×NestJSでやってみる」と宣言してから実装完了まで約3ヶ月。その経緯と詰まったポイントを記録しておく。
+治験CRMにAIを乗せようとしたとき、最初にやったのはRAGだった。結果的に、それをやめてツールベースの実装に切り替えた。その判断の経緯を書いておく。
 
-## なぜ医療系でAI機能が必要になったか
+## 最初にRAGを試みた理由
 
-治験では大量のドキュメントと患者データを扱う。現場スタッフからよく出ていた声がこれだ。
+CRMには被験者データと治験記録が蓄積されている。「自然言語で呼び出せたら便利だろう」と思った。「来月来院予定の被験者を教えて」とか「このプロトコルに該当する被験者は？」という問いに答えられれば、現場の操作コストが下がるはずだった。
 
-- 「過去の症例メモを探すのに毎回時間がかかる」
-- 「プロトコルの該当箇所をすぐ参照したい」
-- 「訪問記録の要約を自動で作ってほしい」
+LangChain.jsのRAG実装を試した。被験者テーブルや来院スケジュールのデータをベクトル化して、質問に近いレコードを引っ張ってくる構成だ。
 
-これらは全部「社内に蓄積されたドキュメントを賢く検索・活用する」ユースケースだ。LangChain + RAGが向いている領域だと判断した。
+## RAGをやめた理由
 
-## アーキテクチャ設計：Chain vs Agent vs RAGの選択
+動かしてみて、根本的な問題に気がついた。
 
-最初に悩んだのがどのアプローチを使うかだ。
+**CRMは「記録システム」だ。**
 
-| アプローチ | 向いているケース | 今回の判断 |
-|-----------|----------------|-----------|
-| Chain | 決まったフローの処理 | シンプルな要約タスクに使用 |
-| Agent | ツールを組み合わせた推論 | 将来の拡張用に設計のみ |
-| RAG | 社内ドキュメントへの質問応答 | メイン実装として採用 |
+記録システムで怖いのは「もっともらしい嘘」だ。RAGは類似ドキュメントを参照して回答を生成するが、完全一致を保証しない。「来月来院予定の被験者」を聞いたとき、近い日付のレコードをいくつか参照して「それらしい」回答を返すことがある。
 
-NestJSのモジュール構成はこうした：
+治験の現場で「それらしい」は困る。来院管理のミスは被験者への影響に直結する。精度が90%というのは、10件に1件は間違えるということだ。
 
-```typescript
-// ai.module.ts
-@Module({
-  imports: [VectorStoreModule, DocumentModule],
-  providers: [
-    AiService,
-    RagChainService,
-    EmbeddingService,
-  ],
-  exports: [AiService],
-})
-export class AiModule {}
-```
+加えて、患者識別情報を外部LLMに送らない原則がある。RAGのクエリを安全に設計しようとすると、匿名化の処理が複雑になり、そこにも誤りが入り込むリスクがある。
 
-RAGの核となる部分はこのように実装した：
+「自然言語で呼び出せたら便利」という目的より、「間違えた記録が残る」リスクのほうが重かった。
+
+## ツールベースのRe-Actエージェントに切り替えた
+
+方針を転換した。RAGで「それらしい回答」を生成するのではなく、**確定したSQLクエリをツールとして定義して、エージェントに選ばせる**構成にした。
+
+LangChain.jsのRe-Actエージェントを使っている。エージェントは受け取った指示を分解し、定義されたツールを組み合わせて実行する。
 
 ```typescript
-// rag-chain.service.ts
-import { Injectable } from '@nestjs/common';
-import { ChatOpenAI } from '@langchain/openai';
-import { createRetrievalChain } from 'langchain/chains/retrieval';
-import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
-
-@Injectable()
-export class RagChainService {
-  private chain: ReturnType<typeof createRetrievalChain> extends Promise<infer T> ? T : never;
-
-  async initialize(retriever: VectorStoreRetriever) {
-    const llm = new ChatOpenAI({ modelName: 'gpt-4o', temperature: 0 });
-    const documentChain = await createStuffDocumentsChain({ llm, prompt });
-    this.chain = await createRetrievalChain({ retriever, combineDocsChain: documentChain });
+// tools/visit-schedule.tool.ts
+const getUpcomingVisitsTool = tool(
+  async ({ subjectId, days }: { subjectId: string; days: number }) => {
+    return visitScheduleService.getUpcoming(subjectId, days);
+  },
+  {
+    name: 'get_upcoming_visits',
+    description: '指定した被験者の直近の来院予定を取得する',
+    schema: z.object({
+      subjectId: z.string(),
+      days: z.number().describe('今日から何日先まで取得するか'),
+    }),
   }
-
-  async query(input: string): Promise<string> {
-    const result = await this.chain.invoke({ input });
-    return result.answer;
-  }
-}
+);
 ```
 
-## 医療データを扱う上でのセキュリティ・プライバシー考慮
+ツールの中身はNestJSのサービスを呼ぶだけだ。SQLは変わらない。エージェントが「どのツールを・どの順番で・どんな引数で呼ぶか」を判断する部分だけAIが担う。
 
-医療系だからといって特別なことをするというより、当たり前のことを徹底する、という感覚が近い。
+これで「AIが間違える」リスクはツール選択の部分に限定できる。ツールが実行されれば、結果は確定したデータだ。
 
-**やったこと：**
-- 患者識別子（ID）を外部LLMに送らない設計（RAGのクエリには匿名化した情報のみ使用）
-- ベクターストアへのアクセスは社内ネットワーク経由のみ
-- LLMのプロンプトに個人情報が混入しないようDTOレベルでフィルタリング
-- ログにはAIの入出力を記録するが、PIIは自動マスキング
+## プロンプトのチューニングに時間を溶かす
+
+Re-Actエージェントで一番時間を使うのは、ここだ。
+
+エージェントに何をさせるか、どこまでツールで処理してどこでLLMに判断させるか、ツールの `description` をどう書くか——このあたりの調整で丸一日溶けることはザラにある。
+
+たとえばツールの description がざっくりしすぎると、エージェントが似たツールを混同する。逆に細かく書きすぎると、エッジケースに対応できない。「LLMがどう読むか」を意識しながら自然言語を調整するのは、コードのデバッグとは別種の疲労感がある。
 
 ```typescript
-// ai-sanitizer.ts
-export function sanitizeForLLM(text: string): string {
-  // 患者IDパターンを除去（例: PT-XXXXX 形式）
-  return text.replace(/PT-\d{5}/g, '[PATIENT_ID]');
-}
+// 曖昧すぎる description の例（改善前）
+description: '被験者情報を取得する'
+
+// もう少し絞った description（改善後）
+description: '被験者IDを指定して、その被験者の基本情報（氏名・生年月日・有効フラグ）を取得する。来院スケジュールや検査結果は別ツールを使うこと'
 ```
 
-## LangChain.jsで詰まったポイント
+プロンプトを変えては試し、変えては試す。自動テストでカバーしにくい部分でもある。
 
-**1.バージョン変更が激しすぎる問題**
+## LangChain.jsのバージョン変化について
 
-LangChain.jsは破壊的変更が多い。`langchain` と `@langchain/core`、`@langchain/openai` が分離されたタイミングでインポートパスが全部変わって半日溶かした。`package.json` で厳密にバージョン固定することをおすすめする。
+本筋ではないが、書いておく。
 
-**2.ストリーミングレスポンスをNestJSで返す方法**
+LangChain.jsは `langchain` と `@langchain/core`、`@langchain/openai` などのパッケージが分離してから、APIの変化が速い。
 
-LangChainのストリーミングをNestJSのSSEで返す際、`StreamableFile` と組み合わせる実装が公式ドキュメントに載っていなくて詰まった。
+実装途中でインポートパスが変わって動かなくなる、ということが何度かあった。`package.json` でバージョンを厳密に固定して、上げるときは変更履歴を確認してから上げる習慣をつけた。
 
-```typescript
-@Get('stream')
-async streamQuery(@Query('q') query: string, @Res() res: Response) {
-  res.setHeader('Content-Type', 'text/event-stream');
-  const stream = await this.ragChainService.streamQuery(query);
-  for await (const chunk of stream) {
-    res.write(`data: ${JSON.stringify({ text: chunk })}\n\n`);
-  }
-  res.end();
-}
-```
+## RAGが向かない領域がある
 
-## 動かしてみた所感と次のステップ
+「AIといえばRAG」という先入観があった。確かに、ドキュメント検索や社内wiki的なユースケースではRAGは強い。
 
-ドキュメント検索の精度は想定より高く、現場スタッフからも「探す時間が減った」というフィードバックをもらえた。ただ、ハルシネーション（もっともらしい嘘）のリスクは依然あるため、「AIの回答には必ず元ドキュメントのソースを表示する」というUX設計が重要だと実感している。
+ただ、記録システムやトランザクションデータを扱う領域では、「正確なデータを正確に返す」ことの優先度がRAGの柔軟性より上になる。
 
-次はAgentを使った複数ツール連携と、ファインチューニングへの挑戦を考えている。
+ツールベースにしたことで、「AIが何をしたか」のトレーサビリティも上がった。どのツールをどんな引数で呼んだかがログに残る。規制対象のシステムで監査に備えるなら、これは副次的なメリットだった。
 
-## まとめ
-
-LangChain×NestJSの組み合わせはTypeScriptで完結できる点が大きな強みだ。医療データを扱う際のポイントは「LLMに何を送らないか」を設計の中心に置くこと。
-
-LangChainのバージョン変化には心理的に慣れるしかないが、RAGの実装体験としては非常に学びが多かった。AI機能を業務システムに組み込みたい人の参考になれば嬉しい。
+プロンプトのチューニングは今も続いている。正解がないぶん、終わりも見えない作業だが、少しずつ精度が上がっていくのは実感できている。
