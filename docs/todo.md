@@ -130,10 +130,7 @@ git push origin main  # 各リポジトリで実行
   - コンポーネント: `src/components/AmazonCard.astro`
 
 ### ポートフォリオ
-- [ ] 各ポートフォリオカードにスクリーンショットを追加
-  - 画像は `public/images/portfolio/` に配置
-  - `portfolios/index.astro` の `screenshot: null` を画像パスに差し替えるだけ
-  - 対象: 歌声くらぶ・EC・AI Ads・Game Portfolio（デプロイ後に撮影）
+- [x] 各ポートフォリオカードにスクリーンショットを追加（2026-05-21）
 
 ---
 
