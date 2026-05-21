@@ -3,19 +3,20 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const portfolios = [
   {
-    title: '歌声くらぶ 公式サイト',
-    tech: ['React 19', 'TypeScript', 'Vite', 'React Router', 'Swiper'],
+    title: 'AI付き広告計測・分析システム',
+    tech: ['NestJS', 'Next.js', 'TypeScript', 'AWS Lambda', 'API Gateway', 'Gemini API'],
     description:
-      '地域の合唱サークルから依頼を受けて設計・実装・納品した実案件。ライブラリ依存を最小限に抑えながら、保守しやすいコンポーネント設計とアクセシビリティ対応を両立。',
+      '実務での「Google広告費×CRMデータ突合」の知見をベースに個人開発。複数媒体の広告費とCRMの参加ステータスを結合し、CRA（申込単価）・CRP（完了単価）を自動算出。集計データをGemini APIに渡し、構造化JSON（responseSchema）で改善アクションを自動出力するダッシュボード。',
     points: [
-      'IntersectionObserver を使った useFadeIn カスタムフックを自前実装',
-      'お知らせデータを型付き JSON で UI から分離し、担当者が更新しやすい構造に',
-      'スキップナビゲーション実装によるキーボードアクセシビリティ対応',
-      'React Router v7 による SPA ルーティング（直リンク・ブラウザバック対応）',
+      'NestJS の Factory/Strategy パターンで媒体別CSVパーサーを実装・拡張性を確保',
+      'バックエンド側でSQLライクな集計をプレ処理しGemini APIへのトークンを最小化',
+      'Gemini SDK の responseSchema で返却JSONスキーマを完全固定し型安全な構造化出力を実現',
+      'メモリキャッシュによるAPI呼び出し制御（無料枠RPM制限への対策）',
+      '@vendia/serverless-express で NestJS を AWS Lambda 上にサーバーレス配置',
     ],
-    screenshot: '/images/portfolio/utagoe.png',
-    github: 'https://github.com/takashi-endo2023/utagoe_club',
-    demo: 'https://utagoe.taka-techblog.com',
+    screenshot: '/images/portfolio/ai-ads.png',
+    github: 'https://github.com/takashi-endo2023/ai-ads-dashboard',
+    demo: 'https://ai-ads.taka-techblog.com',
   },
   {
     title: 'ECサイト（Rails API × React フロントエンド）',
@@ -34,20 +35,19 @@ const portfolios = [
     demo: 'https://ec.taka-techblog.com',
   },
   {
-    title: 'AI付き広告計測・分析システム',
-    tech: ['NestJS', 'Next.js', 'TypeScript', 'AWS Lambda', 'API Gateway', 'Gemini API'],
+    title: '歌声くらぶ 公式サイト',
+    tech: ['React 19', 'TypeScript', 'Vite', 'React Router', 'Swiper'],
     description:
-      '実務での「Google広告費×CRMデータ突合」の知見をベースに個人開発。複数媒体の広告費とCRMの参加ステータスを結合し、CRA（申込単価）・CRP（完了単価）を自動算出。集計データをGemini APIに渡し、構造化JSON（responseSchema）で改善アクションを自動出力するダッシュボード。',
+      '地域の合唱サークルから依頼を受けて設計・実装・納品した実案件。ライブラリ依存を最小限に抑えながら、保守しやすいコンポーネント設計とアクセシビリティ対応を両立。',
     points: [
-      'NestJS の Factory/Strategy パターンで媒体別CSVパーサーを実装・拡張性を確保',
-      'バックエンド側でSQLライクな集計をプレ処理しGemini APIへのトークンを最小化',
-      'Gemini SDK の responseSchema で返却JSONスキーマを完全固定し型安全な構造化出力を実現',
-      'メモリキャッシュによるAPI呼び出し制御（無料枠RPM制限への対策）',
-      '@vendia/serverless-express で NestJS を AWS Lambda 上にサーバーレス配置',
+      'IntersectionObserver を使った useFadeIn カスタムフックを自前実装',
+      'お知らせデータを型付き JSON で UI から分離し、担当者が更新しやすい構造に',
+      'スキップナビゲーション実装によるキーボードアクセシビリティ対応',
+      'React Router v7 による SPA ルーティング（直リンク・ブラウザバック対応）',
     ],
-    screenshot: '/images/portfolio/ai-ads.png',
-    github: 'https://github.com/takashi-endo2023/ai-ads-dashboard',
-    demo: 'https://ai-ads.taka-techblog.com',
+    screenshot: '/images/portfolio/utagoe.png',
+    github: 'https://github.com/takashi-endo2023/utagoe_club',
+    demo: 'https://utagoe.taka-techblog.com',
   },
   {
     title: 'Game Portfolio Site',
