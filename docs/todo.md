@@ -8,99 +8,11 @@
 
 ### Google AdSense 申請
 - プライバシーポリシーは `/privacy` に設置済み
-- ドメイン移管・デプロイ完了後に申請する
 - 申請URL: https://www.google.com/adsense/
 
----
-
-## 🟡 インフラ・デプロイ（順番に実施）
-
-### ① ドメイン移管完了を待つ（さくら → Route 53）
-- [ ] AWS コンソール → Route 53 → 登録済みドメイン で `taka-techblog.com` のステータスが **Active** になるまで待つ
-- 移管完了後、ネームサーバーが Route 53 に自動切り替わる（最大5〜7営業日）
-
-### ② `infra/cdk.json` のメールアドレスを変更
-```json
-"alertEmail": "your-email@example.com"  ← 実際のメールアドレスに変更
-```
-AWS Budget アラート（月$5超）の通知先になる。
-
-### ③ CDK デプロイ
-```bash
-cd /Users/takashi/projects/taka-techblog/infra
-npx cdk deploy --all
-```
-`TakaBlogCertStack`（us-east-1）→ `TakaBlogStack`（ap-northeast-1）の順に作成される。
-
-**デプロイ後に控えるOutput値**
-
-| Output キー | 用途 |
-|---|---|
-| `GithubActionsRoleArn` | 全リポジトリ共通の `AWS_ROLE_ARN` |
-| `BucketName` | taka-techblog の `S3_BUCKET` |
-| `DistributionId` | taka-techblog の `CLOUDFRONT_DISTRIBUTION_ID` |
-| `UtagoeBucketName` | utagoe の `S3_BUCKET` |
-| `UtagoeDistributionId` | utagoe の `CLOUDFRONT_DISTRIBUTION_ID` |
-| `EcBucketName` | ec の `S3_BUCKET` |
-| `EcDistributionId` | ec の `CLOUDFRONT_DISTRIBUTION_ID` |
-| `AiAdsBucketName` | ai-ads-dashboard の `AI_ADS_S3_BUCKET` |
-| `AiAdsDistributionId` | ai-ads-dashboard の `AI_ADS_CLOUDFRONT_DISTRIBUTION_ID` |
-| `AiAdsApiUrl` | ai-ads-dashboard の `AI_ADS_API_URL`（Next.jsビルド時に使用） |
-| `GameBucketName` | game-site の `GAME_S3_BUCKET` |
-| `GameDistributionId` | game-site の `GAME_CLOUDFRONT_DISTRIBUTION_ID` |
-
-### ④ GitHub Secrets の設定（全リポジトリ）
-各リポジトリの **Settings → Secrets and variables → Actions → New repository secret** から登録。
-
-**taka-techblog / utagoe_club / ec**（既存3リポジトリ）
-
-| リポジトリ | Secret名 | 値 |
-|---|---|---|
-| `taka-techblog` | `AWS_ROLE_ARN` | `GithubActionsRoleArn` |
-| `taka-techblog` | `S3_BUCKET` | `BucketName` |
-| `taka-techblog` | `CLOUDFRONT_DISTRIBUTION_ID` | `DistributionId` |
-| `utagoe_club` | `AWS_ROLE_ARN` | 共通 |
-| `utagoe_club` | `S3_BUCKET` | `UtagoeBucketName` |
-| `utagoe_club` | `CLOUDFRONT_DISTRIBUTION_ID` | `UtagoeDistributionId` |
-| `ec` | `AWS_ROLE_ARN` | 共通 |
-| `ec` | `S3_BUCKET` | `EcBucketName` |
-| `ec` | `CLOUDFRONT_DISTRIBUTION_ID` | `EcDistributionId` |
-
-**ai-ads-dashboard**（新規）
-
-| Secret名 | 値 |
-|---|---|
-| `AWS_ROLE_ARN` | 共通 |
-| `AI_ADS_S3_BUCKET` | `AiAdsBucketName` |
-| `AI_ADS_CLOUDFRONT_DISTRIBUTION_ID` | `AiAdsDistributionId` |
-| `AI_ADS_API_URL` | `AiAdsApiUrl`（末尾スラッシュなし） |
-| `AI_ADS_LAMBDA_NAME` | `ai-ads-dashboard-api` |
-| `GEMINI_API_KEY` | Gemini API キー |
-
-**game-site**（新規）
-
-| Secret名 | 値 |
-|---|---|
-| `AWS_ROLE_ARN` | 共通 |
-| `GAME_S3_BUCKET` | `GameBucketName` |
-| `GAME_CLOUDFRONT_DISTRIBUTION_ID` | `GameDistributionId` |
-
-### ⑤ 各リポジトリを main に push → 自動デプロイ確認
-
-```bash
-git push origin main  # 各リポジトリで実行
-```
-
-**確認URL**
-
-| サイト | URL |
-|---|---|
-| ブログ本体 | https://taka-techblog.com |
-| ポートフォリオ | https://taka-techblog.com/portfolios |
-| 歌声くらぶ | https://utagoe.taka-techblog.com |
-| EC サイト | https://ec.taka-techblog.com |
-| AI Ads Dashboard | https://ai-ads.taka-techblog.com |
-| Game Portfolio | https://game.taka-techblog.com |
+### AWS Budget アラートのメールアドレス設定
+- `infra/cdk.json` の `alertEmail` が `"your-email@example.com"` のまま（未設定）
+- 変更後は `npx cdk deploy --all` で反映する
 
 ---
 
@@ -135,6 +47,12 @@ git push origin main  # 各リポジトリで実行
 ---
 
 ## ✅ 完了済み
+
+### インフラ・デプロイ
+- [x] ドメイン移管完了（さくら → Route 53）
+- [x] CDK デプロイ（TakaBlogCertStack + TakaBlogStack）
+- [x] GitHub Secrets 設定（全リポジトリ）
+- [x] 全サービス自動デプロイ確認済み
 
 ### サイト構築
 - [x] Astroプロジェクト初期構築（SSG + MDX対応）

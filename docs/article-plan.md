@@ -1,6 +1,6 @@
 # 記事計画・アイデアメモ
 
-最終更新: 2026-05-18
+最終更新: 2026-05-21
 
 ---
 
@@ -211,6 +211,19 @@
 | 4 | AWS CDK インフラ構成の解説 | このブログのインフラをコードと構成図で解説 | 現場エンジニアへの訴求力がある。IaC設計判断まで語れる |
 
 > ブログ記事（`langchain-nestjs-ai-integration.md`, `cloudformation-to-cdk.md` など）との連携でポートフォリオ→ブログの動線を作る
+
+---
+
+## 📤 Zenn 掲載済み記事
+
+| ブログ記事 | Zenn ファイル |
+|---|---|
+| career-change-to-engineer.md | e4d8874f0c25b0.md |
+| naisei-kansei.md | 46a0ca17e07591.md |
+| incident-branch-conflict-prod.md | 59f8ca153ced03.md |
+| claude-code-workflow.md | ed32a95b5e4802.md |
+| techLead-first-90-days.md | c456bbb0adeb5d.md |
+| clinical-trial-system-performance.md | f35fbfd57c2bf9.md |
 
 ---
 

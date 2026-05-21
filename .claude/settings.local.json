@@ -50,7 +50,11 @@
       "Bash(mkdir -p /Users/takashi/projects/portfolio/game-site/.github/workflows)",
       "Bash(git add *)",
       "Bash(git reset *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(git commit *)",
+      "Bash(grep -iE \"\\\\.\\(png|jpg|jpeg|webp|gif\\)$\")",
+      "Bash(npx zenn *)",
+      "Bash(npx zenn-cli *)"
     ]
   }
 }

@@ -12,7 +12,7 @@
 |---|---|
 | フロントエンド | Astro (TypeScript) |
 | コンテンツ管理 | Markdown / MDX |
-| クライアント永続化 | IndexedDB（idb ライブラリ） |
+| 全文検索 | Pagefind |
 | ホスティング | AWS S3 + CloudFront |
 | IaC | AWS CDK (TypeScript) |
 | CI/CD | GitHub Actions（OIDC 認証） |
@@ -27,16 +27,20 @@
 taka-techblog/
 ├── src/
 │   ├── components/       # 共通コンポーネント
-│   ├── content/blog/     # ブログ記事（Markdown）
-│   ├── data/             # 静的データ（JSON）
+│   ├── content/blog/     # ブログ記事（Markdown / MDX）
 │   ├── layouts/          # ページレイアウト
-│   ├── lib/db.ts         # IndexedDB CRUD リポジトリ
 │   ├── pages/
 │   │   ├── index.astro         # トップページ
-│   │   ├── blog/               # ブログ一覧・記事詳細
+│   │   ├── blog/               # ブログ一覧・記事詳細（ページネーション対応）
 │   │   ├── portfolios/         # 実績一覧
-│   │   └── portfolio/          # IndexedDB CRUD ラボ
+│   │   ├── about.astro         # プロフィール
+│   │   ├── uses.astro          # 使用ツール・環境紹介
+│   │   ├── contact.astro       # お問い合わせ
+│   │   ├── search.astro        # サイト内検索（Pagefind）
+│   │   ├── og/                 # OGP画像自動生成
+│   │   └── privacy.astro       # プライバシーポリシー
 │   └── styles/
+├── articles/             # Zenn記事（push で自動公開）
 ├── infra/                # AWS CDK（インフラをコード管理）
 │   ├── bin/app.ts        # スタック定義
 │   ├── lib/
@@ -46,6 +50,7 @@ taka-techblog/
 ├── .github/workflows/
 │   └── deploy.yml        # 自動デプロイ（OIDC 認証）
 └── public/
+    └── images/portfolio/ # ポートフォリオのスクリーンショット
 ```
 
 ---
@@ -54,10 +59,21 @@ taka-techblog/
 
 ```
 https://taka-techblog.com/            ← トップページ
-https://taka-techblog.com/blog/       ← 技術記事一覧
+https://taka-techblog.com/blog/       ← 技術記事一覧（ページネーション付き）
 https://taka-techblog.com/portfolios/ ← 実績一覧
-https://taka-techblog.com/portfolio/  ← IndexedDB CRUD ラボ
-https://portfolio.taka-techblog.com/  ← CRUD ラボ（サブドメイン）
+https://taka-techblog.com/about/      ← プロフィール
+https://taka-techblog.com/uses/       ← 使用ツール・環境紹介
+https://taka-techblog.com/search/     ← 全文検索
+https://taka-techblog.com/contact/    ← お問い合わせ
+```
+
+サブドメイン（CDKで管理・自動デプロイ）:
+
+```
+https://utagoe.taka-techblog.com/    ← 歌声くらぶ（合唱サークルサイト）
+https://ec.taka-techblog.com/        ← ECサイト（Rails API × React）
+https://ai-ads.taka-techblog.com/    ← AI付き広告計測ダッシュボード
+https://game.taka-techblog.com/      ← Game Portfolio Site
 ```
 
 ---
@@ -67,8 +83,9 @@ https://portfolio.taka-techblog.com/  ← CRUD ラボ（サブドメイン）
 ```bash
 npm install
 npm run dev       # http://localhost:4321
-npm run build     # 静的サイトビルド（dist/）
-npm run check     # 型チェック
+npm run build     # 静的サイトビルド + Pagefind インデックス生成（dist/）
+npm run check     # Astro 型チェック
+npm run typecheck # TypeScript 型チェック（tsc --noEmit）
 ```
 
 ---
@@ -115,13 +132,7 @@ npx cdk bootstrap   # 初回1回だけ
 npx cdk deploy --all
 ```
 
-Outputs に表示された値を GitHub Secrets に設定する：
-
-| Secret 名 | 対応する Output |
-|---|---|
-| `AWS_ROLE_ARN` | `GithubActionsRoleArn` |
-| `S3_BUCKET` | `BucketName` |
-| `CLOUDFRONT_DISTRIBUTION_ID` | `DistributionId` |
+Outputs に表示された値を GitHub Secrets に設定する（`docs/todo.md` 参照）。
 
 ---
 
@@ -177,4 +188,5 @@ tags: ["AWS", "TypeScript"]
 - **サーバーレス完全移行** : DB・サーバー不要で維持費を最小化
 - **IaC 管理** : CDK でインフラをコードとして Git 管理・再現可能
 - **セキュリティ** : S3 パブリック非公開・OAC 配信・OIDC キーレスデプロイ
-- **IndexedDB 採用** : LocalStorage より大容量・非同期・型安全な設計判断
+- **全文検索** : Pagefind によるビルド時インデックス生成（サーバーレスで全文検索を実現）
+- **Zenn連携** : `articles/` に記事を置くだけで Zenn にも自動公開

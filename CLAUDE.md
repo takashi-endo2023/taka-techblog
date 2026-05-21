@@ -121,11 +121,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ```
 src/
   content/blog/       ← ブログ記事（.md / .mdx）
-  components/         ← 共通コンポーネント
+  components/         ← 共通コンポーネント（BlogCard, AmazonCard, Header, Footer, Pagination）
   layouts/            ← BaseLayout, BlogLayout
-  pages/              ← ルーティング
+  pages/
+    blog/             ← 一覧（ページネーション）・記事詳細・タグ・RSS
+    portfolios/       ← 実績一覧
+    og/               ← OGP画像自動生成（satori + @resvg/resvg-js）
+    about.astro       ← プロフィール
+    uses.astro        ← 使用ツール・環境紹介
+    contact.astro     ← お問い合わせ（Googleフォーム埋め込み）
+    search.astro      ← 全文検索（Pagefind）
+    privacy.astro     ← プライバシーポリシー
   styles/global.css   ← グローバルスタイル・CSS変数
-articles/             ← Zenn記事
+articles/             ← Zenn記事（push で自動公開）
+books/                ← Zenn本（現在未使用）
 infra/                ← AWS CDK
 docs/                 ← 運営ドキュメント（todo.md, article-plan.md など）
 public/
