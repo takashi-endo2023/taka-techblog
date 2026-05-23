@@ -48,6 +48,27 @@ export class BlogStack extends cdk.Stack {
     });
 
     // ════════════════════════════════════════════════════════
+    // CloudFront Function: /path → /path/index.html 変換
+    // ════════════════════════════════════════════════════════
+
+    const rewriteFunction = new cloudfront.Function(this, 'RewriteFunction', {
+      functionName: 'taka-techblog-rewrite-index',
+      code: cloudfront.FunctionCode.fromInline(`
+function handler(event) {
+  var request = event.request;
+  var uri = request.uri;
+  if (uri.endsWith('/')) {
+    request.uri += 'index.html';
+  } else if (!uri.includes('.')) {
+    request.uri += '/index.html';
+  }
+  return request;
+}
+      `),
+      runtime: cloudfront.FunctionRuntime.JS_2_0,
+    });
+
+    // ════════════════════════════════════════════════════════
     // ブログ本体（taka-techblog.com）
     // ════════════════════════════════════════════════════════
 
@@ -96,6 +117,10 @@ export class BlogStack extends cdk.Stack {
         cachePolicy: noCachePolicy,
         compress: true,
         responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS,
+        functionAssociations: [{
+          function: rewriteFunction,
+          eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
+        }],
       },
       additionalBehaviors: {
         '_astro/*': {
