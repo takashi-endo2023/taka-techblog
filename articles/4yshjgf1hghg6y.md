@@ -3,7 +3,9 @@ title: "mainブランチを捨てた——リリース1時間前のgit修羅場"
 emoji: "🔥"
 type: "tech"
 topics: ["Git", "DevOps"]
-published: false
+published: true
+published_at: "2025-03-11 09:00"
+canonical_url: "https://taka-techblog.com/blog/git-chaos-1hour-before-release"
 ---
 
 :::message

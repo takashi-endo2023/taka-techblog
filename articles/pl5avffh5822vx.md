@@ -4,6 +4,7 @@ emoji: "🎭"
 type: "idea"
 topics: ["テックリード", "キャリア", "AI", "チーム開発"]
 published: true
+canonical_url: "https://taka-techblog.com/blog/techlead-mask-3years"
 ---
 
 :::message

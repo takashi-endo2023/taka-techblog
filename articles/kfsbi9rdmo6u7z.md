@@ -3,7 +3,9 @@ title: "引き継いだリリースフローが、監査で初めて意味を持
 emoji: "🚢"
 type: "tech"
 topics: ["DevOps", "GitLab"]
-published: false
+published: true
+published_at: "2025-04-01 09:00"
+canonical_url: "https://taka-techblog.com/blog/release-flow-regulated-industry"
 ---
 
 :::message

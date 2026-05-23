@@ -3,7 +3,9 @@ title: "Next.jsのSSR・SSG・ISRを実務でどう使い分けるか"
 emoji: "⚡"
 type: "tech"
 topics: ["Next.js", "React", "フロントエンド"]
-published: false
+published: true
+published_at: "2024-04-02 09:00"
+canonical_url: "https://taka-techblog.com/blog/nextjs-rendering-deep-dive"
 ---
 
 :::message

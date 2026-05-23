@@ -2,7 +2,7 @@
 title: "React×Next.jsの選択基準を実務から考える —SPA・SSR・SSGをどう使い分けるか"
 description: "治験CRMではSPA、このブログではSSGを選んだ理由を実体験から整理。App Router vs Pages Router、CSR/SSR/SSG/ISRそれぞれのユースケースと実務での判断基準をまとめます。"
 pubDate: "2026-05-12"
-tags: ["React", "Next.js", "フロントエンド", "アーキテクチャ"]
+tags: ["React", "Next.js", "アーキテクチャ"]
 ---
 
 ## はじめに
@@ -111,3 +111,7 @@ export async function generateStaticParams() {
 - **ECサイト・ニュース（動的・SEO重視）** →SSR or ISR
 
 判断軸は「SEOが必要か」「データは静的か動的か」「リアルタイム性が必要か」の3点に尽きます。この軸を持っているだけで、技術選定の説明責任を果たせるようになります。
+
+---
+
+**実装例**: この記事で触れたReact SPAとSSGの判断を実際に適用したプロジェクトは[ポートフォリオ](/portfolios)で確認できます。

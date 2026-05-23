@@ -3,7 +3,9 @@ title: "誰も採用をやらないから、自分でやることにした"
 emoji: "🙋"
 type: "idea"
 topics: ["マネジメント", "キャリア"]
-published: false
+published: true
+published_at: "2025-06-03 09:00"
+canonical_url: "https://taka-techblog.com/blog/engineer-hiring-lessons"
 ---
 
 :::message

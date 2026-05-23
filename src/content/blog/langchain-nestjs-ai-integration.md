@@ -2,7 +2,8 @@
 title: "RAGをやめてツールベースに切り替えた話——LangChain.jsとCRMの相性"
 description: "治験CRMへのAI統合でRAGを試みた結果、精度要件と相性が悪いと判断しRe-Actエージェント×ツールベースに切り替えた経緯。プロンプト設計の泥臭さも含めた実録。"
 pubDate: "2025-08-05"
-tags: ["LangChain", "NestJS", "TypeScript", "AI連携", "医療IT"]
+updatedDate: "2026-05-22"
+tags: ["LangChain", "NestJS", "TypeScript", "AI開発", "医療IT"]
 ---
 
 治験CRMにAIを乗せようとしたとき、最初にやったのはRAGだった。結果的に、それをやめてツールベースの実装に切り替えた。その判断の経緯を書いておく。

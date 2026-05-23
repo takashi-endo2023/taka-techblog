@@ -4,6 +4,7 @@ emoji: "🤖"
 type: "idea"
 topics: ["テックリード", "AI", "LLM", "チーム開発"]
 published: true
+canonical_url: "https://taka-techblog.com/blog/solo-techlead-ai-survival"
 ---
 
 :::message

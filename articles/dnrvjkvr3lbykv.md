@@ -3,7 +3,9 @@ title: "GitLab CI/CDを実務で運用するときの設計パターン"
 emoji: "🏗️"
 type: "tech"
 topics: ["GitLab", "DevOps", "CI/CD"]
-published: false
+published: true
+published_at: "2026-02-25 09:00"
+canonical_url: "https://taka-techblog.com/blog/gitlab-cicd-patterns"
 ---
 
 :::message

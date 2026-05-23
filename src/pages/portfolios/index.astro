@@ -17,6 +17,10 @@ const portfolios = [
     screenshot: '/images/portfolio/ai-ads.png',
     github: 'https://github.com/takashi-endo2023/ai-ads-dashboard',
     demo: 'https://ai-ads.taka-techblog.com',
+    relatedArticles: [
+      { title: 'Claude Codeを設計の壁打ち相手として使う：アーキテクチャ相談の実践', slug: 'claude-code-as-design-partner' },
+      { title: 'LangChain.js 2025年の現状：実務で使って感じたこと', slug: 'langchain-js-2025' },
+    ],
   },
   {
     title: 'ECサイト（Rails 8 × React フロントエンド）',
@@ -33,6 +37,9 @@ const portfolios = [
     screenshot: '/images/portfolio/ec.png',
     github: 'https://github.com/takashi-endo2023/ec',
     demo: 'https://ec.taka-techblog.com',
+    relatedArticles: [
+      { title: 'ReactとNext.jsの選定基準', slug: 'react-nextjs-selection' },
+    ],
   },
   {
     title: 'サークルホームページ',
@@ -48,6 +55,7 @@ const portfolios = [
     screenshot: '/images/portfolio/utagoe.png',
     github: 'https://github.com/takashi-endo2023/utagoe_club',
     demo: 'https://utagoe.taka-techblog.com',
+    relatedArticles: null,
   },
   {
     title: 'Game Portfolio Site',
@@ -63,6 +71,7 @@ const portfolios = [
     screenshot: '/images/portfolio/game.png',
     github: 'https://github.com/takashi-endo2023/game-site',
     demo: 'https://game.taka-techblog.com',
+    relatedArticles: null,
   },
   {
     title: '年収トラッカー',
@@ -77,9 +86,13 @@ const portfolios = [
       'Vite manualChunks でアプリ本体・vendor・Recharts を分割しキャッシュ効率を最大化',
       'GitHub Actions OIDC で S3 sync → CloudFront 無効化まで自動デプロイ',
     ],
-    screenshot: null,
+    screenshot: '/images/portfolio/salary.png',
     github: 'https://github.com/takashi-endo2023/salary-tracker',
     demo: 'https://salary.taka-techblog.com',
+    relatedArticles: [
+      { title: 'AstroとAWS CDK + CloudFrontで技術ブログを構築した話', slug: 'astro-aws-cdk-cloudfront-blog' },
+      { title: 'GitHub ActionsとAWS OIDCでキーレスデプロイを実現する', slug: 'github-actions-oidc-aws' },
+    ],
   },
 ];
 ---
@@ -113,6 +126,18 @@ const portfolios = [
           <ul class="point-list">
             {item.points.map((point) => <li>{point}</li>)}
           </ul>
+          {item.relatedArticles && item.relatedArticles.length > 0 && (
+            <div class="related-articles">
+              <p class="related-articles-label">関連記事</p>
+              <ul class="related-articles-list">
+                {item.relatedArticles.map((a) => (
+                  <li>
+                    <a href={`/blog/${a.slug}`} class="related-article-link">{a.title}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <footer class="card-footer">
             {item.github && (
               <a href={item.github} target="_blank" rel="noopener" class="btn btn-outline">
@@ -253,6 +278,49 @@ const portfolios = [
     position: absolute;
     left: 0;
     color: var(--color-accent);
+  }
+
+  .related-articles {
+    padding: 0 2rem 1.25rem;
+  }
+
+  .related-articles-label {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+
+  .related-articles-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .related-article-link {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+    padding-left: 0.9rem;
+    position: relative;
+  }
+
+  .related-article-link::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+    font-size: 0.75rem;
+  }
+
+  .related-article-link:hover {
+    color: var(--color-accent-hover);
   }
 
   .card-footer {

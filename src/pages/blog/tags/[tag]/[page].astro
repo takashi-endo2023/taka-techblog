@@ -1,7 +1,7 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import BlogCard from '../../components/BlogCard.astro';
-import Pagination from '../../components/Pagination.astro';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import BlogCard from '../../../../components/BlogCard.astro';
+import Pagination from '../../../../components/Pagination.astro';
 import { getCollection } from 'astro:content';
 
 import type { GetStaticPaths, Page } from 'astro';
@@ -9,54 +9,71 @@ import type { CollectionEntry } from 'astro:content';
 
 export const getStaticPaths: GetStaticPaths = async ({ paginate }) => {
   const allPosts = await getCollection('blog');
-  const sorted = allPosts.sort(
-    (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
-  );
-  return paginate(sorted, { pageSize: 12 });
+
+  const tagCounts = allPosts.flatMap((p) => p.data.tags).reduce<Record<string, number>>((acc, t) => {
+    acc[t] = (acc[t] ?? 0) + 1;
+    return acc;
+  }, {});
+  const topTags = Object.entries(tagCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 15)
+    .map(([t]) => t);
+
+  const tags = [...new Set(allPosts.flatMap((p) => p.data.tags))];
+
+  return tags.flatMap((tag) => {
+    const tagPosts = allPosts
+      .filter((p) => p.data.tags.includes(tag))
+      .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+    return paginate(tagPosts, {
+      params: { tag },
+      props: { tag, topTags, totalTagPosts: tagPosts.length },
+      pageSize: 12,
+    });
+  });
 };
 
+const { tag, topTags, totalTagPosts } = Astro.props as {
+  tag: string;
+  topTags: string[];
+  totalTagPosts: number;
+};
 const { page } = Astro.props as { page: Page<CollectionEntry<'blog'>> };
 
 function getReadingTime(body: string): number {
   return Math.max(1, Math.ceil(body.length / 300));
 }
-
-// タグ一覧（使用頻度上位15件のみ表示）
-const allPosts = await getCollection('blog');
-const tagCounts = allPosts.flatMap((p) => p.data.tags).reduce<Record<string, number>>((acc, tag) => {
-  acc[tag] = (acc[tag] ?? 0) + 1;
-  return acc;
-}, {});
-const topTags = Object.entries(tagCounts)
-  .sort((a, b) => b[1] - a[1])
-  .slice(0, 15)
-  .map(([tag]) => tag);
 ---
 
 <BaseLayout
   title={page.currentPage > 1
-    ? `Blog — ${page.currentPage}ページ目 | taka-techblog`
-    : 'Blog | taka-techblog'}
-  description="フルスタック・AI・チームビルディングの現場知識を言語化した記事一覧"
+    ? `${tag}の記事一覧 — ${page.currentPage}ページ目 | taka-techblog`
+    : `${tag}の記事一覧 (${totalTagPosts}件) | taka-techblog`}
+  description={`${tag}に関する技術記事・現場知見を${totalTagPosts}件掲載。医療系スタートアップのテックリードが実務から得た${tag}の知識を発信しています。`}
 >
   <div class="container page-content">
     <header class="page-header animate-fade-in-up">
-      <h1>Blog</h1>
-      <p class="page-subtitle">
-        フルスタック・AI・チームビルディングの現場知識を言語化した記事一覧
-      </p>
+      <a href="/blog/1" class="back-link">← Blog 一覧へ戻る</a>
+      <h1>
+        <span class="tag-label">#</span>{tag}
+      </h1>
+      <p class="page-subtitle">{totalTagPosts} 件の記事</p>
     </header>
 
-    <!-- タグナビ（使用頻度上位15件 ＋ 全タグリンク） -->
     <nav class="tag-nav animate-fade-in-up delay-1" aria-label="タグで絞り込む">
-      <a href="/blog/1" class="tag-btn active">すべて</a>
-      {topTags.map((tag) => (
-        <a href={`/blog/tags/${tag}/1`} class="tag-btn">{tag}</a>
+      <a href="/blog/1" class="tag-btn">すべて</a>
+      {topTags.map((t) => (
+        <a
+          href={`/blog/tags/${t}/1`}
+          class:list={['tag-btn', { active: t === tag }]}
+        >
+          {t}
+        </a>
       ))}
       <a href="/blog/tags" class="tag-btn tag-btn--more">すべてのタグ →</a>
     </nav>
 
-    <!-- 記事一覧 -->
     <div class="post-list animate-fade-in-up delay-2">
       {page.data.map((post) => (
         <BlogCard
@@ -70,13 +87,13 @@ const topTags = Object.entries(tagCounts)
       ))}
     </div>
 
-    <!-- ページネーション -->
     <Pagination
       currentPage={page.currentPage}
       lastPage={page.lastPage}
       prevUrl={page.url.prev}
       nextUrl={page.url.next}
-      totalPosts={allPosts.length}
+      totalPosts={totalTagPosts}
+      pageBaseUrl={`/blog/tags/${tag}`}
     />
   </div>
 </BaseLayout>
@@ -87,22 +104,39 @@ const topTags = Object.entries(tagCounts)
     padding-bottom: 4rem;
   }
 
+  .back-link {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+    transition: color 0.15s;
+  }
+
+  .back-link:hover {
+    color: var(--color-accent);
+  }
+
   .page-header {
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
   }
 
   .page-header h1 {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     margin-bottom: 0.5rem;
     letter-spacing: -0.02em;
   }
 
-  .page-subtitle {
-    color: var(--color-text-muted);
-    font-size: 1rem;
+  .tag-label {
+    color: var(--color-accent);
+    margin-right: 0.1em;
   }
 
-  /* タグナビ */
+  .page-subtitle {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    font-family: var(--font-mono);
+  }
+
   .tag-nav {
     display: flex;
     flex-wrap: wrap;
@@ -143,7 +177,6 @@ const topTags = Object.entries(tagCounts)
     border-style: solid;
   }
 
-  /* 記事グリッド */
   .post-list {
     display: grid;
     gap: 1.25rem;

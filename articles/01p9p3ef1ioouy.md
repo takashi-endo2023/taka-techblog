@@ -3,7 +3,9 @@ title: "RAGをやめてツールベースに切り替えた話——LangChain.js
 emoji: "🔀"
 type: "tech"
 topics: ["AI", "LLM", "NestJS", "LangChain"]
-published: false
+published: true
+published_at: "2025-08-05 09:00"
+canonical_url: "https://taka-techblog.com/blog/langchain-nestjs-ai-integration"
 ---
 
 :::message

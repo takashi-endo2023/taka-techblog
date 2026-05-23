@@ -3,7 +3,9 @@ title: "AstroとAWS CDK + CloudFrontで技術ブログを構築した話"
 emoji: "🚀"
 type: "tech"
 topics: ["AWS", "DevOps", "GitHubActions"]
-published: false
+published: true
+published_at: "2025-10-28 09:00"
+canonical_url: "https://taka-techblog.com/blog/astro-aws-cdk-cloudfront-blog"
 ---
 
 :::message

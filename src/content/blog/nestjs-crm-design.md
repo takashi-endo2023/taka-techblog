@@ -3,7 +3,7 @@ title: "NestJSの治験CRMを引き継いで学んだバックエンド設計"
 description: "ベンダーから引き継いだNestJS製治験CRMの保守・改修を通じて理解したモジュール設計、Repositoryパターン、DTOバリデーション、エラーハンドリングの実際。"
 pubDate: "2025-09-16"
 updatedDate: "2026-05-22"
-tags: ["NestJS", "TypeScript", "バックエンド設計", "アーキテクチャ"]
+tags: ["NestJS", "TypeScript", "アーキテクチャ"]
 ---
 
 ベンダーから引き継いだ治験CRMのバックエンドはNestJSで書かれていた。

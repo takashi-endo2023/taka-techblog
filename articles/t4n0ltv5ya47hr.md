@@ -3,7 +3,9 @@ title: "GitHub ActionsとAWS OIDCでキーレスデプロイを実現する"
 emoji: "🔑"
 type: "tech"
 topics: ["GitHubActions", "AWS", "セキュリティ"]
-published: false
+published: true
+published_at: "2026-01-14 09:00"
+canonical_url: "https://taka-techblog.com/blog/github-actions-oidc-aws"
 ---
 
 :::message

@@ -2,7 +2,8 @@
 title: "Claude Codeを設計の壁打ち相手として使う：アーキテクチャ相談の実践"
 description: "知らない領域の機能を設計するとき、Claude Codeは壁打ち相手と先生を同時にやってくれる。広告計測×AI分析機能の設計をマーケティング学習と同時並行でやった話。"
 pubDate: "2026-04-15"
-tags: ["Claude Code", "AI開発", "アーキテクチャ", "設計", "開発生産性"]
+updatedDate: "2026-05-22"
+tags: ["Claude Code", "AI開発", "アーキテクチャ"]
 ---
 
 「自分が知らない領域の機能を設計する」という場面が、エンジニアには思ったより多い。
@@ -86,3 +87,4 @@ Claude Codeとの壁打ちで感じることは、「正解を教えてもらう
 **関連記事**:
 - [AIがなかったら死んでた——一人で全部背負うテックリードの現実](/blog/solo-techlead-ai-survival)
 - [Claude Codeを実務導入して開発フローが変わった話](/blog/claude-code-workflow)
+- [ポートフォリオ: AI付き広告計測・分析システム](/portfolios)

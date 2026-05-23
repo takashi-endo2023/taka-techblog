@@ -4,13 +4,25 @@ import BlogCard from '../components/BlogCard.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('blog');
-const recentPosts = allPosts
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
-  .slice(0, 3);
+const sorted = [...allPosts].sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const recentPosts = sorted.slice(0, 6);
 
 function getReadingTime(body: string): number {
-  return Math.max(1, Math.ceil(body.length / 500));
+  return Math.max(1, Math.ceil(body.length / 300));
 }
+
+const categoryDefs = [
+  { label: 'AI・Claude Code',       tag: 'AI開発' },
+  { label: 'テックリード・組織',     tag: 'テックリード' },
+  { label: 'インフラ・DevOps',       tag: 'DevOps' },
+  { label: '医療IT',                tag: '医療IT' },
+] as const;
+
+const categories = categoryDefs.map(({ label, tag }) => ({
+  label,
+  tag,
+  posts: sorted.filter((p) => p.data.tags.includes(tag)).slice(0, 3),
+}));
 ---
 
 <BaseLayout title="taka-techblog | フルスタック × AI × チームビルディング">
@@ -55,6 +67,34 @@ function getReadingTime(body: string): number {
           tags={post.data.tags}
           readingTime={getReadingTime(post.body ?? '')}
         />
+      ))}
+    </div>
+  </section>
+
+  <!-- Category picks -->
+  <section class="section container">
+    <div class="section-header">
+      <h2>カテゴリで読む</h2>
+      <a href="/blog/tags" class="section-link">タグ一覧 →</a>
+    </div>
+    <div class="category-grid">
+      {categories.map(({ label, tag, posts }) => (
+        <div class="category-card">
+          <div class="category-header">
+            <a href={`/blog/tags/${tag}/1`} class="category-title">{label}</a>
+          </div>
+          <ul class="category-posts">
+            {posts.map((p) => (
+              <li class="category-post-item">
+                <a href={`/blog/${p.id}`} class="category-post-link">{p.data.title}</a>
+                <span class="category-post-date">
+                  {p.data.pubDate.toLocaleDateString('ja-JP', { year: 'numeric', month: 'short', day: 'numeric' })}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <a href={`/blog/tags/${tag}/1`} class="category-more">もっと見る →</a>
+        </div>
       ))}
     </div>
   </section>
@@ -188,6 +228,95 @@ function getReadingTime(body: string): number {
     display: grid;
     gap: 1.25rem;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  /* ── Category picks ── */
+  .category-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+
+  .category-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: border-color 0.2s;
+  }
+
+  .category-card:hover {
+    border-color: var(--color-accent);
+  }
+
+  .category-header {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.75rem;
+  }
+
+  .category-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-accent-hover);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .category-title:hover {
+    color: var(--color-text);
+  }
+
+  .category-posts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+  }
+
+  .category-post-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .category-post-link {
+    font-size: 0.88rem;
+    color: var(--color-text);
+    text-decoration: none;
+    line-height: 1.4;
+    transition: color 0.15s;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .category-post-link:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .category-post-date {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+  }
+
+  .category-more {
+    font-size: 0.82rem;
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color 0.15s;
+    align-self: flex-start;
+  }
+
+  .category-more:hover {
+    color: var(--color-accent-hover);
   }
 
   /* ── Tech Stack ── */

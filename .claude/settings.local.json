@@ -104,7 +104,23 @@
       "Bash(curl -v -sI https://taka-techblog.com/)",
       "Bash(dig +short taka-techblog.com)",
       "Bash(curl -sI --resolve \"taka-techblog.com:443:$\\(dig +short taka-techblog.com)",
-      "Bash(curl -sI --connect-timeout 10 -H \"Host: taka-techblog.com\" \"https://13.249.146.28/\")"
+      "Bash(curl -sI --connect-timeout 10 -H \"Host: taka-techblog.com\" \"https://13.249.146.28/\")",
+      "Bash(sort -t'\"' -k2 -r)",
+      "Bash(xargs -I{} sh -c 'echo \"FILE: {}\"; grep -o \"taka-techblog.com/blog/[^?\\\\\"]*\" {}; head -6 {}')",
+      "Bash(sed -i '' 's/\"AI駆動開発\"/\"AI開発\"/g' src/content/blog/claude-code-workflow.md)",
+      "Bash(sed -i '' 's/\"AI連携\"/\"AI開発\"/g' src/content/blog/langchain-nestjs-ai-integration.md)",
+      "Bash(sed -i '' 's/, \"AI\",/, \"AI開発\",/g; s/, \"AI\"\\\\]/, \"AI開発\"]/g; s/\\\\[\"AI\",/[\"AI開発\",/g' src/content/blog/typescript-langchain-type-safe.md)",
+      "Bash(sed -i '' 's/, \"組織\"\\\\]/, \"組織設計\"]/g; s/, \"組織\",/, \"組織設計\",/g' src/content/blog/solo-techlead-ai-survival.md)",
+      "Bash(sed -i '' 's/, \"組織\"\\\\]/, \"組織設計\"]/g; s/, \"組織\",/, \"組織設計\",/g' src/content/blog/code-review-culture.md)",
+      "Bash(Read /private/tmp/claude-501/-Users-takashi-projects-taka-techblog/a5c565b1-366c-4f99-ad6e-baf3f37c7a99/tasks/brxs0p82s.output)",
+      "Bash(node -e \"const v = require\\('./node_modules/astro/package.json'\\).version; console.log\\('Astro version:', v\\)\")",
+      "Bash(node -e \"const t = require\\('./node_modules/astro/dist/transitions/index.js'\\); console.log\\(Object.keys\\(t\\)\\)\")",
+      "Bash(ls ~/Desktop/*.png ~/Desktop/*.jpg ~/Desktop/*.webp 2>/dev/null)",
+      "Bash(cp ~/Desktop/salary.png /Users/takashi/projects/taka-techblog/public/images/portfolio/salary.png && echo \"Copied\")",
+      "Bash(grep -v \"^$\")",
+      "Bash(mkdir -p /Users/takashi/projects/taka-techblog/src/pages/blog/tags/\\\\[tag\\\\])",
+      "Bash(grep -v '^$')",
+      "WebSearch"
     ]
   }
 }

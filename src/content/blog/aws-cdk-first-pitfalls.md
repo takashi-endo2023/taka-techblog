@@ -2,7 +2,7 @@
 title: "AWS CDKを初めて使って詰まった5つのこと"
 description: "IaC初挑戦でAWS CDKを選んでこのブログのインフラを構築した際に直面した5つの壁と、その解決策をまとめました。CDK初心者が同じ穴にはまらないように。"
 pubDate: "2025-11-18"
-tags: ["AWS CDK", "AWS", "IaC", "初心者", "CloudFront"]
+tags: ["AWS", "DevOps"]
 ---
 
 ## なぜCDKを選んだのか
@@ -41,7 +41,7 @@ cfnBucket.accelerateConfiguration = {
 
 `cdk deploy`を実行するIAMユーザーの権限不足で何度もデプロイが止まりました。CloudFormationがリソースを作るために必要な権限と、自分のユーザーが持つ権限の2段階があるのを最初は理解していませんでした。
 
-ローカル開発中は一時的に`AdministratorAccess`を付与して進め、動作確認が取れてからCI/CDで使うロールの権限を最小化するアプローチが現実的です。本番環境では以下のように権限を絞っています。
+ローカル開発中は一時的に`AdministratorAccess`を付与して進め、動作確認が取れてからCI-CDで使うロールの権限を最小化するアプローチが現実的です。本番環境では以下のように権限を絞っています。
 
 ```typescript
 // CDKデプロイ用のIAMロール

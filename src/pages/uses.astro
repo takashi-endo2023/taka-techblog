@@ -1,29 +1,161 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const sections = [
+const associateId = 'takashi084-22';
+
+interface AffiliateItem {
+  name: string;
+  description: string;
+  asin?: string;
+}
+
+const sections: { title: string; items: AffiliateItem[] }[] = [
   {
     title: 'マシン',
     items: [
       {
-        name: 'MacBook Pro M1',
+        name: 'MacBook Pro M3 Pro（14インチ）— 仕事用',
         description:
-          'メイン開発マシン。M1チップの恩恵でビルドやDockerの動作が快適。外部モニター1枚と組み合わせて使用。',
+          '会社支給のメイン開発機。M3 Pro チップで複数サービスの Docker 同時起動 + ビルドが余裕。バッテリーも長持ちで外出先でも気にならなくなった。',
+        asin: 'B0CM5DVWF1',
+      },
+      {
+        name: 'MacBook Pro M1（13インチ）— プライベート用',
+        description:
+          '個人開発・ブログ執筆はこちら。M1 でも日常的な用途では全く困らない。外部モニターと組み合わせてデスクトップ運用。',
+        asin: 'B08N6MMJX5',
       },
     ],
   },
   {
-    title: 'キーボード・マウス',
+    title: 'デスク環境',
+    items: [
+      {
+        name: 'FlexiSpot 電動昇降デスク',
+        description:
+          '電動で高さを変えられるスタンディングデスク。午後の眠気が出る時間帯に立って作業するようになってから、集中力が明らかに変わった。天板サイズは 140×70cm で広さも十分。',
+        asin: 'B092VWRNYQ',
+      },
+      {
+        name: 'DXRacer ゲーミングチェア（DXR-BKN）',
+        description:
+          'フォーミュラシリーズのファブリック素材チェア。長時間座っても腰が痛くなりにくく、リクライニングで休憩もできる。在宅ワーク導入以降ずっと使い続けている一脚。',
+        asin: 'B00M2CZZOA',
+      },
+      {
+        name: 'Dell S2721QS 27インチ 4K モニター',
+        description:
+          '4K IPS パネルで文字がくっきり読める。27インチに 4K は細かすぎるという声もあるが、MacBook との HiDPI 表示の組み合わせが快適。高さ・縦横回転調整付きで姿勢も整えやすい。',
+        asin: 'B08HGNYMWZ',
+      },
+      {
+        name: 'HUANUO HNSS7 モニターアーム',
+        description:
+          'ガスシリンダー式で片手でスムーズに高さ・角度を調整できる。13〜49インチ・耐荷重12kgまで対応で Dell 27インチも余裕。クランプ＆グロメット両対応でデスクを選ばない。USB ケーブル内蔵でケーブルもスッキリ。',
+        asin: 'B08229RRRF',
+      },
+      {
+        name: 'Quntis L205-QU モニターライト（40cm）',
+        description:
+          'モニター上部に引っ掛けるだけで設置できるバーライト。演色性 Ra≥98 で目が疲れにくい。照度 700Lux 以上・無段階調光で夜間作業の手元が格段に見やすくなった。モニターへの映り込みもない。',
+        asin: 'B08DKQ3JG1',
+      },
+    ],
+  },
+  {
+    title: 'エルゴノミクス',
+    items: [
+      {
+        name: 'Havit HV-MP855 大型マウスパッド（900×400mm）',
+        description:
+          'キーボードとマウスをまとめて乗せられる横長サイズ。表面の布素材がマウスの滑りと止まりのバランスが良く、長時間操作でも手首が疲れにくい。防水で拭き取り掃除も楽。',
+        asin: 'B01M18UR54',
+      },
+      {
+        name: 'HyperX リストレスト テンキーレス（4Z7X1AA）',
+        description:
+          '低反発フォームで手首をしっかり支えてくれる。テンキーレスキーボードのサイズにぴったり合う幅で邪魔にならない。滑り止めラバーベースで位置もズレない。',
+        asin: 'B09SGS3X7W',
+      },
+      {
+        name: 'クモリ チェアマット PVC 80×100cm',
+        description:
+          'フローリングをキャスターの傷から守る透明マット。80×100cm のサイズ感がちょうどよく、圧迫感がない。PVC 素材で拭くだけで汚れが落ちるのがラク。',
+        asin: 'B0CWQBS8DM',
+      },
+      {
+        name: 'IKSTAR ランバーサポート 低反発クッション',
+        description:
+          '腰椎をしっかり支えるランバーサポート。低反発素材で長時間座っても腰への負担が減った。ゲーミングチェアの背面にそのまま固定できる。',
+        asin: 'B076RJN5TK',
+      },
+      {
+        name: 'IKSTAR 指圧突起設計 低反発座布団（ブラック）',
+        description:
+          '指圧突起が座面からお尻・太ももの血行を促してくれる座布団。長時間座り続けると出てくる疲れが明らかに軽減された。厚みがあって底付き感もない。',
+        asin: 'B07PC1RV1H',
+      },
+    ],
+  },
+  {
+    title: 'キーボード・マウス（仕事用）',
     items: [
       {
         name: 'Logicool MX KEYS S（KX800sGR）',
         description:
           'ワイヤレスキーボード。キーのストロークが適度で長時間の入力でも疲れにくい。複数デバイスの切り替えも快適。',
+        asin: 'B0C65F55K5',
       },
       {
         name: 'Logicool MX Master 2',
         description:
           '多ボタン・高精度トラッキングのワイヤレスマウス。ホイールのフリースピンモードが地味に便利で、長いコードのスクロールが快適になった。',
+        asin: 'B071Z2TFHX',
+      },
+    ],
+  },
+  {
+    title: 'キーボード・マウス（プライベート）',
+    items: [
+      {
+        name: 'Apple Magic Keyboard（Touch ID搭載）',
+        description:
+          'プライベートの Mac 作業はこちら。Touch ID で瞬時にロック解除できるのが思いのほか快適。キーストロークは浅めだが慣れると速く打てる。',
+        asin: 'B0DL72TNG2',
+      },
+      {
+        name: 'Apple Magic Mouse',
+        description:
+          'マルチタッチ対応で、スクロールやスワイプが指一本で直感的に操作できる。Logicool とは全く違う使い心地だが、プライベートの casual な作業にはこちらが好み。',
+        asin: 'B0DL6WXF1G',
+      },
+    ],
+  },
+  {
+    title: 'オーディオ',
+    items: [
+      {
+        name: 'AirPods Pro（第2世代）',
+        description:
+          'ノイズキャンセリングの完成度が高く、在宅ワーク時の集中力維持に欠かせない。外音取り込みモードも自然で、宅配の呼び鈴を聞き逃すことがなくなった。',
+        asin: 'B0CHXVBQHR',
+      },
+    ],
+  },
+  {
+    title: 'ガジェット・充電',
+    items: [
+      {
+        name: 'Apple Watch Series 9',
+        description:
+          '仕事中も運動中も常時着用。タイマー・通知の確認・スタンドリマインダーが在宅ワークの生活リズムを整えてくれる。Siri 経由でハンズフリー操作できるのも地味に便利。',
+        asin: 'B0CHX4KK2C',
+      },
+      {
+        name: 'Belkin 3-in-1 ワイヤレス充電スタンド Qi2（WIZ023dqBK）',
+        description:
+          'iPhone・Apple Watch・AirPods を1台でまとめて充電。Qi2 認証で 15W 急速ワイヤレス充電対応。ケーブルが1本で済むのでデスクがすっきりした。',
+        asin: 'B0D5D4HLWW',
       },
     ],
   },
@@ -116,7 +248,7 @@ const sections = [
 
 <BaseLayout
   title="Uses | taka-techblog"
-  description="普段の開発で使っているマシン・エディタ・ツール・技術スタックの一覧。"
+  description="普段の開発で使っているマシン・デスク環境・ガジェット・エディタ・AIツール・技術スタックの一覧。MacBook Pro M3・FlexiSpot電動昇降デスク・DXRacer・Dell 4Kモニター・AirPods Pro・Apple Watchなど実際に使っているものを紹介。"
 >
   <div class="container uses-page">
     <header class="page-header animate-fade-in-up">
@@ -131,8 +263,24 @@ const sections = [
           <ul class="item-list">
             {section.items.map((item) => (
               <li class="item">
-                <p class="item-name">{item.name}</p>
+                <p class="item-name">
+                  {item.asin
+                    ? <a href={`https://www.amazon.co.jp/dp/${item.asin}?tag=${associateId}`} target="_blank" rel="noopener noreferrer sponsored" class="item-link">{item.name}</a>
+                    : item.name
+                  }
+                </p>
                 <p class="item-desc">{item.description}</p>
+                {item.asin && (
+                  <a
+                    href={`https://www.amazon.co.jp/dp/${item.asin}?tag=${associateId}`}
+                    target="_blank"
+                    rel="noopener noreferrer sponsored"
+                    class="amazon-btn"
+                  >
+                    <span class="amazon-pr">PR</span>
+                    Amazonで見る →
+                  </a>
+                )}
               </li>
             ))}
           </ul>
@@ -198,5 +346,46 @@ const sections = [
     font-size: 0.9rem;
     color: var(--color-text-muted);
     line-height: 1.75;
+  }
+
+  .item-link {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .item-link:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .amazon-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-radius: var(--radius);
+    background: rgba(245, 158, 11, 0.06);
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
+  }
+
+  .amazon-btn:hover {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.6);
+  }
+
+  .amazon-pr {
+    font-size: 0.68rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    padding: 0.05em 0.35em;
+    border-radius: 3px;
   }
 </style>

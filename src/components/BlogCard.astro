@@ -18,30 +18,25 @@ const formattedDate = pubDate.toLocaleDateString('ja-JP', {
 ---
 
 <article class="blog-card">
-  <a href={`/blog/${slug}`} class="card-link" aria-label={title}>
-    <div class="card-top-line"></div>
-    <div class="card-inner">
-      <div class="card-meta">
-        <time datetime={pubDate.toISOString()} class="card-date">{formattedDate}</time>
-        {readingTime && (
-          <span class="card-reading-time">{readingTime} min read</span>
-        )}
-        <div class="card-tags">
-          {tags.slice(0, 3).map((tag) => (
-            <span
-              class="tag tag-link"
-              data-href={`/blog/tags/${tag}`}
-              role="link"
-              tabindex="0"
-            >{tag}</span>
-          ))}
-        </div>
+  <div class="card-top-line" aria-hidden="true"></div>
+  <div class="card-inner">
+    <div class="card-meta">
+      <time datetime={pubDate.toISOString()} class="card-date">{formattedDate}</time>
+      {readingTime && (
+        <span class="card-reading-time">{readingTime} min read</span>
+      )}
+      <div class="card-tags">
+        {tags.slice(0, 3).map((tag) => (
+          <a href={`/blog/tags/${tag}/1`} class="tag tag-link">{tag}</a>
+        ))}
       </div>
-      <h2 class="card-title">{title}</h2>
-      <p class="card-description">{description}</p>
-      <span class="card-read-more">続きを読む →</span>
     </div>
-  </a>
+    <h2 class="card-title">
+      <a href={`/blog/${slug}`} class="card-title-link stretched-link">{title}</a>
+    </h2>
+    <p class="card-description">{description}</p>
+    <span class="card-read-more" aria-hidden="true">続きを読む →</span>
+  </div>
 </article>
 
 <style>
@@ -60,7 +55,6 @@ const formattedDate = pubDate.toLocaleDateString('ja-JP', {
     box-shadow: var(--glow-accent);
   }
 
-  /* Gradient top line that appears on hover */
   .card-top-line {
     position: absolute;
     top: 0;
@@ -74,12 +68,6 @@ const formattedDate = pubDate.toLocaleDateString('ja-JP', {
 
   .blog-card:hover .card-top-line {
     opacity: 1;
-  }
-
-  .card-link {
-    display: block;
-    color: inherit;
-    text-decoration: none;
   }
 
   .card-inner {
@@ -114,18 +102,36 @@ const formattedDate = pubDate.toLocaleDateString('ja-JP', {
     display: flex;
     gap: 0.4rem;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tag-link:hover {
+    background: rgba(124, 106, 247, 0.25);
   }
 
   .card-title {
     font-size: 1.15rem;
     margin-bottom: 0.5rem;
-    color: var(--color-text);
-    transition: color 0.15s;
     line-height: 1.4;
   }
 
-  .blog-card:hover .card-title {
+  .card-title-link {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .blog-card:hover .card-title-link {
     color: var(--color-accent-hover);
+  }
+
+  /* stretched-link: カード全体をクリック可能にする */
+  .stretched-link::after {
+    position: absolute;
+    inset: 0;
+    content: '';
+    z-index: 0;
   }
 
   .card-description {
@@ -140,36 +146,6 @@ const formattedDate = pubDate.toLocaleDateString('ja-JP', {
 
   .card-read-more {
     font-size: 0.85rem;
-    color: var(--color-accent-hover);  /* #9d8ffa: surface背景との比 6.20:1 (WCAG AA 準拠) */
-    transition: gap 0.15s;
-  }
-
-  .tag-link {
-    cursor: pointer;
-    position: relative;
-    z-index: 1;
-  }
-
-  .tag-link:hover {
-    background: rgba(124, 106, 247, 0.25);
+    color: var(--color-accent-hover);
   }
 </style>
-
-<script>
-  document.querySelectorAll<HTMLElement>('.tag-link').forEach((el) => {
-    el.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const href = el.dataset.href;
-      if (href) window.location.href = href;
-    });
-    el.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        e.stopPropagation();
-        const href = el.dataset.href;
-        if (href) window.location.href = href;
-      }
-    });
-  });
-</script>

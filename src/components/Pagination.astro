@@ -5,9 +5,10 @@ interface Props {
   prevUrl?: string;
   nextUrl?: string;
   totalPosts?: number;
+  pageBaseUrl?: string;
 }
 
-const { currentPage, lastPage, prevUrl, nextUrl, totalPosts } = Astro.props;
+const { currentPage, lastPage, prevUrl, nextUrl, totalPosts, pageBaseUrl = '/blog' } = Astro.props;
 
 // 現在ページの前後 2 ページ + 先頭・末尾を表示し、隙間は "…" で補完
 const delta = 2;
@@ -40,7 +41,7 @@ for (let i = 1; i <= lastPage; i++) {
         <span class="page-ellipsis" aria-hidden="true">…</span>
       ) : (
         <a
-          href={`/blog/${p}`}
+          href={`${pageBaseUrl}/${p}`}
           class:list={['page-num', { active: p === currentPage }]}
           aria-current={p === currentPage ? 'page' : undefined}
         >

@@ -4,6 +4,7 @@ emoji: "🧭"
 type: "idea"
 topics: ["チーム開発", "キャリア", "マネジメント"]
 published: true
+canonical_url: "https://taka-techblog.com/blog/techLead-first-90-days"
 ---
 
 :::message

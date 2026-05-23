@@ -3,7 +3,9 @@ title: "AstroサイトのS3+CloudFrontキャッシュ戦略：静的サイトを
 emoji: "⚡"
 type: "tech"
 topics: ["AWS", "DevOps"]
-published: false
+published: true
+published_at: "2025-12-09 09:00"
+canonical_url: "https://taka-techblog.com/blog/astro-s3-cache-strategy"
 ---
 
 :::message

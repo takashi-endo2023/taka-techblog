@@ -1,6 +1,6 @@
 # 記事計画・アイデアメモ
 
-最終更新: 2026-05-21
+最終更新: 2026-05-24
 
 ---
 
@@ -15,7 +15,6 @@
 | 2025-01-21 | 技術的負債との向き合い方 | technical-debt-strategy.md |
 | 2025-01-28 | 未経験エンジニア2名をコーチング型で育てた方法 | coaching-junior-engineers.md |
 | 2025-02-04 | コードより先に要件を言語化させる | junior-engineer-spec-before-code.md |
-| 2025-03-25 | コンフリクト解消ミスが本番障害を起こした話 | incident-branch-conflict-prod.md |
 | 2025-04-22 | プレイングマネージャーの現実 | playing-manager-reality.md |
 | 2025-05-13 | 少数精鋭エンジニアチームの設計思想 | small-elite-team-design.md |
 | 2025-05-20 | コードレビュー文化をゼロから作った話 | code-review-culture.md |
@@ -181,7 +180,7 @@
 
 | カテゴリ | 現在の記事数 | 方針 |
 |---|---|---|
-| キャリア・組織 | 12本 | 十分。当面は追加なし |
+| キャリア・組織 | 11本 | 十分。当面は追加なし |
 | JavaScript/TypeScript | 8本 | 十分。TS移行実体験で締め |
 | React/Next.js/フロントエンド | 9本 | 十分。AI×フロントエンドテーマで1本追加余地あり |
 | インフラ/Linux/Web基礎 | 6本 | 十分 |
@@ -220,26 +219,42 @@
 |---|---|
 | career-change-to-engineer.md | e4d8874f0c25b0.md |
 | naisei-kansei.md | 46a0ca17e07591.md |
-| incident-branch-conflict-prod.md | 59f8ca153ced03.md |
 | claude-code-workflow.md | ed32a95b5e4802.md |
 | techLead-first-90-days.md | c456bbb0adeb5d.md |
 | clinical-trial-system-performance.md | f35fbfd57c2bf9.md |
 
 ---
 
+## 📜 資格取得計画（取得後に記事化予定）
+
+| 資格 | 分野 | 記事化メモ |
+|---|---|---|
+| AWS CLF（Cloud Practitioner） | AWS | 入口として。合格体験記よりAWS全体像の整理記事を狙う |
+| AWS SAA（Solutions Architect Associate） | AWS | 検索流入が強い。「実務のどこで活きたか」セットで書く |
+| AWS AIF（AI Foundations） | AWS / AI | AI記事との連携。LangChain・Claude Code との接続で差別化 |
+| AWS MLS（Machine Learning Specialty） | AWS / AI | AIF取得後。ML実装記事と組み合わせる |
+| 基本情報技術者 | IPA | 勉強ノート系が受ける。後輩エンジニア向けの解説記事にも転用 |
+| 応用情報技術者 | IPA | 基本情報の次。マネジメント系記事との相乗効果 |
+| マネジメント系（PM・PMP等） | マネジメント | テックリードのキャリア観と組み合わせると差別化になる |
+| 簿記3級 / 2級 | 財務 | エンジニアが簿記を学んだ理由・IT投資の話との接続で独自性を出す |
+
+> 取得したら `article-plan.md` の未執筆アイデアセクションに記事案を追記する。
+> 勉強中に「こうやって勉強している」記事を書く方が、合格体験記より読まれやすいケースもある。
+
+---
+
 ## 🏷️ タグ一覧（現在使用中）
 
 ```
-技術系: React, Next.js, TypeScript, JavaScript, NestJS, Astro
-       AWS, CDK, CloudFormation, GitHub Actions, GitLab, Docker
-       LangChain, Claude Code, AI開発, Cursor
-       HTTP, REST, API, ネットワーク, Linux, インフラ, パフォーマンス
-       テスト, Storybook, Atomic Design, SEO
+技術系: TypeScript, JavaScript, React, Next.js, NestJS
+       AWS, DevOps, インフラ, GitHub Actions
+       LangChain, Claude Code, AI開発
+       アーキテクチャ, パフォーマンス, データベース, セキュリティ
 
-チーム系: チーム開発, テックリード, エンジニア育成, 組織設計, 採用
-        コードレビュー, 内製化, チームビルディング, マネジメント
+チーム系: チーム開発, テックリード, 組織設計, マネジメント
 
-医療IT: CSV, 医療IT, 規制対応, 品質管理, インシデント対応
+医療IT: 医療IT, 品質管理
 
-キャリア: キャリア, 設計, リファクタリング
+キャリア: キャリア, 書評
 ```
+計 24タグ（2026-05-24 に104タグから整理）

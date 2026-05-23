@@ -3,7 +3,9 @@ title: "ESLint・Jest・Viteを最初に整備する——JavaScriptプロジェ
 emoji: "🛠️"
 type: "tech"
 topics: ["JavaScript", "TypeScript", "テスト"]
-published: false
+published: true
+published_at: "2023-10-25 09:00"
+canonical_url: "https://taka-techblog.com/blog/javascript-dev-tools-eslint-jest"
 ---
 
 :::message
