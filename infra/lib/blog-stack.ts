@@ -108,8 +108,8 @@ function handler(event) {
       defaultTtl: cdk.Duration.seconds(0),
       maxTtl: cdk.Duration.seconds(0),
       minTtl: cdk.Duration.seconds(0),
-      enableAcceptEncodingGzip: true,
-      enableAcceptEncodingBrotli: true,
+      enableAcceptEncodingGzip: false,
+      enableAcceptEncodingBrotli: false,
     });
 
     const distribution = new cloudfront.Distribution(this, 'Distribution', {
