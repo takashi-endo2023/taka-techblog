@@ -205,17 +205,18 @@ th {
 }
 
 @keyframes pulse-ring {
-  0%   { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(124, 106, 247, 0.4); }
-  70%  { transform: scale(1);    box-shadow: 0 0 0 8px rgba(124, 106, 247, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(124, 106, 247, 0); }
+  0%, 100% { transform: scale(0.9);  opacity: 0.6; }
+  50%       { transform: scale(1.15); opacity: 1;   }
 }
 
 .animate-fade-in-up {
   animation: fadeInUp 0.55s ease both;
+  will-change: transform, opacity;
 }
 
 .animate-fade-in {
   animation: fadeIn 0.4s ease both;
+  will-change: opacity;
 }
 
 .delay-1 { animation-delay: 0.1s; }

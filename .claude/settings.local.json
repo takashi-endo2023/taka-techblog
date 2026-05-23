@@ -96,7 +96,15 @@
       "Bash(aws configure *)",
       "Read(//Users/takashi/.aws/**)",
       "Bash(aws --version)",
-      "Bash(aws sts *)"
+      "Bash(aws sts *)",
+      "Bash(npx cdk *)",
+      "Bash(aws s3 *)",
+      "Bash(aws cloudfront *)",
+      "Bash(curl -sI https://taka-techblog.com/)",
+      "Bash(curl -v -sI https://taka-techblog.com/)",
+      "Bash(dig +short taka-techblog.com)",
+      "Bash(curl -sI --resolve \"taka-techblog.com:443:$\\(dig +short taka-techblog.com)",
+      "Bash(curl -sI --connect-timeout 10 -H \"Host: taka-techblog.com\" \"https://13.249.146.28/\")"
     ]
   }
 }

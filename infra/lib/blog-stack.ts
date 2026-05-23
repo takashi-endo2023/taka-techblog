@@ -112,13 +112,75 @@ function handler(event) {
       enableAcceptEncodingBrotli: false,
     });
 
+    // ── カスタムセキュリティヘッダー（ブログ本体用）─────────────
+    // CSP: script は self + GTM のみ（unsafe-inline 排除）
+    // HSTS: includeSubDomains + preload（2年）
+    // COOP: same-origin でポップアップ経由の情報漏洩を防止
+    const csp = [
+      "default-src 'self'",
+      "script-src 'self' https://www.googletagmanager.com",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://bat.bing.com",
+      "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.googletagmanager.com",
+      "font-src 'self'",
+      "worker-src 'self'",
+      "frame-src https://docs.google.com",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "object-src 'none'",
+    ].join('; ');
+
+    const blogResponseHeadersPolicy = new cloudfront.ResponseHeadersPolicy(
+      this,
+      'BlogResponseHeadersPolicy',
+      {
+        responseHeadersPolicyName: `${props.bucketName}-security`,
+        securityHeadersBehavior: {
+          contentTypeOptions: { override: true },
+          frameOptions: {
+            frameOption: cloudfront.HeadersFrameOption.DENY,
+            override: true,
+          },
+          referrerPolicy: {
+            referrerPolicy: cloudfront.HeadersReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN,
+            override: true,
+          },
+          strictTransportSecurity: {
+            accessControlMaxAge: cdk.Duration.days(730), // 2 years
+            includeSubdomains: true,
+            preload: true,
+            override: true,
+          },
+          xssProtection: { protection: true, modeBlock: true, override: true },
+          contentSecurityPolicy: {
+            contentSecurityPolicy: csp,
+            override: true,
+          },
+        },
+        customHeadersBehavior: {
+          customHeaders: [
+            {
+              header: 'Cross-Origin-Opener-Policy',
+              value: 'same-origin',
+              override: true,
+            },
+            {
+              header: 'Permissions-Policy',
+              value: 'camera=(), microphone=(), geolocation=()',
+              override: true,
+            },
+          ],
+        },
+      }
+    );
+
     const distribution = new cloudfront.Distribution(this, 'Distribution', {
       defaultBehavior: {
         origin: origins.S3BucketOrigin.withOriginAccessControl(bucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         cachePolicy: noCachePolicy,
         compress: true,
-        responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS,
+        responseHeadersPolicy: blogResponseHeadersPolicy,
         functionAssociations: [{
           function: rewriteFunction,
           eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
@@ -130,7 +192,7 @@ function handler(event) {
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           cachePolicy: staticAssetsPolicy,
           compress: true,
-          responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS,
+          responseHeadersPolicy: blogResponseHeadersPolicy,
         },
         'images/*': {
           origin: origins.S3BucketOrigin.withOriginAccessControl(bucket),
