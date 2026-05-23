@@ -72,9 +72,9 @@ const ogImageURL = new URL(ogImage, Astro.site);
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SSWBR8E9JH"></script>
-    <script>
+    <script is:inline>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag(){window.dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-SSWBR8E9JH');
     </script>

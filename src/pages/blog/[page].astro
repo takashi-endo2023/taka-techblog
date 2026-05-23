@@ -65,7 +65,7 @@ const topTags = Object.entries(tagCounts)
           pubDate={post.data.pubDate}
           slug={post.id}
           tags={post.data.tags}
-          readingTime={getReadingTime(post.body)}
+          readingTime={getReadingTime(post.body ?? '')}
         />
       ))}
     </div>
