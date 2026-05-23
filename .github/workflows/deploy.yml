@@ -47,23 +47,48 @@ jobs:
             --cache-control "max-age=31536000,immutable" \
             --delete
 
-      # 2. 画像・フォント等 → 1日キャッシュ
+      # 2. ロゴ・フォント → 1年キャッシュ（ファイル名固定・ほぼ不変）
+      - name: Deploy logo and fonts
+        run: |
+          aws s3 cp dist/logo.png "s3://${{ secrets.S3_BUCKET }}/logo.png" \
+            --cache-control "max-age=31536000,immutable"
+          aws s3 cp dist/logo-small.png "s3://${{ secrets.S3_BUCKET }}/logo-small.png" \
+            --cache-control "max-age=31536000,immutable"
+          aws s3 cp dist/logo-small.webp "s3://${{ secrets.S3_BUCKET }}/logo-small.webp" \
+            --cache-control "max-age=31536000,immutable"
+          aws s3 sync dist/fonts "s3://${{ secrets.S3_BUCKET }}/fonts" \
+            --cache-control "max-age=31536000,immutable"
+
+      # 3. 画像・フォント等 → 1日キャッシュ
       - name: Deploy public assets
         run: |
           aws s3 sync dist/ "s3://${{ secrets.S3_BUCKET }}/" \
             --cache-control "max-age=86400" \
             --exclude "*.html" \
             --exclude "_astro/*" \
+            --exclude "logo.png" \
+            --exclude "logo-small.png" \
+            --exclude "logo-small.webp" \
+            --exclude "fonts/*" \
             --delete
 
-      # 3. HTML → no-cache（デプロイ直後に最新版を配信）
+      # 4. HTML → gzip 圧縮 + no-cache
       - name: Deploy HTML files
         run: |
+          # 削除された記事を S3 から除去（uncompressed で sync → --delete を利用）
           aws s3 sync dist/ "s3://${{ secrets.S3_BUCKET }}/" \
             --cache-control "max-age=0,no-cache" \
             --exclude "*" \
             --include "*.html" \
             --delete
+          # gzip 圧縮して上書きアップロード
+          find dist -name "*.html" -print0 | while IFS= read -r -d '' f; do
+            key="${f#dist/}"
+            gzip -9 -c "$f" | aws s3 cp - "s3://${{ secrets.S3_BUCKET }}/$key" \
+              --content-encoding "gzip" \
+              --content-type "text/html; charset=utf-8" \
+              --cache-control "max-age=0,no-cache"
+          done
 
       # ── CloudFront キャッシュ無効化 ─────────────────────────
       - name: Invalidate CloudFront cache

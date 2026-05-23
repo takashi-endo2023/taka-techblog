@@ -19,7 +19,10 @@ function isActive(href: string): boolean {
 <header class="site-header">
   <div class="header-inner container">
     <a href="/" class="site-logo">
-      <img src="/logo.png" alt="" class="logo-img" width="72" height="50" aria-hidden="true" />
+      <picture>
+        <source srcset="/logo-small.webp" type="image/webp" />
+        <img src="/logo-small.png" alt="" class="logo-img" width="93" height="64" aria-hidden="true" />
+      </picture>
       <span class="logo-text">taka-techblog</span>
     </a>
 

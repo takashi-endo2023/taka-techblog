@@ -7,7 +7,9 @@
     "esModuleInterop": true,
     "outDir": "dist",
     "rootDir": ".",
-    "declaration": true
+    "declaration": true,
+    "typeRoots": ["./node_modules/@types"]
   },
+  "include": ["bin/**/*.ts", "lib/**/*.ts"],
   "exclude": ["node_modules", "dist", "cdk.out"]
 }

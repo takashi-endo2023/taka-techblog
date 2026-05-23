@@ -86,7 +86,17 @@
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('deps:', list\\(d.get\\('dependencies',{}\\).keys\\(\\)\\)\\)\")",
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('dependencies',{}\\), indent=2\\)\\)\")",
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('all deps:', {**d.get\\('dependencies',{}\\), **d.get\\('devDependencies',{}\\)}\\)\")",
-      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('framework:', d.get\\('dependencies',{}\\).get\\('next',''\\), d.get\\('dependencies',{}\\).get\\('vite',''\\)\\); tdeps = {**d.get\\('dependencies',{}\\), **d.get\\('devDependencies',{}\\)}; print\\('vite?', 'vite' in tdeps\\); print\\('tailwind?', [k for k in tdeps if 'tailwind' in k]\\)\")"
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('framework:', d.get\\('dependencies',{}\\).get\\('next',''\\), d.get\\('dependencies',{}\\).get\\('vite',''\\)\\); tdeps = {**d.get\\('dependencies',{}\\), **d.get\\('devDependencies',{}\\)}; print\\('vite?', 'vite' in tdeps\\); print\\('tailwind?', [k for k in tdeps if 'tailwind' in k]\\)\")",
+      "Bash(identify /Users/takashi/projects/taka-techblog/public/logo.png)",
+      "Bash(sips -g pixelWidth -g pixelHeight /Users/takashi/projects/taka-techblog/public/logo.png)",
+      "Bash(cwebp --version)",
+      "Bash(sips -z 64 93 /Users/takashi/projects/taka-techblog/public/logo.png --out /Users/takashi/projects/taka-techblog/public/logo-small.png)",
+      "Bash(cwebp -lossless -z 9 /Users/takashi/projects/taka-techblog/public/logo-small.png -o /Users/takashi/projects/taka-techblog/public/logo-small.webp)",
+      "Bash(node -e ' *)",
+      "Bash(aws configure *)",
+      "Read(//Users/takashi/.aws/**)",
+      "Bash(aws --version)",
+      "Bash(aws sts *)"
     ]
   }
 }
