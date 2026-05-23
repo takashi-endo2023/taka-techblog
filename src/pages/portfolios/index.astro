@@ -4,7 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 const portfolios = [
   {
     title: 'AI付き広告計測・分析システム',
-    tech: ['NestJS', 'Next.js', 'TypeScript', 'AWS Lambda', 'API Gateway', 'Gemini API'],
+    tech: ['NestJS', 'Next.js 15', 'TypeScript', 'Tailwind CSS v4', 'Recharts', 'Gemini API', 'AWS Lambda'],
     description:
       '実務での「Google広告費×CRMデータ突合」の知見をベースに個人開発。複数媒体の広告費とCRMの参加ステータスを結合し、CRA（申込単価）・CRP（完了単価）を自動算出。集計データをGemini APIに渡し、構造化JSON（responseSchema）で改善アクションを自動出力するダッシュボード。',
     points: [
@@ -19,12 +19,12 @@ const portfolios = [
     demo: 'https://ai-ads.taka-techblog.com',
   },
   {
-    title: 'ECサイト（Rails API × React フロントエンド）',
-    tech: ['React 19', 'TypeScript', 'Vite', 'Tailwind CSS v4', 'TanStack Query', 'Zustand', 'Zod', 'Rails API'],
+    title: 'ECサイト（Rails 8 × React フロントエンド）',
+    tech: ['React 19', 'TypeScript', 'Vite', 'Tailwind CSS v4', 'TanStack Query', 'Zustand', 'Zod', 'Rails 8', 'MySQL'],
     description:
-      'Rails API をバックエンドに持つフルスタック EC サイト。フロントエンドは React + TanStack Query で非同期状態を管理し、Zustand でカートを制御。管理者・ユーザー両面の UI を実装。',
+      'Rails 8 API をバックエンドに持つフルスタック EC サイト。フロントエンドは React + TanStack Query で非同期状態を管理し、Zustand でカートを制御。管理者・ユーザー両面の UI を実装。',
     points: [
-      'Rails API Mode（JWT認証）と React の完全分離アーキテクチャ',
+      'Rails 8 API Mode（devise-jwt 認証・Pundit 認可）と React の完全分離アーキテクチャ',
       'TanStack Query でサーバー状態キャッシュ・楽観的更新を実装',
       'Zustand によるカート状態のグローバル管理（セッション永続化）',
       'React Hook Form + Zod によるスキーマベースのバリデーション',
@@ -36,7 +36,7 @@ const portfolios = [
   },
   {
     title: 'サークルホームページ',
-    tech: ['React 19', 'TypeScript', 'Vite', 'React Router', 'Swiper'],
+    tech: ['React 19', 'TypeScript', 'Vite', 'React Router v7', 'Swiper'],
     description:
       '地域の合唱サークルから依頼を受けて設計・実装・納品した実案件。ライブラリ依存を最小限に抑えながら、保守しやすいコンポーネント設計とアクセシビリティ対応を両立。',
     points: [
@@ -51,11 +51,11 @@ const portfolios = [
   },
   {
     title: 'Game Portfolio Site',
-    tech: ['Next.js', 'TypeScript', 'Three.js', 'GSAP', 'Framer Motion'],
+    tech: ['Next.js', 'TypeScript', 'Three.js', '@react-three/fiber', 'GSAP', 'Framer Motion', 'Lenis'],
     description:
       'Three.js パーティクル・GSAP アニメーション・HUD デザインシステムで構築したシネマティックなポートフォリオサイト。ゲームUI/SF的な世界観をWebで表現。',
     points: [
-      'Three.js + @react-three/fiber でパーティクルフィールドを3D描画',
+      '@react-three/fiber + @react-three/drei でパーティクルフィールドを3D描画',
       'GSAP ScrollTrigger による高度なスクロール連動アニメーション',
       'Framer Motion + Lenis スムーススクロールで没入感のあるUXを実現',
       'HUDインスパイアのデザインシステムをTailwind CSS v4でゼロから設計',
@@ -63,6 +63,23 @@ const portfolios = [
     screenshot: '/images/portfolio/game.png',
     github: 'https://github.com/takashi-endo2023/game-site',
     demo: 'https://game.taka-techblog.com',
+  },
+  {
+    title: '年収トラッカー',
+    tech: ['React', 'TypeScript', 'Vite', 'Recharts', 'SQLite', 'better-sqlite3', 'AWS S3', 'CloudFront'],
+    description:
+      '2015年からのキャリア全月次収入を記録・可視化するパーソナルファイナンスツール。ローカルでは SQLite に月単位で実データを保存・編集でき、デプロイ時はモックデータを表示するデモモードに自動切り替え。',
+    points: [
+      'Vite configureServer プラグインで SQLite REST API を dev server に直接注入（バックエンドプロセス不要）',
+      'VITE_DEMO_MODE 環境変数でローカル（SQLite 実データ）とデプロイ（モック表示）を切り替え',
+      '月次レコード（year+month 複合主キー）を better-sqlite3 で CRUD、フロントで年次集計に変換',
+      'Recharts ComposedChart で年次集計グラフ（棒＋折れ線）を描画、年行クリックで月次明細を展開',
+      'Vite manualChunks でアプリ本体・vendor・Recharts を分割しキャッシュ効率を最大化',
+      'GitHub Actions OIDC で S3 sync → CloudFront 無効化まで自動デプロイ',
+    ],
+    screenshot: null,
+    github: 'https://github.com/takashi-endo2023/salary-tracker',
+    demo: 'https://salary.taka-techblog.com',
   },
 ];
 ---

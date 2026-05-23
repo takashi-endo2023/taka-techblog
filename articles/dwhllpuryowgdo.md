@@ -1,0 +1,215 @@
+---
+title: "GitHub Actions + AWSでCI/CDを構築する——OIDCでアクセスキーなしの安全なデプロイ"
+emoji: "🔄"
+type: "tech"
+topics: ["AWS", "DevOps", "GitHubActions"]
+published: false
+---
+
+:::message
+この記事は [taka-techblog](https://taka-techblog.com/blog/aws-devops-github-actions?utm_source=zenn&utm_medium=referral) にも掲載しています。
+:::
+
+このブログのデプロイはGitHub Actionsで自動化している。`main`ブランチにpushすると自動でAstroをビルドし、S3にアップロードして、CloudFrontのキャッシュを無効化する。一連の流れを約2分で完了させている。
+
+以前は「GitHub SecretsにAWSのアクセスキーを登録する」方法を使っていたが、今はOIDC（OpenID Connect）認証に切り替えた。この記事では、アクセスキーを一切使わない安全なCI/CDパイプラインの構築方法を解説する。
+
+## アクセスキーをGitHub Secretsに置くリスク
+
+AWSのアクセスキーをGitHub Secretsに登録する方法は手軽だが、リスクがある。
+
+- **鍵の有効期限がない**: IAMアクセスキーはデフォルトで有効期限なしに発行される。漏洩しても気づきにくい
+- **ローテーションが面倒**: 鍵を更新するたびにGitHub Secretsも書き換える必要がある
+- **権限の最小化が難しい**: 「とりあえず広めの権限のキー」を使いまわしてしまいがち
+- **セキュリティスキャンに引っかかる**: コードに誤ってコミットするリスクはゼロではない
+
+OIDCを使えばこれらの問題をすべて解決できる。GitHub ActionsがAWSに対して一時的な認証情報を要求し、その都度短命なトークンで操作する。長期的なアクセスキーを発行しなくて済む。
+
+## GitHub OIDC + IAMロールの設定方法
+
+### 1. IAM OIDCプロバイダーを作成する
+
+AWSコンソールまたはCDKでOIDCプロバイダーを登録する。
+
+```typescript
+// AWS CDKでOIDCプロバイダーを作成する例
+import * as iam from 'aws-cdk-lib/aws-iam';
+
+const githubProvider = new iam.OpenIdConnectProvider(this, 'GitHubOidcProvider', {
+  url: 'https://token.actions.githubusercontent.com',
+  clientIds: ['sts.amazonaws.com'],
+});
+```
+
+### 2. IAMロールを作成する
+
+GitHub Actionsがアサインするロールを作成する。信頼ポリシーで「特定のリポジトリのmainブランチからのみ」に絞ることが重要だ。
+
+```typescript
+const deployRole = new iam.Role(this, 'GitHubActionsDeployRole', {
+  assumedBy: new iam.WebIdentityPrincipal(
+    githubProvider.openIdConnectProviderArn,
+    {
+      StringEquals: {
+        'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com',
+      },
+      StringLike: {
+        'token.actions.githubusercontent.com:sub':
+          'repo:takashi-endo/taka-techblog:ref:refs/heads/main',
+      },
+    }
+  ),
+  roleName: 'GitHubActionsDeployRole',
+});
+
+// S3への書き込みとCloudFront Invalidationのみ許可
+deployRole.addToPolicy(new iam.PolicyStatement({
+  actions: ['s3:PutObject', 's3:DeleteObject', 's3:ListBucket'],
+  resources: [
+    bucket.bucketArn,
+    `${bucket.bucketArn}/*`,
+  ],
+}));
+
+deployRole.addToPolicy(new iam.PolicyStatement({
+  actions: ['cloudfront:CreateInvalidation'],
+  resources: [`arn:aws:cloudfront::${this.account}:distribution/${distributionId}`],
+}));
+```
+
+`StringLike`で`ref:refs/heads/main`を指定することで、mainブランチからのActionsのみがロールを引き受けられる。他のブランチやフォークからの不正な実行を防げる。
+
+## GitHub Actionsワークフローの実装
+
+以下が実際に使っているワークフローの全体像だ。
+
+```yaml
+name: Deploy to S3
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write   # OIDCトークンの発行に必要
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::123456789012:role/GitHubActionsDeployRole
+          aws-region: ap-northeast-1
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync ./dist s3://taka-techblog \
+            --delete \
+            --cache-control "public, max-age=31536000, immutable" \
+            --exclude "*.html" \
+            --exclude "*.xml" \
+            --exclude "*.json"
+          aws s3 sync ./dist s3://taka-techblog \
+            --delete \
+            --cache-control "public, max-age=0, must-revalidate" \
+            --include "*.html" \
+            --include "*.xml" \
+            --include "*.json"
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
+```
+
+### ポイント解説
+
+**`permissions: id-token: write`が必須**
+
+OIDCトークンを発行するために`id-token: write`の権限が必要だ。これを忘れると認証エラーが出る。
+
+**キャッシュコントロールを分けてS3にアップロードする**
+
+S3のsyncコマンドを2回実行している理由は、ファイル種別ごとにキャッシュ設定を変えるためだ。
+
+- HTMLやXML・JSONは`max-age=0`で常に最新を取得させる
+- 画像・CSS・JSはハッシュ付きファイル名が多いため`max-age=31536000`で長期キャッシュ
+
+この設定でCloudFrontのキャッシュを最大限活用しつつ、コンテンツの更新を確実に反映できる。
+
+**CloudFront IDはSecretsに入れる**
+
+ディストリビューションIDはAWSリソースの識別子で、セキュリティ上の機密ではないが、公開リポジトリの場合はSecretsに入れておくのが無難だ。
+
+## ブランチ戦略
+
+このブログでは以下のシンプルな戦略を採用している。
+
+| ブランチ | 役割 | デプロイ先 |
+|---|---|---|
+| `main` | 本番 | S3（本番） |
+| `feature/*` | 作業ブランチ | デプロイなし（ビルド確認のみ） |
+
+記事の草稿は`feature/article-name`ブランチで作業し、完成したら`main`にマージする。マージと同時にGitHub Actionsが起動して本番デプロイが完了する。
+
+複数人開発やステージング環境が必要な場合は、`develop`ブランチをステージング環境にデプロイするジョブを追加する構成が一般的だ。
+
+```yaml
+on:
+  push:
+    branches:
+      - main      # 本番デプロイ
+      - develop   # ステージングデプロイ
+```
+
+## 規制産業のCI/CD——「誰がいつデプロイしたか」をトレースできる仕組み
+
+治験管理システムにCI/CDを導入したとき、一般的なWebサービスにはない要件が加わった。「リリース記録」だ。
+
+医療系システムは変更管理のプロセスが厳格で、「いつ、誰の承認のもとで、何をリリースしたか」をトレースできる証跡が必要だ。GitHub Actionsのワークフロー実行履歴は、そのままリリース記録として機能することに気づいた。
+
+ポイントは**デプロイを `main` ブランチへのマージに紐づける**ことだ。GitHubのPR（プルリクエスト）にはレビュー承認の記録が残り、マージした時刻・マージした人物が履歴として残る。`main` へのマージをトリガーにデプロイすることで、「このリリースはPR #123のレビューを通過し、承認者Aのレビューを経て、Bがマージした」という証跡が自動で残る。
+
+もうひとつ取り組んだのが**デプロイの冪等性**だ。CI/CDを導入する前は手動デプロイで、「さっきと同じコマンドを打ったのになぜか動作が変わった」という事象が起きていた。GitHub Actionsを通じたデプロイは、同じコミットからは常に同じ結果が得られる。これは規制要件の「再現性」とも合致している。
+
+アクセスキーの廃止（OIDC導入）も、規制対応として重要だった。アクセスキーはローテーションが必要で、管理が煩雑だ。OIDCで一時トークンを発行する方式にしてからは、「認証情報の管理」という運用コストが完全になくなり、外部監査でも「適切な認証管理がされている」と評価された。
+
+## まとめ
+
+GitHub Actions + AWS OIDCによるCI/CDパイプラインのポイントをまとめる。
+
+- **アクセスキーはSecretsに置かない**: OIDCで一時認証情報を使う設計にする
+- **IAMロールの信頼ポリシーはリポジトリとブランチで絞る**: `StringLike`でsub条件を設定する
+- **`permissions: id-token: write`を忘れない**: OIDCトークン発行に必須
+- **S3のキャッシュ設定はファイル種別で分ける**: HTMLと静的アセットで戦略を分ける
+- **デプロイとInvalidationはセット**: これを忘れると古いファイルが配信され続ける
+
+一度設定してしまえば、あとは`git push`するだけで本番反映が完了する。開発体験が大きく向上するので、まだ手動デプロイをしているなら今すぐCI/CDを導入することを強くすすめる。
+
+
+📚 **[AWSの基本・仕組み・重要用語が全部わかる教科書](https://www.amazon.co.jp/dp/4815607850)** — 川畑光平 著 ／SBクリエイティブ — 図解でAWSの全体像をつかむ入門書
+
+---
+
+他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
+X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)

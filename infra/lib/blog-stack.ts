@@ -18,6 +18,9 @@ interface BlogStackProps extends cdk.StackProps {
   ecSubdomain: string;
   aiAdsSubdomain: string;
   gameSubdomain: string;
+  salarySubdomain: string;
+  salaryBucketName: string;
+  salaryGithubRepo: string;
   bucketName: string;
   utagoeBucketName: string;
   ecBucketName: string;
@@ -336,6 +339,67 @@ export class BlogStack extends cdk.Stack {
     });
 
     // ════════════════════════════════════════════════════════
+    // 年収トラッカー（salary.taka-techblog.com）React SPA
+    // ════════════════════════════════════════════════════════
+
+    const salaryBucket = new s3.Bucket(this, 'SalaryBucket', {
+      bucketName: props.salaryBucketName,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+    });
+
+    const salaryAssetsPolicy = new cloudfront.CachePolicy(this, 'SalaryAssetsPolicy', {
+      cachePolicyName: `${props.salaryBucketName}-assets`,
+      defaultTtl: cdk.Duration.days(365),
+      maxTtl: cdk.Duration.days(365),
+      minTtl: cdk.Duration.days(365),
+      enableAcceptEncodingGzip: true,
+      enableAcceptEncodingBrotli: true,
+    });
+
+    const salaryDistribution = new cloudfront.Distribution(this, 'SalaryDistribution', {
+      defaultBehavior: {
+        origin: origins.S3BucketOrigin.withOriginAccessControl(salaryBucket),
+        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+        compress: true,
+        responseHeadersPolicy: cloudfront.ResponseHeadersPolicy.SECURITY_HEADERS,
+      },
+      additionalBehaviors: {
+        'assets/*': {
+          origin: origins.S3BucketOrigin.withOriginAccessControl(salaryBucket),
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          cachePolicy: salaryAssetsPolicy,
+          compress: true,
+        },
+      },
+      domainNames: [props.salarySubdomain],
+      certificate: props.certificate,
+      defaultRootObject: 'index.html',
+      errorResponses: [
+        {
+          httpStatus: 403,
+          responseHttpStatus: 200,
+          responsePagePath: '/index.html',
+          ttl: cdk.Duration.seconds(0),
+        },
+        {
+          httpStatus: 404,
+          responseHttpStatus: 200,
+          responsePagePath: '/index.html',
+          ttl: cdk.Duration.seconds(0),
+        },
+      ],
+      priceClass: cloudfront.PriceClass.PRICE_CLASS_200,
+    });
+
+    new route53.ARecord(this, 'SalaryRecord', {
+      zone: hostedZone,
+      recordName: props.salarySubdomain,
+      target: route53.RecordTarget.fromAlias(new targets.CloudFrontTarget(salaryDistribution)),
+    });
+
+    // ════════════════════════════════════════════════════════
     // AI Ads Dashboard Frontend（ai-ads.taka-techblog.com）
     // ════════════════════════════════════════════════════════
 
@@ -452,6 +516,7 @@ export class BlogStack extends cdk.Stack {
               `repo:${props.ecGithubRepo}:ref:refs/heads/main`,
               `repo:${props.aiAdsGithubRepo}:ref:refs/heads/main`,
               `repo:${props.gameGithubRepo}:ref:refs/heads/main`,
+              `repo:${props.salaryGithubRepo}:ref:refs/heads/main`,
             ],
           },
         }
@@ -529,6 +594,19 @@ export class BlogStack extends cdk.Stack {
       actions: ['cloudfront:CreateInvalidation'],
       resources: [
         `arn:aws:cloudfront::${this.account}:distribution/${gameDistribution.distributionId}`,
+      ],
+    }));
+
+    // Salary Tracker S3 + CloudFront
+    githubRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['s3:PutObject', 's3:GetObject', 's3:DeleteObject', 's3:ListBucket'],
+      resources: [salaryBucket.bucketArn, `${salaryBucket.bucketArn}/*`],
+    }));
+
+    githubRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['cloudfront:CreateInvalidation'],
+      resources: [
+        `arn:aws:cloudfront::${this.account}:distribution/${salaryDistribution.distributionId}`,
       ],
     }));
 
@@ -625,6 +703,16 @@ export class BlogStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'GameDistributionId', {
       description: 'GitHub Secrets: GAME_CLOUDFRONT_DISTRIBUTION_ID',
       value: gameDistribution.distributionId,
+    });
+
+    new cdk.CfnOutput(this, 'SalaryBucketName', {
+      description: 'GitHub Secrets: SALARY_S3_BUCKET',
+      value: salaryBucket.bucketName,
+    });
+
+    new cdk.CfnOutput(this, 'SalaryDistributionId', {
+      description: 'GitHub Secrets: SALARY_CLOUDFRONT_DISTRIBUTION_ID',
+      value: salaryDistribution.distributionId,
     });
   }
 }

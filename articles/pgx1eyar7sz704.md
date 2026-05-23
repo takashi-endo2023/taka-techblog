@@ -1,0 +1,143 @@
+---
+title: "Next.jsのSSR・SSG・ISRを実務でどう使い分けるか"
+emoji: "⚡"
+type: "tech"
+topics: ["Next.js", "React", "フロントエンド"]
+published: false
+---
+
+:::message
+この記事は [taka-techblog](https://taka-techblog.com/blog/nextjs-rendering-deep-dive?utm_source=zenn&utm_medium=referral) にも掲載しています。
+:::
+
+Next.jsを使い始めたとき、SSR・SSG・ISRの使い分けで最初に詰まった。
+
+ドキュメントを読めば「SSRはリクエスト時にレンダリング」「SSGはビルド時に生成」と書いてある。わかる。でも「じゃあこのページはどれにすべきか」という実務の判断は、ドキュメントには書いていない。
+
+実際に複数のプロジェクトで使い分けてきた経験から、判断基準と落とし穴を整理しておく。
+
+## 3つのレンダリング手法の特性
+
+### SSG（Static Site Generation）
+
+ビルド時にHTMLを生成する。デプロイ後は静的ファイルとして配信されるため、最も高速でサーバー負荷がゼロ。
+
+**向いているページ**
+- 内容がほとんど変わらないページ（About・利用規約など）
+- ブログ記事・ドキュメント
+- マーケティングページ
+
+**向いていないページ**
+- ログインユーザー固有のデータを表示するページ
+- リアルタイム性が必要なページ
+
+### SSR（Server-Side Rendering）
+
+リクエストごとにサーバーでHTMLを生成する。常に最新データを返せる反面、サーバー処理が必要でレスポンスが遅くなる。
+
+**向いているページ**
+- ログイン状態によって内容が変わるページ
+- SEOが必要かつ頻繁に更新されるデータを表示するページ
+- リクエスト時のCookieやヘッダーを使う必要があるページ
+
+**向いていないページ**
+- 静的なコンテンツ（SSGの方が速くて安い）
+- 更新頻度が低いページ（ISRの方が効率的）
+
+### ISR（Incremental Static Regeneration）
+
+SSGの亜種。ビルド時にHTMLを生成しつつ、設定した時間が経過したら次のリクエスト時にバックグラウンドで再生成する。SSGの速度とSSRの新鮮さを両立する。
+
+**向いているページ**
+- ECサイトの商品一覧・詳細（価格・在庫が変わるが毎回最新でなくてもいい）
+- ニュース・ブログの一覧ページ
+- リアルタイム性が不要だが定期的な更新が必要なページ
+
+## 実務での判断フロー
+
+迷ったときは以下の順で考えている。
+
+```
+1. このページのデータはリクエストユーザーに依存するか？
+   → Yes: SSR（またはクライアントサイドフェッチ）
+   → No: 次へ
+
+2. データの更新頻度はどのくらいか？
+   → ほぼ変わらない: SSG
+   → 数分〜数時間単位で変わる: ISR
+   → リアルタイム: SSR + クライアントサイドフェッチ
+```
+
+ほとんどのケースはこれで決まる。
+
+## App Routerでの実装
+
+Next.js 13以降のApp Routerでは、記述方法が変わっている。
+
+### SSG
+
+```typescript
+// デフォルトがSSG（キャッシュあり）
+export default async function Page() {
+  const data = await fetch('https://api.example.com/data');
+  return <div>{/* ... */}</div>;
+}
+```
+
+### SSR
+
+```typescript
+// cache: 'no-store' でSSR相当
+export default async function Page() {
+  const data = await fetch('https://api.example.com/data', {
+    cache: 'no-store',
+  });
+  return <div>{/* ... */}</div>;
+}
+```
+
+### ISR
+
+```typescript
+// revalidate で再生成間隔を指定（秒）
+export default async function Page() {
+  const data = await fetch('https://api.example.com/data', {
+    next: { revalidate: 3600 }, // 1時間
+  });
+  return <div>{/* ... */}</div>;
+}
+```
+
+## 実務で踏んだ落とし穴
+
+### SSRをデフォルトにしてパフォーマンスが悪化した
+
+「動的なデータがあるかもしれないから」という理由でSSRを多用したプロジェクトがあった。結果、静的でよかったページまでサーバー処理が走り、レスポンスタイムが悪化した。
+
+**対策**: 「本当にリクエスト単位で変わるか」を必ず確認する。ユーザー固有データがないならSSG +クライアントサイドフェッチの組み合わせを検討する。
+
+### ISRのrevalidate設定を忘れてSSGになっていた
+
+ISRのつもりで `revalidate` を書いたが、ページコンポーネントとは別の場所に書くべきだったため効いていなかった。
+
+**対策**: App Routerでは `fetch` のオプションで指定するか、ページファイルの `export const revalidate = 3600;` で設定する。設定が効いているかVercelやCloudFrontのキャッシュヘッダーで確認する。
+
+### ユーザー依存データをSSGで返してしまった
+
+ビルド時に生成されるため、特定ユーザーのデータが全員に表示されるという事故につながる。個人情報が絡む場合は致命的。
+
+**対策**: ログイン後のページはSSRまたはクライアントサイドフェッチを徹底する。
+
+## まとめ
+
+レンダリング手法の選択は「最新データが必要か」「誰に対しても同じ内容か」の2軸で整理すると判断しやすい。
+
+SSRをデフォルトにすると安全に見えるが、パフォーマンスとコストで損をする。実務ではページごとに最適な手法を選ぶ習慣をつけることが重要だ。
+
+
+📚 **[TypeScriptとReact/Next.jsでつくる実践Webアプリケーション開発](https://www.amazon.co.jp/dp/4297129167)** — 手島拓也 著 ／ 技術評論社 —Atomic Design・Storybook・Next.jsレンダリング・SEO・テストまで網羅
+
+---
+
+他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
+X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)

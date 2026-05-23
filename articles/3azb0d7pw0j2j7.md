@@ -1,0 +1,164 @@
+---
+title: "JavaScriptの非同期処理を整理する——コールバック・Promise・async/awaitの使い分け"
+emoji: "⏳"
+type: "tech"
+topics: ["JavaScript", "TypeScript"]
+published: false
+---
+
+:::message
+この記事は [taka-techblog](https://taka-techblog.com/blog/javascript-async-promise?utm_source=zenn&utm_medium=referral) にも掲載しています。
+:::
+
+非同期処理は、JavaScriptを「使える」人間と「わかっている」人間を分ける最初の壁だと思っている。
+
+私自身、独学のころに非同期処理で何度も詰まった。コードが思い通りの順番で動かない、`undefined`が返ってくる、エラーがどこで起きたかわからない——そういう経験を積み重ねながら「なんとなく動かせる」状態になっていた。
+
+テックリードになって後輩のコードを見るようになってから、「なぜPromiseを使うのか」「async/awaitはどういう仕組みか」を説明しなければならない場面が増えた。「JavaScript本格入門（山田祥寛 著 技術評論社）」を読んで、その説明の精度を上げたいと思ったのが動機のひとつだ。
+
+## コールバック：最初の非同期の書き方
+
+JavaScriptの非同期処理の出発点はコールバック関数だ。
+
+```javascript
+// Node.jsのファイル読み込みをイメージした例
+const fetchUser = (id, callback) => {
+  setTimeout(() => {
+    if (id <= 0) {
+      callback(new Error("Invalid ID"), null);
+    } else {
+      callback(null, { id, name: "Taka" });
+    }
+  }, 100);
+};
+
+fetchUser(1, (err, user) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+  console.log(user.name);
+});
+```
+
+問題は、非同期処理が連なると起きる「コールバック地獄」だ。ユーザー情報を取得して、そのIDでプロフィールを取得して、さらに投稿一覧を取得して……というネストが深くなるほど読みにくく、エラーハンドリングが各層に散らばる。
+
+独学時代、このネストの深さにうんざりしてコードを書くのをやめたことが実際にある。
+
+## Promiseで「何が起きるか」を表現する
+
+Promiseはコールバック地獄を解消するために生まれた仕組みだ。「今は値がないが、いずれ解決（または失敗）する」という状態を表現するオブジェクトといえる。
+
+```typescript
+type User = { id: number; name: string };
+
+const fetchUser = (id: number): Promise<User> => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (id <= 0) {
+        reject(new Error("Invalid ID"));
+      } else {
+        resolve({ id, name: "Taka" });
+      }
+    }, 100);
+  });
+};
+
+const fetchProfile = (userId: number): Promise<string> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(`Profile of user ${userId}`);
+    }, 100);
+  });
+};
+
+// then/catchでチェーン
+fetchUser(1)
+  .then((user) => fetchProfile(user.id))
+  .then((profile) => console.log(profile))
+  .catch((err) => console.error(err));
+```
+
+`.then()`でチェーンできるので、ネストが横に伸びる。エラーハンドリングも`.catch()`1箇所にまとめられる。コールバックのころと比べると見通しがかなりよくなった。
+
+しかしPromiseが増えたとき、複数の非同期処理をどう組み合わせるかでまた詰まった。`Promise.all()`や`Promise.race()`の存在を知ったのも実務に入ってからで、最初はそこで混乱した。
+
+## async/awaitで同期的に書ける見た目を得る
+
+ES2017で導入されたasync/awaitは、Promiseをベースに「同期処理のような見た目」で非同期コードを書けるようにしたものだ。
+
+```typescript
+const getProfileInfo = async (userId: number): Promise<void> => {
+  try {
+    const user = await fetchUser(userId);
+    const profile = await fetchProfile(user.id);
+    console.log(profile);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// 並列実行したいときはPromise.allを使う
+const getMultipleUsers = async (ids: number[]): Promise<User[]> => {
+  const users = await Promise.all(ids.map((id) => fetchUser(id)));
+  return users;
+};
+
+getProfileInfo(1);
+```
+
+`await`で一時停止して次の行に進む書き方は、頭の中で「上から下へ順番に実行される」イメージで読める。エラーハンドリングもtry/catchで統一できる。
+
+実務ではほぼasync/awaitで書いているが、本書を読んで改めて確認したのは「async関数は必ずPromiseを返す」という点だ。これを意識していないと、async関数の戻り値を扱うときに型エラーで詰まることがある。
+
+## 実務で詰まるポイント：awaitの付け忘れと並列実行
+
+async/awaitを使うようになって最初に詰まったのは、`await`の付け忘れによる不具合だ。
+
+```typescript
+// NG：awaitがないのでPromiseオブジェクトが返る
+const badExample = async () => {
+  const user = fetchUser(1); // Promiseオブジェクトが入る
+  console.log(user.name);   // undefinedになる
+};
+
+// NG：逐次処理を書いているつもりで、無駄に遅い
+const slowExample = async (ids: number[]) => {
+  const user1 = await fetchUser(ids[0]); // 100ms待つ
+  const user2 = await fetchUser(ids[1]); // さらに100ms待つ（合計200ms）
+  return [user1, user2];
+};
+
+// OK：並列実行で効率化
+const fastExample = async (ids: number[]) => {
+  const [user1, user2] = await Promise.all([
+    fetchUser(ids[0]),
+    fetchUser(ids[1]),
+  ]); // 100msで両方取得できる
+  return [user1, user2];
+};
+```
+
+後輩のコードレビューで「これ逐次実行になってますよ」とコメントする機会が増えた。async/awaitの見た目のわかりやすさが、逆に「Promiseが並列実行できる」という意識を薄めてしまうのだと思う。
+
+## エラーハンドリングの設計も変わる
+
+非同期処理の変遷で、エラーハンドリングの書き方も変わった。
+
+コールバック時代はNode.jsの慣習として第一引数にエラーを受け取るパターンが多かった。Promiseでは`.catch()`。async/awaitではtry/catchだ。
+
+チームではasync/awaitのtry/catchを基本にしているが、本書を読んで意識するようになったのは「どこでcatchするか」の設計だ。関数ごとにtry/catchを書くと、エラーが握りつぶされやすい。どこで回復するかを意識してcatchの位置を決める習慣が大切だと、本書の説明を通じて改めて整理できた。
+
+## まとめ
+
+コールバック→Promise→async/awaitという変遷は、「非同期処理をどう表現するか」の試行錯誤の歴史だ。それぞれに出番があり、Promiseを理解せずにasync/awaitだけ覚えても詰まる場面が必ず来る。
+
+テックリードとして「なぜこう書くのか」を説明できるための地図を持っておきたい人には、本書の非同期処理の章は読む価値がある。書き方を覚える本ではなく、仕組みを理解するための本として使うのが正しいと感じた。
+
+
+📚 **[改訂3版JavaScript本格入門 ～モダンスタイルによる基礎から現場での応用まで](https://www.amazon.co.jp/dp/4297132885)** — 山田祥寛 著 ／ 技術評論社 —ES6+・非同期処理・クロージャ・クラスまで体系的に学べる決定版
+
+---
+
+他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
+X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)

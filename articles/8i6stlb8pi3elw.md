@@ -1,0 +1,209 @@
+---
+title: "Next.jsでSEOを実装するときに押さえるべきこと——メタデータからJSON-LDまで"
+emoji: "🔍"
+type: "tech"
+topics: ["Next.js", "React", "SEO"]
+published: false
+---
+
+:::message
+この記事は [taka-techblog](https://taka-techblog.com/blog/nextjs-seo-implementation?utm_source=zenn&utm_medium=referral) にも掲載しています。
+:::
+
+「Next.jsはSEOに強い」とよく言われる。確かにSSR・SSGでサーバーサイドレンダリングができるため、クライアントサイドのみのSPAより検索エンジンに有利だ。
+
+ただ「Next.jsを使っているからSEOは大丈夫」は大きな誤解だ。適切な設定をしなければ、せっかくのSSR・SSGも活かしきれない。
+
+このブログ（Astro製）の構築経験も踏まえながら、Next.jsでSEOを実装するときに押さえるべきポイントを整理する。
+
+## SEOの基本：何を設定するか
+
+Next.jsでSEO対策として設定すべき項目を優先度順に並べる。
+
+| 項目 | 優先度 | 説明 |
+|---|---|---|
+| title / description | 必須 | 検索結果に表示されるタイトルと説明文 |
+| OGP（og:titleなど） | 高 | SNSシェア時のプレビュー |
+| canonical URL | 高 | 重複コンテンツを防ぐ |
+| JSON-LD（構造化データ） | 中 | リッチスニペット表示に影響 |
+| サイトマップ | 中 | クローラーへのページ案内 |
+| robots.txt | 中 | クロール制御 |
+
+## App Routerでの実装
+
+Next.js 13以降のApp Routerでは、`metadata` オブジェクトでSEO設定を管理できる。
+
+### 静的なメタデータ
+
+```typescript
+// app/about/page.tsx
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'About | My Blog',
+  description: 'フルスタックエンジニアのブログです。',
+  openGraph: {
+    title: 'About | My Blog',
+    description: 'フルスタックエンジニアのブログです。',
+    url: 'https://example.com/about',
+    siteName: 'My Blog',
+    images: [
+      {
+        url: 'https://example.com/og-image.png',
+        width: 1200,
+        height: 630,
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About | My Blog',
+    description: 'フルスタックエンジニアのブログです。',
+    images: ['https://example.com/og-image.png'],
+  },
+};
+```
+
+### 動的なメタデータ（記事ページなど）
+
+```typescript
+// app/blog/[slug]/page.tsx
+import type { Metadata } from 'next';
+
+type Props = {
+  params: { slug: string };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const post = await getPost(params.slug);
+
+  return {
+    title: `${post.title} | My Blog`,
+    description: post.description,
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      type: 'article',
+      publishedTime: post.pubDate.toISOString(),
+      images: [`https://example.com/og/${params.slug}.png`],
+    },
+  };
+}
+```
+
+## JSON-LD（構造化データ）の実装
+
+Googleの検索結果でリッチスニペット（投稿日・著者名などの追加情報）を表示するには、JSON-LDの追加が必要だ。
+
+```typescript
+// app/blog/[slug]/page.tsx
+export default async function BlogPost({ params }: Props) {
+  const post = await getPost(params.slug);
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.description,
+    datePublished: post.pubDate.toISOString(),
+    author: {
+      '@type': 'Person',
+      name: '著者名',
+      url: 'https://example.com/about',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'My Blog',
+      url: 'https://example.com',
+    },
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <article>{/* ... */}</article>
+    </>
+  );
+}
+```
+
+## サイトマップの自動生成
+
+Next.js 13.3以降では `sitemap.ts` を作るだけで自動生成できる。
+
+```typescript
+// app/sitemap.ts
+import { MetadataRoute } from 'next';
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const posts = await getAllPosts();
+
+  const postUrls = posts.map((post) => ({
+    url: `https://example.com/blog/${post.slug}`,
+    lastModified: post.updatedDate ?? post.pubDate,
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }));
+
+  return [
+    {
+      url: 'https://example.com',
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 1,
+    },
+    {
+      url: 'https://example.com/about',
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+    ...postUrls,
+  ];
+}
+```
+
+## 実務で気をつけていること
+
+### titleは各ページで必ずユニークにする
+
+全ページ同じtitleにしているサイトが実際にある。Googleは重複タイトルを低品質のシグナルとして扱う。`ページ名 | サイト名` の形式で各ページ固有にする。
+
+### OGP画像はPNGで用意する
+
+SVGはTwitter/Xで表示されない。OGP画像は 1200×630pxのPNGを用意する。記事ごとに動的生成するなら `satori` + `@resvg/resvg-js` の組み合わせがビルド時生成に使える。
+
+### canonicalは自分自身を指すように設定する
+
+Next.jsの `metadata` では以下で設定できる。
+
+```typescript
+export const metadata: Metadata = {
+  alternates: {
+    canonical: 'https://example.com/blog/this-post',
+  },
+};
+```
+
+クロスポスト（Zennなどにも同じ記事を掲載）する場合は、canonicalを元記事のURLに設定することで重複コンテンツと判断されるリスクを下げられる。
+
+### descriptionは120文字以内を目安に
+
+検索結果でのスニペット表示は約120文字。長すぎると省略されてしまう。キーワードを含みつつ、クリックしたくなる文章にすることが重要だ。
+
+## まとめ
+
+Next.jsのSEO対策は、フレームワークの機能を使えば実装自体は難しくない。
+
+ただし「設定した」で終わりではなく、Google Search Consoleでインデックス状況とパフォーマンスを継続的に確認することが重要だ。SEOは設定ではなくコンテンツと継続の話なので、技術的な基盤を整えた上で記事を書き続けることが最終的な答えになる。
+
+
+📚 **[TypeScriptとReact/Next.jsでつくる実践Webアプリケーション開発](https://www.amazon.co.jp/dp/4297129167)** — 手島拓也 著 ／ 技術評論社 —Atomic Design・Storybook・Next.jsレンダリング・SEO・テストまで網羅
+
+---
+
+他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
+X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)

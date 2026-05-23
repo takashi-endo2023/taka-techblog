@@ -20,6 +20,9 @@ const utagoeGithubRepo   = app.node.tryGetContext('utagoeGithubRepo')   as strin
 const ecGithubRepo       = app.node.tryGetContext('ecGithubRepo')       as string;
 const aiAdsGithubRepo    = app.node.tryGetContext('aiAdsGithubRepo')    as string;
 const gameGithubRepo     = app.node.tryGetContext('gameGithubRepo')     as string;
+const salarySubdomain    = app.node.tryGetContext('salarySubdomain')    as string;
+const salaryBucketName   = app.node.tryGetContext('salaryBucketName')   as string;
+const salaryGithubRepo   = app.node.tryGetContext('salaryGithubRepo')   as string;
 const aiAdsLambdaName    = app.node.tryGetContext('aiAdsLambdaName')    as string;
 const alertEmail         = app.node.tryGetContext('alertEmail')         as string;
 
@@ -38,6 +41,9 @@ new BlogStack(app, 'TakaBlogStack', {
   ecSubdomain,
   aiAdsSubdomain,
   gameSubdomain,
+  salarySubdomain,
+  salaryBucketName,
+  salaryGithubRepo,
   bucketName,
   utagoeBucketName,
   ecBucketName,

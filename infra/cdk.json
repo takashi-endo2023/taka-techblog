@@ -17,6 +17,9 @@
     "ecGithubRepo": "takashi-endo2023/ec",
     "aiAdsGithubRepo": "takashi-endo2023/ai-ads-dashboard",
     "gameGithubRepo": "takashi-endo2023/game-site",
+    "salarySubdomain": "salary.taka-techblog.com",
+    "salaryBucketName": "salary-taka-techblog",
+    "salaryGithubRepo": "takashi-endo2023/salary-tracker",
     "aiAdsLambdaName": "ai-ads-dashboard-api",
     "alertEmail": "your-email@example.com"
   }

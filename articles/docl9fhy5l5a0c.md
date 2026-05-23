@@ -1,0 +1,302 @@
+---
+title: "ESLint・Jest・Viteを最初に整備する——JavaScriptプロジェクトの開発環境構築"
+emoji: "🛠️"
+type: "tech"
+topics: ["JavaScript", "TypeScript", "テスト"]
+published: false
+---
+
+:::message
+この記事は [taka-techblog](https://taka-techblog.com/blog/javascript-dev-tools-eslint-jest?utm_source=zenn&utm_medium=referral) にも掲載しています。
+:::
+
+「このプロジェクト、ESLintが入っていないんですよね」
+
+転職して最初に参加したプロジェクトで言われた一言だ。コードベースはすでに数千行あり、後からESLintを導入すると大量のエラーが出た。既存コードをすべて修正するか、ルールを緩めて妥協するか——という判断を迫られた経験がある。
+
+開発ツールは後から入れると面倒なものの筆頭だ。プロジェクト初期に整備しておけば「最初からルールに沿ったコードしか生まれない」状態を作れる。
+
+「改訂3版JavaScript本格入門」でツール周りの基礎を整理し、以降は新しいプロジェクトを立ち上げるときに必ずセットアップするようになった。
+
+## なぜ最初に整備するべきか
+
+後から入れると何が大変なのかを具体的に言うと、
+
+- **ESLint**: 既存コードが一気にエラー扱いになる。全ファイルを修正するか、`eslint-disable` コメントで握りつぶすかの二択になる
+- **Jest**: テストなしで書かれたコードは、後からテストを書こうとすると副作用が多くてテストしづらい構造になっていることが多い
+- **Vite/ビルドツール**: プロジェクト構成が固まった後にバンドラを変更すると、設定のマイグレーションコストが高い
+
+逆に最初から入れておけば、「書いたときにすぐフィードバックをもらえる」ツールが揃った状態で開発を始められる。
+
+## ESLint——静的解析でバグの芽を摘む
+
+### フラットコンフィグへの移行
+
+ESLint v9からコンフィグ形式が変わり、`eslint.config.js`（フラットコンフィグ）が標準になった。新規プロジェクトではこちらを使う。
+
+```js
+// eslint.config.js
+import js from "@eslint/js";
+import tseslint from "typescript-eslint";
+
+export default tseslint.config(
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  {
+    rules: {
+      // 使わない変数はエラー
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      // console.logは警告（本番コードに残すな、という意図）
+      "no-console": "warn",
+      // anyの使用を警告
+      "@typescript-eslint/no-explicit-any": "warn",
+    },
+  },
+  {
+    // テストファイルはルールを緩める
+    files: ["**/*.test.ts", "**/*.spec.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  }
+);
+```
+
+インストールは以下の通り。
+
+```bash
+npm install -D eslint @eslint/js typescript-eslint
+```
+
+`package.json` のscriptsに追加しておく。
+
+```json
+{
+  "scripts": {
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
+  }
+}
+```
+
+### PrettierとESLintの役割分担
+
+ここで重要な話をしておく。ESLintとPrettierは別のツールで、役割が違う。
+
+| ツール | 役割 |
+|---|---|
+| **ESLint** | バグになりうるコードパターンの検出・修正（例：未使用変数、`any`の乱用） |
+| **Prettier** | コードフォーマットの統一（インデント・クォート・セミコロンなど） |
+
+かつてはESLintにフォーマットルールを持たせていたが、現在は「フォーマットはPrettierに任せ、ESLintはバグ検出に集中させる」が主流だ。
+
+```bash
+npm install -D prettier eslint-config-prettier
+```
+
+`eslint-config-prettier` はESLintのフォーマット系ルールをオフにするもので、PrettierとESLintの競合を防ぐ。
+
+## Jest——テストを書く習慣をつける
+
+### 基本セットアップ（TypeScript対応）
+
+```bash
+npm install -D jest @types/jest ts-jest
+npx ts-jest config:init
+```
+
+`jest.config.ts` が生成される。
+
+```ts
+// jest.config.ts
+import type { Config } from "jest";
+
+const config: Config = {
+  preset: "ts-jest",
+  testEnvironment: "node",
+  testMatch: ["**/__tests__/**/*.ts", "**/*.test.ts"],
+  collectCoverageFrom: ["src/**/*.ts", "!src/**/*.d.ts"],
+};
+
+export default config;
+```
+
+### describe・it・expectの基本
+
+```ts
+// src/utils/format.ts
+export function formatPrice(price: number): string {
+  return `¥${price.toLocaleString("ja-JP")}`;
+}
+
+export function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
+}
+```
+
+```ts
+// src/utils/format.test.ts
+import { formatPrice, clamp } from "./format";
+
+describe("formatPrice", () => {
+  it("金額を日本円形式にフォーマットする", () => {
+    expect(formatPrice(1000)).toBe("¥1,000");
+    expect(formatPrice(1234567)).toBe("¥1,234,567");
+  });
+
+  it("0円を正しくフォーマットする", () => {
+    expect(formatPrice(0)).toBe("¥0");
+  });
+});
+
+describe("clamp", () => {
+  it("値が範囲内にある場合はそのまま返す", () => {
+    expect(clamp(5, 0, 10)).toBe(5);
+  });
+
+  it("値が最小値を下回る場合は最小値を返す", () => {
+    expect(clamp(-1, 0, 10)).toBe(0);
+  });
+
+  it("値が最大値を上回る場合は最大値を返す", () => {
+    expect(clamp(15, 0, 10)).toBe(10);
+  });
+});
+```
+
+`describe` でグループ化し、`it`（または `test`）で1ケースを書く。関数単位でテストを書く習慣をつけると、後からリファクタリングしたときに壊れたことにすぐ気づける。
+
+テストを書くことで「この関数は引数と返り値が明確に定義されているか」という設計のフィードバックも得られる。テストが書きにくい関数は、副作用が多い・責務が大きすぎるサインであることが多い。
+
+### Reactコンポーネントのテスト
+
+Reactコンポーネントをテストする場合は `@testing-library/react` を使う。
+
+```bash
+npm install -D @testing-library/react @testing-library/jest-dom jest-environment-jsdom
+```
+
+```tsx
+// src/components/Badge.test.tsx
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import Badge from "./Badge";
+
+describe("Badge", () => {
+  it("テキストを表示する", () => {
+    render(<Badge label="New" />);
+    expect(screen.getByText("New")).toBeInTheDocument();
+  });
+});
+```
+
+## Vite——速いビルドと開発サーバ
+
+Viteは開発サーバとビルドツールが一体になったモダンなツールだ。create-viteでプロジェクトを作るのが最速だ。
+
+```bash
+npm create vite@latest my-app -- --template react-ts
+cd my-app
+npm install
+npm run dev
+```
+
+`--template react-ts` でReact + TypeScript構成が一発で作られる。他にも `vanilla-ts`・`vue-ts` などのテンプレートがある。
+
+開発サーバはHMR（ホットモジュールリプレースメント）で保存のたびに即反映される。WebpackベースのCreate React Appと比べて体感できるほど速い。
+
+`vite.config.ts` で基本設定を確認しておく。
+
+```ts
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    // エイリアス設定（@/components/... のように書ける）
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  server: {
+    port: 3000,
+  },
+});
+```
+
+なおNext.jsプロジェクトではViteは使わない（Next.jsは独自のビルドを持つ）。ViteはVanilla JS・React SPA・Vue・Svelteなど、フレームワークのバンドラが入っていないプロジェクトで使う。
+
+## CI連携で「動く状態」を守る
+
+ここまでのツールはCIに組み込んで初めて真価を発揮する。GitHub Actionsの例を示す。
+
+```yaml
+# .github/workflows/ci.yml
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test -- --coverage
+      - run: npm run build
+```
+
+このCIが通らないとマージできない運用にしておくと、「lintが通らないコードが本番に入る」事故を防げる。
+
+## チームにESLint+Jestを根付かせた話——「後から入れる大変さ」を経験して
+
+治験管理システムの内製化プロジェクトに加わったとき、すでに動いているコードベースにESLintとテストが一切なかった。
+
+「あとで入れよう」が積み重なった結果で、よくある状況だ。しかし後から入れる大変さは想像以上だった。
+
+ESLintを既存コードに適用すると、最初に何百件もの警告が出る。一度に全部修正しようとすると膨大な作業になるし、修正PRがコンフリクトの温床になる。対策として取ったのは「段階的適用」だ。
+
+```
+# 既存コードは warnings のみ（エラー扱いにしない）
+# 新規ファイルは全ルールをエラーとして適用
+```
+
+`.eslintignore` で既存の複雑なファイルを一時的に除外し、新しいファイルからルールを厳格に適用する。3ヶ月かけて少しずつ既存コードも修正した。
+
+Jestも同様で、「テストがないコードにテストを後付けする」のはつらい。特にモジュール間の依存が密結合していると、テストを書くためにリファクタリングが必要になる、というループにはまる。
+
+この経験を踏まえて、新規プロジェクトでは必ず**プロジェクト初日にESLint・Prettier・Jest・CIを整える**ことをルールにした。コードが1行もない状態での設定は驚くほど楽で、あとはルールに乗っていくだけだ。
+
+「後から入れると大変」を身体で理解してから、チームメンバーへの説得が格段にしやすくなった。
+
+## まとめ
+
+開発ツールの整備は地味だが、プロジェクトの品質を長期的に支える土台になる。
+
+- **ESLint**: 静的解析でバグの芽を摘む。TypeScript対応・フラットコンフィグで設定
+- **Prettier**: フォーマットの自動化。ESLintと役割を分離する
+- **Jest**: ユニットテストを書く習慣。`describe`/`it`/`expect` の3点セット
+- **Vite**: 高速な開発サーバとビルド。React SPAの新規プロジェクトで重宝する
+
+後から入れると大変、最初から入れると楽——これだけ覚えておけば十分だ。
+
+---
+
+「改訂3版JavaScript本格入門」ではツールの使い方だけでなく、なぜそのツールが必要なのかという背景も含めて整理されている。開発環境の「なぜ」を理解したい人に特に役立つ。
+
+
+📚 **[改訂3版JavaScript本格入門 ～モダンスタイルによる基礎から現場での応用まで](https://www.amazon.co.jp/dp/4297132885)** — 山田祥寛 著 ／ 技術評論社 —ES6+・非同期処理・クロージャ・クラスまで体系的に学べる決定版
+
+---
+
+他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
+X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)
