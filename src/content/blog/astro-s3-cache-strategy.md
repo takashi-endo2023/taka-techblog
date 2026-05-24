@@ -1,7 +1,7 @@
 ---
 title: "AstroサイトのS3+CloudFrontキャッシュ戦略：静的サイトを最速にする"
 description: "AstroのビルドアーティファクトをS3+CloudFrontで配信するときのキャッシュ設計。immutableキャッシュとno-cacheの使い分け・デプロイ後の即時反映・CloudFront Invalidationのコスト管理まで。"
-pubDate: "2025-04-11"
+pubDate: "2025-03-15"
 tags: ["DevOps", "AWS", "パフォーマンス"]
 ---
 

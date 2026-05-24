@@ -1,7 +1,7 @@
 ---
 title: "NestJS + LangChainで治験CRMにAI機能を追加した構成メモ"
 description: "ベンダーから引き継いだNestJS+React+PostgreSQLの治験CRMに、LangChain.jsのRe-Actエージェントを追加した際のモジュール設計と判断の記録。"
-pubDate: "2025-03-01"
+pubDate: "2026-02-18"
 updatedDate: "2026-05-22"
 tags: ["NestJS", "LangChain", "アーキテクチャ", "AI開発", "医療IT"]
 ---

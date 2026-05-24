@@ -1,7 +1,7 @@
 ---
 title: "Claude Codeを実務導入して開発フローが変わった話"
 description: "医療系スタートアップでClaude Codeを実務導入した実録。Cursorとの使い分け、具体的な工数削減効果、医療・規制産業でのAIツール利用指針の整備、チームへの浸透の現実まで。"
-pubDate: "2025-07-02"
+pubDate: "2026-03-31"
 updatedDate: "2026-05-22"
 tags: ["Claude Code", "AI開発", "チーム開発"]
 ---

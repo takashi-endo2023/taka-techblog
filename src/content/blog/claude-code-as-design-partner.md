@@ -1,7 +1,7 @@
 ---
 title: "Claude Codeを設計の壁打ち相手として使う：アーキテクチャ相談の実践"
 description: "知らない領域の機能を設計するとき、Claude Codeは壁打ち相手と先生を同時にやってくれる。広告計測×AI分析機能の設計をマーケティング学習と同時並行でやった話。"
-pubDate: "2025-07-15"
+pubDate: "2026-04-13"
 updatedDate: "2026-05-22"
 tags: ["Claude Code", "AI開発", "アーキテクチャ"]
 ---

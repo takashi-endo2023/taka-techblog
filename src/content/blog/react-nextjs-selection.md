@@ -1,7 +1,7 @@
 ---
 title: "React×Next.jsの選択基準を実務から考える —SPA・SSR・SSGをどう使い分けるか"
 description: "治験CRMではSPA、このブログではSSGを選んだ理由を実体験から整理。App Router vs Pages Router、CSR/SSR/SSG/ISRそれぞれのユースケースと実務での判断基準をまとめます。"
-pubDate: "2025-08-25"
+pubDate: "2025-01-06"
 tags: ["React", "Next.js", "アーキテクチャ"]
 ---
 
