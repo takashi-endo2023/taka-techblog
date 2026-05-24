@@ -133,7 +133,9 @@
       "Bash(sed -i '' 's/^published: false$/published: false\\\\ncanonical_url: \"https:\\\\/\\\\/www.taka-techblog.com\\\\/blog\\\\/web-technology-book-review\"/' articles/0d3f099034a005.md)",
       "Bash(sed -i '' 's/^published: false$/published: false\\\\ncanonical_url: \"https:\\\\/\\\\/www.taka-techblog.com\\\\/blog\\\\/javascript-honkaku-nyumon-review\"/' articles/ec31073bda0f55.md)",
       "Bash(sed -i '' 's/^published: false$/published: false\\\\ncanonical_url: \"https:\\\\/\\\\/www.taka-techblog.com\\\\/blog\\\\/typescript-react-nextjs-book-review\"/' articles/6fd4ae4ee5f36f.md)",
-      "Bash(xargs sed -i '' 's/taka_tech1988/_taka_tech/g')"
+      "Bash(xargs sed -i '' 's/taka_tech1988/_taka_tech/g')",
+      "mcp__filesystem__directory_tree",
+      "mcp__filesystem__read_text_file"
     ]
   }
 }

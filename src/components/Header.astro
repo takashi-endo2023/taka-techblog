@@ -7,11 +7,12 @@ const navLinks = [
   { href: '/contact', label: 'Contact' },
 ];
 
+const allLinks = [...navLinks, { href: '/search', label: 'Search' }];
+
 const currentPath = Astro.url.pathname;
 
 function isActive(href: string): boolean {
   if (href === '/') return currentPath === '/';
-  // /blog/1 のリンクは /blog/* すべてでアクティブにする
   if (href === '/blog/1') return currentPath.startsWith('/blog');
   return currentPath.startsWith(href);
 }
@@ -36,7 +37,6 @@ function isActive(href: string): boolean {
           {label}
         </a>
       ))}
-      <!-- 検索アイコン -->
       <a
         href="/search"
         class:list={['nav-search', { active: currentPath === '/search' }]}
@@ -55,68 +55,156 @@ function isActive(href: string): boolean {
       id="menu-toggle"
       aria-label="メニューを開く"
       aria-expanded="false"
-      aria-controls="site-nav"
+      aria-controls="mobile-overlay"
     >
       <span class="bar"></span>
       <span class="bar"></span>
       <span class="bar"></span>
     </button>
   </div>
-
-  <!-- Mobile nav -->
-  <div class="mobile-nav" id="mobile-nav" aria-hidden="true">
-    {navLinks.map(({ href, label }) => (
-      <a
-        href={href}
-        class:list={['mobile-nav-link', { active: isActive(href) }]}
-      >
-        {label}
-      </a>
-    ))}
-    <a
-      href="/search"
-      class:list={['mobile-nav-link', { active: currentPath === '/search' }]}
-    >
-      Search
-    </a>
-  </div>
 </header>
 
+<!-- ===== Full-screen overlay ===== -->
+<div class="mobile-overlay" id="mobile-overlay" aria-hidden="true">
+  <nav class="ov-body">
+    <p class="ov-eyebrow">// NAVIGATE</p>
+
+    {allLinks.map(({ href, label }, i) => (
+      <a
+        href={href}
+        class:list={['ov-link', { 'ov-link--active': isActive(href) }]}
+        style={`--i:${i}`}
+        tabindex="-1"
+      >
+        <span class="ov-num">{String(i + 1).padStart(2, '0')}</span>
+        <span class="ov-label">{label}</span>
+        <span class="ov-arr" aria-hidden="true">↗</span>
+      </a>
+    ))}
+
+    <div class="ov-foot">
+      <span class="ov-foot-tag">// x.com</span>
+      <a
+        href="https://x.com/_taka_tech"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="ov-foot-link"
+        tabindex="-1"
+      >@_taka_tech ↗</a>
+    </div>
+  </nav>
+</div>
+
 <script>
-  // View Transitions でページ遷移するたびにヘッダー DOM が差し替わるため、
-  // astro:page-load で毎回リスナーを再登録する
+  let menuAbortCtrl: AbortController | null = null;
+
+  // ---- iOS スクロールロック ----
+  // iOS Safari は body に overflow:hidden を設定しても背面スクロールを止められない。
+  // position:fixed + top でスクロール位置を固定し、閉じる時に復元する。
+  let savedScrollY = 0;
+
+  function lockScroll() {
+    savedScrollY = window.scrollY;
+    document.body.style.overflow  = 'hidden';
+    document.body.style.position  = 'fixed';
+    document.body.style.top       = `-${savedScrollY}px`;
+    document.body.style.width     = '100%';
+  }
+
+  function unlockScroll() {
+    document.body.style.overflow  = '';
+    document.body.style.position  = '';
+    document.body.style.top       = '';
+    document.body.style.width     = '';
+    window.scrollTo(0, savedScrollY);
+  }
+
   function initMenu() {
-    const toggle = document.getElementById('menu-toggle');
-    const mobileNav = document.getElementById('mobile-nav');
-    if (!toggle || !mobileNav) return;
+    menuAbortCtrl?.abort();
+    menuAbortCtrl = new AbortController();
+    const { signal } = menuAbortCtrl;
+
+    const toggle = document.getElementById('menu-toggle') as HTMLButtonElement | null;
+    const overlay = document.getElementById('mobile-overlay') as HTMLElement | null;
+    if (!toggle || !overlay) return;
+
+    const focusableEls = overlay.querySelectorAll<HTMLElement>('[tabindex]');
+
+    function openMenu() {
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'メニューを閉じる');
+      toggle.classList.add('open');
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden', 'false');
+      lockScroll();
+      focusableEls.forEach(el => el.setAttribute('tabindex', '0'));
+    }
+
+    function closeMenu() {
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'メニューを開く');
+      toggle.classList.remove('open');
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
+      unlockScroll();
+      focusableEls.forEach(el => el.setAttribute('tabindex', '-1'));
+    }
 
     toggle.addEventListener('click', (e) => {
       e.stopPropagation();
-      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!isOpen));
-      mobileNav.setAttribute('aria-hidden', String(isOpen));
-      toggle.classList.toggle('open', !isOpen);
-      mobileNav.classList.toggle('open', !isOpen);
-    });
+      toggle.getAttribute('aria-expanded') === 'true' ? closeMenu() : openMenu();
+    }, { signal });
+
+    // リンクのタップで閉じる
+    overlay.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) closeMenu();
+    }, { signal });
+
+    // Escape キー
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        closeMenu();
+        toggle.focus();
+      }
+    }, { signal });
+
+    // 外側タップで閉じる
+    // iOS Safari は非インタラクティブ要素への tap では document の click が発火しない。
+    // touchend を併用することで確実に拾う。
+    function handleOutside(e: Event) {
+      const t = document.getElementById('menu-toggle');
+      const o = document.getElementById('mobile-overlay');
+      if (!t || !o) return;
+      if (t.getAttribute('aria-expanded') !== 'true') return;
+      if (!t.contains(e.target as Node) && !o.contains(e.target as Node)) closeMenu();
+    }
+    document.addEventListener('click',    handleOutside, { signal });
+    document.addEventListener('touchend', handleOutside, { signal, passive: true });
   }
 
+  // View Transitions のページ遷移ごとに再登録
   document.addEventListener('astro:page-load', initMenu);
 
-  // 外側クリックで閉じる — document に一度だけ登録し、毎回要素を参照し直す
-  document.addEventListener('click', (e) => {
+  // ページ遷移開始直前（戻るボタン含む）にスクロールロックを必ず解除。
+  // メニューを開いたまま遷移した場合に body { position:fixed } が残るのを防ぐ。
+  document.addEventListener('astro:before-preparation', () => {
     const toggle = document.getElementById('menu-toggle');
-    const mobileNav = document.getElementById('mobile-nav');
-    if (!toggle || !mobileNav) return;
-    if (!toggle.contains(e.target as Node) && !mobileNav.contains(e.target as Node)) {
+    const overlay = document.getElementById('mobile-overlay');
+    if (toggle?.getAttribute('aria-expanded') === 'true') {
       toggle.setAttribute('aria-expanded', 'false');
-      mobileNav.setAttribute('aria-hidden', 'true');
       toggle.classList.remove('open');
-      mobileNav.classList.remove('open');
+      overlay?.classList.remove('open');
+      overlay?.setAttribute('aria-hidden', 'true');
+      unlockScroll();
     }
   });
+
+  // 初回ロード用フォールバック（<ClientRouter> が先に astro:page-load を発火するレース対策）
+  initMenu();
 </script>
 
 <style>
+  /* ── Site header ── */
   .site-header {
     position: sticky;
     top: 0;
@@ -133,6 +221,7 @@ function isActive(href: string): boolean {
     justify-content: space-between;
   }
 
+  /* ── Logo ── */
   .site-logo {
     display: flex;
     align-items: center;
@@ -142,26 +231,23 @@ function isActive(href: string): boolean {
     font-size: 1.05rem;
     text-decoration: none;
     transition: opacity 0.15s;
+    position: relative;
+    z-index: 110; /* オーバーレイより前面 */
   }
+  .site-logo:hover { opacity: 0.8; }
 
-  .site-logo:hover {
-    opacity: 0.8;
-  }
-
-  /* 猫シルエットを白抜きでアイコン表示 */
   .logo-img {
     display: block;
     height: 32px;
     width: auto;
     filter: brightness(0) invert(1);
   }
-
   .logo-text {
     font-family: var(--font-mono);
     letter-spacing: -0.01em;
   }
 
-  /* Desktop nav */
+  /* ── Desktop nav ── */
   .site-nav {
     display: flex;
     align-items: center;
@@ -173,20 +259,13 @@ function isActive(href: string): boolean {
     border-radius: 6px;
     font-size: 0.9rem;
     color: var(--color-text-muted);
+    text-decoration: none;
     transition: all 0.15s;
   }
-
   .nav-link:hover,
-  .nav-link.active {
-    color: var(--color-text);
-    background: var(--color-surface);
-  }
+  .nav-link.active { color: var(--color-text); background: var(--color-surface); }
+  .nav-link.active { color: var(--color-accent-hover); }
 
-  .nav-link.active {
-    color: var(--color-accent-hover);
-  }
-
-  /* 検索アイコン */
   .nav-search {
     display: inline-flex;
     align-items: center;
@@ -195,96 +274,226 @@ function isActive(href: string): boolean {
     height: 32px;
     border-radius: 6px;
     color: var(--color-text-muted);
+    text-decoration: none;
     transition: all 0.15s;
     margin-left: 0.25rem;
   }
-
   .nav-search:hover,
-  .nav-search.active {
-    color: var(--color-accent-hover);
-    background: var(--color-surface);
-  }
+  .nav-search.active { color: var(--color-accent-hover); background: var(--color-surface); }
 
-  /* Hamburger button */
+  /* ── Hamburger ── */
   .menu-toggle {
     display: none;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     gap: 5px;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     background: none;
-    border: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
     cursor: pointer;
-    padding: 4px;
-    border-radius: 6px;
-    transition: background 0.15s;
-    touch-action: manipulation;       /* iOS 300ms タップ遅延を除去 */
-    -webkit-tap-highlight-color: transparent; /* タップ時の青枠を非表示 */
+    padding: 8px;
+    position: relative;
+    z-index: 110;
+    transition: background 0.2s, border-color 0.2s;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
-
   .menu-toggle:hover {
     background: var(--color-surface);
+    border-color: var(--color-border);
+  }
+  .menu-toggle.open {
+    background: rgba(124, 106, 247, 0.1);
+    border-color: rgba(124, 106, 247, 0.4);
   }
 
   .bar {
     display: block;
-    width: 100%;
-    height: 2px;
+    width: 18px;
+    height: 1.5px;
     background: var(--color-text);
     border-radius: 2px;
-    transition: transform 0.25s, opacity 0.25s;
     transform-origin: center;
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.2s;
   }
+  .menu-toggle.open .bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .menu-toggle.open .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .menu-toggle.open .bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
-  .menu-toggle.open .bar:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-  }
-  .menu-toggle.open .bar:nth-child(2) {
+  /* ── Overlay ── */
+  /*
+   * cursor:pointer を付けることで iOS Safari がオーバーレイ背景を
+   * "タップ可能な要素" として認識し、touchend → click を発火するようになる。
+   */
+  .mobile-overlay { cursor: pointer; }
+  /* 操作要素はデフォルトカーソルに戻す */
+  .ov-link, .ov-foot-link, .ov-body { cursor: default; }
+
+  .mobile-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    overflow-y: auto;
+    /* 微細なパープルグリッド + 暗い背景 */
+    background:
+      linear-gradient(rgba(124, 106, 247, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124, 106, 247, 0.045) 1px, transparent 1px),
+      rgba(10, 11, 16, 0.97);
+    background-size: 44px 44px, 44px 44px, auto;
+    backdrop-filter: blur(20px) saturate(0.5);
+    -webkit-backdrop-filter: blur(20px) saturate(0.5);
+
+    /* 閉じた状態 → この transition は「開く」時に使われる */
     opacity: 0;
-    transform: scaleX(0);
-  }
-  .menu-toggle.open .bar:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0s;
   }
 
-  /* Mobile nav panel */
-  .mobile-nav {
-    display: none;
-    flex-direction: column;
-    padding: 0.75rem 1.5rem 1rem;
-    border-top: 1px solid var(--color-border);
-    gap: 0.25rem;
+  /* 開いた状態 → この transition は「閉じる」時に使われる */
+  .mobile-overlay.open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0s 0.3s;
   }
 
-  .mobile-nav.open {
+  /* デスクトップでは完全に非表示（安全策）*/
+  @media (min-width: 601px) {
+    .mobile-overlay { display: none; }
+  }
+
+  /* ── Overlay body ── */
+  .ov-body {
+    min-height: 100%;
+    padding: calc(var(--header-height) + 2.75rem) 2.5rem 4rem;
     display: flex;
+    flex-direction: column;
   }
 
-  .mobile-nav-link {
-    padding: 0.6rem 0.75rem;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    color: var(--color-text-muted);
-    transition: all 0.15s;
+  /* ── Eyebrow ── */
+  .ov-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(-6px);
+    /* 「開く」時に使用（base 側に delay） */
+    transition: opacity 0.25s 0.08s, transform 0.25s 0.08s;
+  }
+  .mobile-overlay.open .ov-eyebrow {
+    opacity: 0.5;
+    transform: translateY(0);
+    /* 「閉じる」時に使用（delay なし） */
+    transition: opacity 0.15s, transform 0.15s;
   }
 
-  .mobile-nav-link:hover,
-  .mobile-nav-link.active {
+  /* ── Nav links ── */
+  @keyframes olIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .ov-link {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid rgba(42, 45, 58, 0.5);
+    text-decoration: none;
     color: var(--color-text);
-    background: var(--color-surface);
+    opacity: 0;
+    /* 閉じる時のフェードアウト（animation が外れた後に transition が担う）*/
+    transition: opacity 0.15s, color 0.15s;
+  }
+  .mobile-overlay.open .ov-link {
+    animation: olIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: calc(0.1s + var(--i, 0) * 0.065s);
   }
 
-  .mobile-nav-link.active {
+  .ov-num {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    line-height: 1;
+    color: var(--color-accent);
+    opacity: 0.45;
+    min-width: 1.8rem;
+    user-select: none;
+    transition: opacity 0.15s;
+  }
+
+  .ov-label {
+    font-size: 1.85rem;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    flex: 1;
+    transition: color 0.15s, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ov-arr {
+    font-size: 1rem;
+    color: var(--color-accent);
+    opacity: 0;
+    transform: translateX(-6px) translateY(4px);
+    transition: opacity 0.2s, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Hover */
+  .ov-link:hover .ov-label {
     color: var(--color-accent-hover);
+    transform: translateX(6px);
+  }
+  .ov-link:hover .ov-arr  { opacity: 0.8; transform: translateX(0) translateY(0); }
+  .ov-link:hover .ov-num  { opacity: 1; }
+
+  /* Active（現在ページ）*/
+  .ov-link--active .ov-label { color: var(--color-accent); }
+  .ov-link--active .ov-num   { opacity: 1; }
+  .ov-link--active .ov-arr   { opacity: 0.45; transform: translateX(0) translateY(0); }
+
+  /* ── Footer ── */
+  .ov-foot {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    opacity: 0;
+    transform: translateY(8px);
+    /* 「開く」時に使用（base 側に delay） */
+    transition: opacity 0.3s 0.55s, transform 0.3s 0.55s;
+  }
+  .mobile-overlay.open .ov-foot {
+    opacity: 1;
+    transform: translateY(0);
+    /* 「閉じる」時に使用（delay なし） */
+    transition: opacity 0.2s, transform 0.2s;
   }
 
+  .ov-foot-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    opacity: 0.4;
+  }
+
+  .ov-foot-link {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+    display: inline-block;
+  }
+  .ov-foot-link:hover { color: var(--color-text); }
+
+  /* ── Responsive ── */
   @media (max-width: 600px) {
-    .site-nav {
-      display: none;
-    }
-    .menu-toggle {
-      display: flex;
-    }
+    .site-nav    { display: none; }
+    .menu-toggle { display: flex; }
   }
 </style>
