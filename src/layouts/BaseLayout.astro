@@ -1,6 +1,10 @@
 ---
 import { ClientRouter } from 'astro:transitions';
-import globalCSS from '../styles/global.css?raw';
+import fontsCSS  from '../styles/fonts.css?raw';
+import _globalCSS from '../styles/global.css?raw';
+// @import './fonts.css' はインライン style では相対パスが解決されないため除去し、
+// fonts.css の内容を直接結合する
+const globalCSS = fontsCSS + '\n' + _globalCSS.replace(/@import\s+['"]\.\/fonts\.css['"]\s*;?\n?/, '');
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
