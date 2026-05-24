@@ -1,7 +1,7 @@
 ---
 title: "GitLab CI-CDを実務で運用するときの設計パターン"
 description: "医療系スタートアップのNestJS+React構成でGitLab CI-CDを運用してわかった設計パターン。「最後は人の手」を原則に、環境別デプロイ・キャッシュ戦略・手動承認ゲートの実際。"
-pubDate: "2026-02-25"
+pubDate: "2025-06-05"
 updatedDate: "2026-05-22"
 tags: ["DevOps", "インフラ"]
 ---

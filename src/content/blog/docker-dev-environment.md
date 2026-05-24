@@ -1,7 +1,7 @@
 ---
 title: "Docker開発環境を標準化してチームの「動かない」を減らす"
 description: "「自分のPCでは動く」問題を撲滅するためにDocker開発環境を整備した話。docker-compose設計・.env管理・M1/M2 Macの罠・NestJS+PostgreSQL構成まで実践的にまとめます。"
-pubDate: "2024-12-10"
+pubDate: "2024-06-16"
 tags: ["DevOps", "チーム開発", "NestJS"]
 ---
 

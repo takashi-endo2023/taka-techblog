@@ -1,7 +1,7 @@
 ---
 title: "LangChain.js 2025年の現状：実務で使って感じたこと"
 description: "NestJSプロジェクトでLangChain.jsを実務投入して1年。バージョン変遷の激しさ・LCEL構文への移行・RAG実装・OpenAI SDKとの使い分けまで正直にレビュー。"
-pubDate: "2025-07-15"
+pubDate: "2024-12-23"
 updatedDate: "2026-05-22"
 tags: ["LangChain", "AI開発", "NestJS", "TypeScript"]
 ---

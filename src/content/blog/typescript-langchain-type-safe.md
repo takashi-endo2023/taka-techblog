@@ -1,7 +1,7 @@
 ---
 title: "TypeScriptで型安全なLangChainアプリを作る —LangChain.jsの型定義と実装パターン"
 description: "LangChain.jsの型定義の扱い方からストリーミングレスポンスの型安全な実装、カスタムChainの設計まで、医療系スタートアップのNestJS実務で得た知見をまとめました。"
-pubDate: "2025-08-26"
+pubDate: "2025-02-02"
 updatedDate: "2026-05-22"
 tags: ["TypeScript", "LangChain", "AI開発"]
 ---

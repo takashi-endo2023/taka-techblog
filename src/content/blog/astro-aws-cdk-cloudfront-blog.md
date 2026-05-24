@@ -1,7 +1,7 @@
 ---
 title: "AstroとAWS CDK + CloudFrontで技術ブログを構築した話"
 description: "放置していたWordPressブログを、AIが面倒を減らしてくれたから再挑戦できた。Astro SSG + AWS CDK + CloudFrontで月120円、AstroもCDKも初挑戦で構築した記録。"
-pubDate: "2025-10-28"
+pubDate: "2025-03-15"
 updatedDate: "2026-05-22"
 tags: ["DevOps", "AWS", "GitHub Actions"]
 ---
