@@ -183,7 +183,8 @@
       "Bash(sed -n '180,186p' /Users/takashi/projects/taka-techblog/src/content/blog/nextjs-seo-implementation.mdx)",
       "Bash(sed -n '133,139p' /Users/takashi/projects/taka-techblog/src/content/blog/aws-rds-dynamodb-choice.mdx)",
       "mcp__filesystem__search_files",
-      "Bash(sort -t: -k2 -n)"
+      "Bash(sort -t: -k2 -n)",
+      "Bash(node scripts/sync-zenn.js)"
     ]
   }
 }
