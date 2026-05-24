@@ -151,7 +151,18 @@
       "Bash(echo \"---exit:$?\")",
       "Bash(dig www.taka-techblog.com)",
       "Bash(dig taka-techblog.com)",
-      "Bash(aws route53 *)"
+      "Bash(aws route53 *)",
+      "Bash(awk '{print $2}')",
+      "Bash(awk -F'\"' '{print $1}')",
+      "Bash(whois taka-techblog.com)",
+      "Bash(dig @ns-85.awsdns-10.com www.taka-techblog.com A +short)",
+      "Bash(dig www.taka-techblog.com A +short)",
+      "Bash(dig taka-techblog.com NS +short)",
+      "Bash(curl -sI https://www.taka-techblog.com)",
+      "Bash(curl -v --max-time 10 https://www.taka-techblog.com)",
+      "Bash(sudo dscacheutil -flushcache)",
+      "Bash(sudo killall -HUP mDNSResponder)",
+      "Bash(curl -sI --resolve \"www.taka-techblog.com:443:13.249.146.23\" https://www.taka-techblog.com)"
     ]
   }
 }
