@@ -77,10 +77,13 @@
 --color-text-muted: #8892a4
 --color-accent: #7c6af7        /* メインアクセント（紫） */
 --color-accent-hover: #9d8ffa
---font-sans: 'Inter', 'Hiragino Kaku Gothic ProN', ...
---font-mono: 'JetBrains Mono', 'Fira Code', ...
+--color-accent-btn: #5f52d4    /* ボタン背景（WCAG AA準拠） */
+--color-code-bg: #1e2130       /* コードブロック背景 */
+--font-sans: 'Inter Variable', 'Inter', 'Hiragino Kaku Gothic ProN', ...
+--font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', 'Fira Code', ...
 --radius: 8px
 --max-width: 860px
+--header-height: 60px
 ```
 
 ### UIコンポーネントのパターン
@@ -124,6 +127,7 @@ src/
     contact.astro     ← お問い合わせ（Googleフォーム埋め込み）
     search.astro      ← 全文検索（Pagefind）
     privacy.astro     ← プライバシーポリシー
+    404.astro         ← 404エラーページ
   styles/global.css   ← グローバルスタイル・CSS変数
 articles/             ← Zenn記事（push で自動公開）
 books/                ← Zenn本（現在未使用）

@@ -244,19 +244,15 @@ X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)
 
 ## 進行中タスク
 
-### Google AdSense 審査待ち
-- 申請済み・審査待ち
-- 通過後: `src/layouts/BaseLayout.astro` の `<head>` にAdSenseタグを1行追加するだけ
+### Google AdSense
+- 実装済み（`ca-pub-6362820016436423`、`src/layouts/BaseLayout.astro` の `<head>` に設定済み）
+- 審査通過・広告表示状況は AdSense ダッシュボードで確認
 
 ### 既存記事のリライト（薄い記事）
 - [ ] `code-review-culture` — 4KB台、書き込み不足
 - [ ] `small-elite-team-design` — 4KB台
 - [ ] `git-chaos-1hour-before-release` — 4KB台
 - [ ] `ai-meeting-notes-structured` — 4KB台
-
-### デプロイ待ち（今セッションの変更）
-- [ ] `git push` で本番反映（astro.config.mjs のwww修正・About/Contact/Uses・Zenn記事のwww統一など）
-- [ ] Search Console サイトマップを `https://www.taka-techblog.com/sitemap-index.xml` に更新
 
 ---
 

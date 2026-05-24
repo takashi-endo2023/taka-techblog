@@ -98,3 +98,4 @@ Claude Codeと組み合わせることで、コーディングから設計相談
 - コスト感（月20ドル）はfast request上限に注意
 - Claude Codeとは「実装補助vs設計相談」で使い分ける
 - NestJSのボイラープレート生成との相性は特に良い
+- Claude Codeを設計の壁打ち相手として活用する方法は[Claude Codeを設計の壁打ち相手として使う：アーキテクチャ相談の実践](/blog/claude-code-as-design-partner)で詳しく紹介している

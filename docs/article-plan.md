@@ -9,103 +9,118 @@
 ### キャリア・組織
 | pubDate | タイトル | ファイル |
 |---|---|---|
-| 2023-06-15 | 接客業から転身して3年でテックリード・係長になった話 | career-change-to-engineer.md |
-| 2024-08-12 | テックリード就任最初の90日でやったこと | techLead-first-90-days.md |
-| 2025-01-07 | 外部ベンダーから1年で完全内製化した話 | naisei-kansei.md |
-| 2025-01-21 | 技術的負債との向き合い方 | technical-debt-strategy.md |
-| 2025-01-28 | 未経験エンジニア2名をコーチング型で育てた方法 | coaching-junior-engineers.md |
-| 2025-02-04 | コードより先に要件を言語化させる | junior-engineer-spec-before-code.md |
-| 2025-04-22 | プレイングマネージャーの現実 | playing-manager-reality.md |
-| 2025-05-13 | 少数精鋭エンジニアチームの設計思想 | small-elite-team-design.md |
-| 2025-05-20 | コードレビュー文化をゼロから作った話 | code-review-culture.md |
-| 2025-06-03 | エンジニア採用の書類選考・面接を担当して気づいたこと | engineer-hiring-lessons.md |
-| 2026-05-06 | エンジニアが経営層にIT投資の価値を伝える技術 | communicating-it-value-to-executives.md |
+| 2023-06-15 | 島流しの先にエンジニアがあった——30歳からの転身の現実 | career-change-to-engineer.md |
+| 2024-03-26 | 同僚が部下になった日——テックリード就任、最初の90日の現実 | techLead-first-90-days.md |
+| 2024-06-30 | 外部ベンダーから内製化した3年間 — 年間480万円の固定費をゼロにするまで | naisei-kansei.md |
+| 2024-07-13 | 直したいのに直せない——技術的負債と向き合う3年間 | technical-debt-strategy.md |
+| 2024-07-27 | 未経験エンジニア2名をコーチング型で育てた方法 | coaching-junior-engineers.md |
+| 2024-08-09 | コードより先に要件を言語化させる——会話が成立しない部下への対処 | junior-engineer-spec-before-code.md |
+| 2024-10-16 | テックリードと係長を兼任するプレイングマネージャーの現実 | playing-manager-reality.md |
+| 2024-10-30 | 3人で回すということ——少人数チームを機能させるための工夫 | small-elite-team-design.md |
+| 2024-11-13 | 目標は私が暇になること——コードレビューを3年一人でやってきた話 | code-review-culture.md |
+| 2024-11-26 | 誰も採用をやらないから、自分でやることにした | engineer-hiring-lessons.md |
+| 2025-08-12 | 「理屈が通れば動く人」との3年——経営層への技術翻訳の実際 | communicating-it-value-to-executives.md |
+| 2025-09-08 | AIがなかったら死んでた——一人で全部背負うテックリードの現実 | solo-techlead-ai-survival.md |
+| 2025-09-21 | みんなの安定のために仮面を被った——テックリード3年間の全記録 | techlead-mask-3years.md |
 
 ### JavaScript / TypeScript
 | pubDate | タイトル | ファイル |
 |---|---|---|
-| 2023-07-10 | ES6+の新構文を実務でどう使うか | javascript-es6-modern-syntax.mdx |
-| 2023-08-01 | JavaScriptのスコープとthis | javascript-scope-closure.mdx |
-| 2023-08-22 | JavaScriptの非同期処理 | javascript-async-promise.mdx |
-| 2023-09-12 | JavaScriptのArray高階関数 | javascript-array-methods.mdx |
-| 2023-10-03 | JavaScriptのクラスとモジュール | javascript-class-module.mdx |
-| 2023-10-25 | ESLint・Jest・Viteを最初に整備する | javascript-dev-tools-eslint-jest.mdx |
-| 2024-07-09 | JavaScriptからTypeScriptへ段階的移行 | typescript-migration-lessons.md |
-| 2026-08-26 | TypeScriptで型安全なLangChainアプリを作る | typescript-langchain-type-safe.md |
+| 2023-06-29 | ES6+の新構文を実務でどう使うか——JavaScript本格入門で整理した基礎知識 | javascript-es6-modern-syntax.mdx |
+| 2023-07-12 | JavaScriptのスコープとthisで詰まったこと——本格入門で理解が深まった概念 | javascript-scope-closure.mdx |
+| 2023-07-26 | JavaScriptの非同期処理を整理する——コールバック・Promise・async/awaitの使い分け | javascript-async-promise.mdx |
+| 2023-08-08 | JavaScriptのArray高階関数を実務で使いこなす——map・filter・reduceの使い分け | javascript-array-methods.mdx |
+| 2023-08-22 | JavaScriptのクラスとモジュールを理解する——TypeScriptに活きるOOPの基礎 | javascript-class-module.mdx |
+| 2023-09-05 | ESLint・Jest・Viteを最初に整備する——JavaScriptプロジェクトの開発環境構築 | javascript-dev-tools-eslint-jest.mdx |
+| 2025-10-18 | TypeScript Utility Types実践ガイド——Partial・Pick・Omitを実務でどう使うか | typescript-utility-types-practical.mdx |
+| 2025-12-25 | 改訂3版 JavaScript本格入門——100万部超えロングセラーを独学エンジニアが読んだ正直な評価 | javascript-honkaku-nyumon-review.mdx |
+| 2026-01-08 | JavaScriptのMap・Setを使いこなす——Arrayとの使い分けを実務目線で整理する | javascript-map-set-practical.mdx |
+| 2026-01-22 | Fetch APIで非同期通信をマスターする——GET・POST・エラーハンドリング・React連携まで | javascript-fetch-api-practical.mdx |
+| 2026-02-04 | JavaScriptの正規表現入門——実務でよく使うパターンをコード例で整理する | javascript-regexp-practical.mdx |
 
 ### React / Next.js / フロントエンド設計
 | pubDate | タイトル | ファイル |
 |---|---|---|
-| 2024-01-30 | TypeScript+React+Next.js実践本のレビュー | typescript-react-nextjs-book-review.mdx |
-| 2024-02-20 | URIデザインのベストプラクティス | uri-design-best-practices.mdx |
-| 2024-03-12 | Atomic Designを実務で使って気づいたこと | atomic-design-in-practice.mdx |
-| 2024-04-02 | Next.jsのSSR・SSG・ISRを実務でどう使い分けるか | nextjs-rendering-deep-dive.mdx |
-| 2024-04-23 | StorybookをReactチームに導入して見えてきたこと | storybook-team-adoption.mdx |
-| 2024-05-14 | Next.jsでSEOを実装するときに押さえるべきこと | nextjs-seo-implementation.mdx |
-| 2024-06-04 | フロントエンドのテスト戦略 | frontend-testing-practical-approach.mdx |
-| 2024-06-25 | REST API設計の基本 | rest-api-design-web-basics.mdx |
-| 2026-05-12 | React×Next.jsの選択基準を実務から考える | react-nextjs-selection.md |
+| 2023-11-25 | Atomic Designを実務で使って気づいたこと——設計の共通言語はチームを助ける | atomic-design-in-practice.mdx |
+| 2023-12-09 | Next.jsのSSR・SSG・ISRを実務でどう使い分けるか | nextjs-rendering-deep-dive.mdx |
+| 2023-12-22 | StorybookをReactチームに導入して見えてきたこと——メリットと継続の難しさ | storybook-team-adoption.mdx |
+| 2024-01-05 | Next.jsでSEOを実装するときに押さえるべきこと——メタデータからJSON-LDまで | nextjs-seo-implementation.mdx |
+| 2024-01-19 | フロントエンドのテスト戦略——「全部書く」をやめてから品質が上がった話 | frontend-testing-practical-approach.mdx |
+| 2024-02-01 | TypeScriptとReact/Next.js実践本を未経験エンジニアが読んだ正直な感想 | typescript-react-nextjs-beginner-review.mdx |
+| 2024-02-15 | TypeScriptとReact/Next.js実践本を読んで実務で使い続けた話——テックリード視点の正直な評価 | typescript-react-nextjs-book-review.mdx |
+| 2025-08-25 | React×Next.jsの選択基準を実務から考える —SPA・SSR・SSGをどう使い分けるか | react-nextjs-selection.md |
+| 2025-11-01 | styled-components vs CSS Modules——Next.jsプロジェクトでCSS設計を選ぶ基準 | css-in-js-styled-components-vs-modules.mdx |
+| 2025-11-15 | Next.jsのデプロイ先を選ぶ——Vercel・AWS・Herokuを比較して学んだこと | nextjs-deployment-strategy.mdx |
+| 2025-11-28 | フロントエンドエンジニアが最低限知っておくべきアクセシビリティ入門 | frontend-accessibility-intro.mdx |
+| 2025-12-12 | StripeとNext.jsで決済機能を実装する——Checkout・Webhook・本番対応まで | nextjs-stripe-payment.mdx |
 
 ### インフラ / Linux / Web基礎
 | pubDate | タイトル | ファイル |
 |---|---|---|
-| 2024-01-08 | HTTPを正しく理解する | http-methods-status-codes.mdx |
-| 2023-11-15 | Linux運用で最低限知るべきこと | linux-server-operations-basics.mdx |
-| 2023-12-05 | フロントエンドエンジニアがサーバ/インフラを学んで気づいたこと | server-infra-basics-for-frontend.mdx |
-| 2024-10-29 | Webサービスのパフォーマンスチューニング入門 | web-performance-tuning-basics.mdx |
-| 2024-11-19 | 高可用性設計の基本 | high-availability-design-spof.mdx |
-| 2024-12-10 | Docker開発環境を標準化してチームの「動かない」を減らす | docker-dev-environment.md |
-| 2026-08-26 | サーバ/インフラを支える技術——止まらないサービスを作るための設計思想を学んだ正直な評価 | server-infra-book-review.mdx |
-| 2026-09-02 | Linuxロードアベレージを正確に理解する | linux-load-average-deep-dive.mdx |
-| 2026-09-09 | MySQLレプリケーション設計 | mysql-replication-design.mdx |
-| 2026-09-16 | リバースプロキシの役割と設計 | reverse-proxy-cache-design.mdx |
+| 2023-09-18 | Linux運用で最低限知るべきこと——ターミナル作業を怖くなくするための基礎知識 | linux-server-operations-basics.mdx |
+| 2023-10-02 | フロントエンドエンジニアがサーバ/インフラを学んで気づいたこと——見えていなかった仕組み | server-infra-basics-for-frontend.mdx |
+| 2023-10-15 | HTTPを正しく理解する——メソッド・ステータスコード・ヘッダーの実務知識 | http-methods-status-codes.mdx |
+| 2023-10-29 | 望ましいURIとは何か——Webを支える技術で学んだURL設計のベストプラクティス | uri-design-best-practices.mdx |
+| 2023-11-12 | REST APIの設計原則を学び直す——URLの考え方から冪等性まで | rest-api-design-web-basics.mdx |
+| 2024-05-20 | Webサービスのパフォーマンスチューニング入門——計測・キャッシュ・DBが三本柱 | web-performance-tuning-basics.mdx |
+| 2024-06-02 | 高可用性設計の基本——SPOF排除とフェイルオーバーで「止まらないサービス」を作る | high-availability-design-spof.mdx |
+| 2024-06-16 | Docker開発環境を標準化してチームの「動かない」を減らす | docker-dev-environment.md |
+| 2026-02-18 | Webを支える技術——HTTPとRESTを根本から理解したいエンジニアへの正直な評価 | web-technology-book-review.mdx |
+| 2026-03-03 | WebアーキテクチャとRESTが生まれた理由——設計思想を歴史から理解する | web-architecture-rest-history.mdx |
+| 2026-03-17 | HTTPキャッシュ完全ガイド——Cache-Control・ETag・CDN連携を実務で使いこなす | http-cache-guide.mdx |
+| 2026-03-31 | REST APIの書き込み設計——冪等性・トランザクション・楽観的ロックの実装パターン | rest-api-write-design.mdx |
+| 2026-04-13 | サーバ/インフラを支える技術——止まらないサービスを作るための設計思想を学んだ正直な評価 | server-infra-book-review.mdx |
+| 2026-04-27 | Linuxロードアベレージを正確に理解する——sar・vmstat・psで障害の原因を特定する | linux-load-average-deep-dive.mdx |
+| 2026-05-10 | MySQLレプリケーション設計——障害復旧・読み取り分散・RDS Multi-AZとの比較 | mysql-replication-design.mdx |
+| 2026-05-24 | リバースプロキシの役割と設計——Nginx・CDN・キャッシュ戦略 | reverse-proxy-cache-design.mdx |
 
 ### AWS / IaC / CI/CD
 | pubDate | タイトル | ファイル |
 |---|---|---|
-| 2024-07-16 | AWSのIAM設計を正しく理解する | aws-iam-least-privilege.mdx |
-| 2024-08-06 | AWS VPCのサブネット設計を理解する | aws-vpc-subnet-design.mdx |
-| 2024-08-27 | CloudWatchでAWSを監視する | aws-cloudwatch-monitoring.mdx |
-| 2024-09-17 | EC2・Lambda・ECSをどう使い分けるか | aws-compute-ec2-lambda-ecs.mdx |
-| 2024-10-08 | RDSとDynamoDBの使い分け | aws-rds-dynamodb-choice.mdx |
-| 2025-04-15 | CloudFormationからCDKへ移行した話 | cloudformation-to-cdk.md |
-| 2025-10-28 | AstroとAWS CDK + CloudFrontで技術ブログを構築した話 | astro-aws-cdk-cloudfront-blog.md |
-| 2025-11-18 | AWS CDKを初めて使って詰まった5つのこと | aws-cdk-first-pitfalls.md |
-| 2025-12-09 | AstroサイトのS3+CloudFrontキャッシュ戦略 | astro-s3-cache-strategy.md |
-| 2025-12-30 | S3+CloudFrontで静的サイトを本番運用する | aws-s3-cloudfront-static-site.mdx |
-| 2026-01-14 | GitHub ActionsとAWS OIDCでキーレスデプロイを実現する | github-actions-oidc-aws.md |
-| 2026-02-04 | GitHub Actions + AWSでCI/CDを構築する | aws-devops-github-actions.mdx |
-| 2026-02-25 | GitLab CI/CDを実務で運用するときの設計パターン | gitlab-cicd-patterns.md |
+| 2024-02-28 | AWSのIAM設計を正しく理解する——最小権限の原則と実務での落とし穴 | aws-iam-least-privilege.mdx |
+| 2024-03-13 | AWS VPCのサブネット設計を理解する——パブリック・プライベートの分け方とセキュリティ設定 | aws-vpc-subnet-design.mdx |
+| 2024-04-09 | CloudWatchでAWSを監視する——メトリクス・アラーム・ログの実務パターン | aws-cloudwatch-monitoring.mdx |
+| 2024-04-23 | EC2・Lambda・ECSをどう使い分けるか——AWSコンピューティングの選択基準 | aws-compute-ec2-lambda-ecs.mdx |
+| 2024-05-06 | RDSとDynamoDBの使い分け——データ構造とアクセスパターンで選ぶ基準 | aws-rds-dynamodb-choice.mdx |
+| 2024-09-19 | mainブランチを捨てた——リリース1時間前のgit修羅場 | git-chaos-1hour-before-release.md |
+| 2025-03-15 | AstroとAWS CDK + CloudFrontで技術ブログを構築した話 | astro-aws-cdk-cloudfront-blog.md |
+| 2025-03-29 | AWS CDKを初めて使って詰まった5つのこと | aws-cdk-first-pitfalls.md |
+| 2025-04-11 | AstroサイトのS3+CloudFrontキャッシュ戦略：静的サイトを最速にする | astro-s3-cache-strategy.md |
+| 2025-04-25 | S3 + CloudFrontで静的サイトを本番運用する——このブログを構築して学んだこと | aws-s3-cloudfront-static-site.mdx |
+| 2025-05-08 | GitHub ActionsとAWS OIDCでキーレスデプロイを実現する | github-actions-oidc-aws.md |
+| 2025-05-22 | GitHub Actions + AWSでCI-CDを構築する——OIDCでアクセスキーなしの安全なデプロイ | aws-devops-github-actions.mdx |
+| 2025-06-05 | GitLab CI-CDを実務で運用するときの設計パターン | gitlab-cicd-patterns.md |
 
 ### NestJS / バックエンド
 | pubDate | タイトル | ファイル |
 |---|---|---|
-| 2025-09-16 | NestJSで治験CRMのバックエンドを設計した | nestjs-crm-design.md |
-| 2025-10-07 | 少数精鋭チームの技術的工夫：NestJS + LangChainで作るAI搭載CRM | nestjs-langchain-crm-architecture.md |
+| 2025-02-16 | NestJSの治験CRMを引き継いで学んだバックエンド設計 | nestjs-crm-design.md |
+| 2025-03-01 | NestJS + LangChainで治験CRMにAI機能を追加した構成メモ | nestjs-langchain-crm-architecture.md |
 
 ### AI / LangChain / Claude Code
 | pubDate | タイトル | ファイル | 備考 |
 |---|---|---|---|
-| 2025-07-15 | LangChain.js 2025年の現状 | langchain-js-2025.md | LangChain概要・実務評価 |
-| 2025-08-05 | 医療系CRMにLangChain×NestJSでAI連携を実装した話 | langchain-nestjs-ai-integration.md | 実装詳細 |
-| 2025-08-26 | TypeScriptで型安全なLangChainアプリを作る | typescript-langchain-type-safe.md | 型設計 |
-| 2026-03-18 | Cursor実務レビュー2025 | cursor-review-2025.md | Cursor vs Claude Code |
-| 2026-04-01 | Claude Codeを実務導入して開発フローが変わった話 | claude-code-workflow.md | **導入・効果測定済み** |
-| 2026-04-15 | Claude Codeを設計の壁打ち相手として使う | claude-code-as-design-partner.md | **設計相談ユースケース済み** |
-| 2026-04-29 | AIで議事録を構造化する | ai-meeting-notes-structured.md | 業務効率化ユースケース |
+| 2024-12-23 | LangChain.js 2025年の現状：実務で使って感じたこと | langchain-js-2025.md | LangChain概要・実務評価 |
+| 2025-01-20 | RAGをやめてツールベースに切り替えた話——LangChain.jsとCRMの相性 | langchain-nestjs-ai-integration.md | 実装詳細 |
+| 2025-02-02 | TypeScriptで型安全なLangChainアプリを作る —LangChain.jsの型定義と実装パターン | typescript-langchain-type-safe.md | 型設計 |
+| 2025-06-18 | Cursor実務レビュー2025：Claude Codeと使い分けて気づいたこと | cursor-review-2025.md | Cursor vs Claude Code |
+| 2025-07-02 | Claude Codeを実務導入して開発フローが変わった話 | claude-code-workflow.md | 導入・効果測定済み |
+| 2025-07-15 | Claude Codeを設計の壁打ち相手として使う：アーキテクチャ相談の実践 | claude-code-as-design-partner.md | 設計相談ユースケース済み |
+| 2025-07-29 | AIで議事録を構造化する：「要約」では使えない理由とプロンプト設計 | ai-meeting-notes-structured.md | 業務効率化ユースケース |
+| 2025-10-05 | AIを社内に広めたら、本部長がモンスターになった話 | ai-team-adoption-monster.md | 組織導入の現実 |
 
 ### 医療IT / 治験 / 規制対応
 | pubDate | タイトル | ファイル | 備考 |
 |---|---|---|---|
-| 2025-02-18 | CSV（コンピュータ化システムバリデーション）とは何か | csv-validation-guide.md | **CSV概要・バリデーション工程済み** |
-| 2025-03-11 | 製薬メーカーのシステム監査に技術者として対応した話 | system-audit-experience.md | **監査対応実体験済み** |
-| 2025-04-01 | 規制産業でのリリースフロー設計 | release-flow-regulated-industry.md | **変更管理プロセス済み** |
-| 2025-07-28 | 治験データが増えるにつれてシステムが遅くなった | clinical-trial-system-performance.md | **N+1・パフォーマンス済み** |
+| 2024-08-23 | CSV（コンピュータ化システムバリデーション）とは何か — 医療ITエンジニア目線で解説 | csv-validation-guide.md | CSV概要・バリデーション工程済み |
+| 2024-09-06 | 製薬メーカーのシステム監査に技術者として対応した話 | system-audit-experience.md | 監査対応実体験済み |
+| 2024-10-03 | 引き継いだリリースフローが、監査で初めて意味を持った | release-flow-regulated-industry.md | 変更管理プロセス済み |
+| 2025-01-06 | 治験データが増えるにつれてシステムが遅くなった——パフォーマンス改善の実記録 | clinical-trial-system-performance.md | N+1・パフォーマンス済み |
 
 ### その他
 | pubDate | タイトル | ファイル |
 |---|---|---|
-| 2025-06-24 | MakeShopでECサイトを立ち上げた技術的な話 | makeshop-technical-notes.md |
+| 2024-12-10 | グループ会社のIT環境をゼロから整備した話——MakeShopとGA4と諸々 | makeshop-technical-notes.md |
 
 ---
 
@@ -184,14 +199,15 @@
 
 | カテゴリ | 現在の記事数 | 方針 |
 |---|---|---|
-| キャリア・組織 | 11本 | 十分。当面は追加なし |
-| JavaScript/TypeScript | 8本 | 十分。TS移行実体験で締め |
-| React/Next.js/フロントエンド | 9本 | 十分。AI×フロントエンドテーマで1本追加余地あり |
-| インフラ/Linux/Web基礎 | 6本 | 十分 |
-| AWS/IaC/CI/CD | 12本 | 十分。PR品質ゲートで1本追加余地あり |
+| キャリア・組織 | 13本 | 十分。当面は追加なし |
+| JavaScript/TypeScript | 11本 | 十分 |
+| React/Next.js/フロントエンド | 12本 | 十分 |
+| インフラ/Linux/Web基礎 | 16本 | 十分 |
+| AWS/IaC/CI/CD | 13本 | 十分。PR品質ゲートで1本追加余地あり |
 | NestJS/バックエンド | 2本 | 余地あり。AI×バックエンド方向で |
-| **AI/LangChain/Claude Code** | **7本** | **拡充優先。5本追加予定** |
+| **AI/LangChain/Claude Code** | **8本** | **拡充優先。5本追加予定** |
 | **医療IT/治験/規制対応** | **4本** | **拡充優先。4本追加予定** |
+| その他 | 1本 | |
 
 ---
 

@@ -82,15 +82,15 @@ location ~* \.(js|css|png|jpg|svg|ico|woff2)$ {
 // キャッシュ付きデータ取得の例
 async function getUser(userId: string) {
   const cacheKey = `user:${userId}`;
-  
+
   // キャッシュを確認
   const cached = await redis.get(cacheKey);
   if (cached) return JSON.parse(cached);
-  
+
   // DBから取得してキャッシュに保存（TTL: 5分）
   const user = await db.users.findById(userId);
   await redis.setex(cacheKey, 300, JSON.stringify(user));
-  
+
   return user;
 }
 ```
@@ -157,6 +157,8 @@ const posts = await db.posts.findAll({
 4. **Webサーバの同時接続数チューニング**——スループット改善に効く
 
 「とりあえずサーバを増やす」はコストがかかる割に根本解決にならないことが多い。計測してボトルネックを特定し、一番効果の高いところに集中することがチューニングの正攻法だ。
+
+理論的なチューニング手法だけでなく、データ量の増加に伴って実際にシステムが遅くなった経験からの改善記録も参考になる。[治験データが増えるにつれてシステムが遅くなった——パフォーマンス改善の実記録](/blog/clinical-trial-system-performance)に具体的なプロセスをまとめている。
 
 <AmazonCard
   asin="4774135666"

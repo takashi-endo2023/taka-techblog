@@ -162,7 +162,22 @@
       "Bash(curl -v --max-time 10 https://www.taka-techblog.com)",
       "Bash(sudo dscacheutil -flushcache)",
       "Bash(sudo killall -HUP mDNSResponder)",
-      "Bash(curl -sI --resolve \"www.taka-techblog.com:443:13.249.146.23\" https://www.taka-techblog.com)"
+      "Bash(curl -sI --resolve \"www.taka-techblog.com:443:13.249.146.23\" https://www.taka-techblog.com)",
+      "Bash(curl -s --resolve \"www.taka-techblog.com:443:13.249.146.23\" https://www.taka-techblog.com/)",
+      "Bash(curl -s --compressed --resolve \"www.taka-techblog.com:443:13.249.146.23\" https://www.taka-techblog.com/)",
+      "Bash(curl -sI --resolve \"www.taka-techblog.com:443:13.249.146.23\" \"https://www.taka-techblog.com/_astro/index.CrtSQZ8D.css\")",
+      "Bash(curl -sI --resolve \"www.taka-techblog.com:443:13.249.146.23\" \"https://www.taka-techblog.com/\")",
+      "Bash(awk -F'\"' '{print $2}')",
+      "Bash(awk -F'-' '{print $1\"-\"$2}')",
+      "Bash(grep -rn \" $\" --include=\"*.md\" --include=\"*.mdx\" .)",
+      "Bash(grep -rPn \" +$\" --include=\"*.md\" --include=\"*.mdx\" .)",
+      "Bash(convert /Users/takashi/projects/taka-techblog/public/images/portfolio/utagoe.png -resize '1200x>' -quality 85 /Users/takashi/projects/taka-techblog/public/images/portfolio/utagoe_compressed.png)",
+      "Bash(convert /Users/takashi/projects/taka-techblog/public/images/portfolio/utagoe.png -resize '1200x>' -quality 85 /Users/takashi/projects/taka-techblog/public/images/portfolio/utagoe.webp)",
+      "Bash(xargs sed -i '' 's/[[:space:]]*$//')",
+      "Bash(grep -E \"\\\\.\\(astro|ts\\)$\")",
+      "Bash(awk -F'|' '{print $4}')",
+      "Bash(awk -F'|' '{print $5}')",
+      "Bash(awk -F'|' '{print $2 \" | \" $3}')"
     ]
   }
 }
