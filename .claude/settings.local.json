@@ -135,7 +135,23 @@
       "Bash(sed -i '' 's/^published: false$/published: false\\\\ncanonical_url: \"https:\\\\/\\\\/www.taka-techblog.com\\\\/blog\\\\/typescript-react-nextjs-book-review\"/' articles/6fd4ae4ee5f36f.md)",
       "Bash(xargs sed -i '' 's/taka_tech1988/_taka_tech/g')",
       "mcp__filesystem__directory_tree",
-      "mcp__filesystem__read_text_file"
+      "mcp__filesystem__read_text_file",
+      "Bash(curl -s https://www.taka-techblog.com/)",
+      "Bash(curl -sI https://www.taka-techblog.com/)",
+      "Bash(curl -v --max-time 10 https://www.taka-techblog.com/)",
+      "Bash(gh run *)",
+      "Bash(aws s3api *)",
+      "Bash(gunzip -c /tmp/prod-index.html)",
+      "Bash(gunzip -c /tmp/prod-index.html > /tmp/prod-index-decoded.html && grep -c \"mobile-overlay\" /tmp/prod-index-decoded.html && grep \"mobile-overlay\" /tmp/prod-index-decoded.html | head -5)",
+      "Bash(gunzip -c)",
+      "Bash(gzip -9 -c /Users/takashi/projects/taka-techblog/dist/index.html)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('ID:', d['Invalidation']['Id'], '| Status:', d['Invalidation']['Status']\\)\")",
+      "Bash(git rm *)",
+      "Bash(python3 -m json.tool)",
+      "Bash(echo \"---exit:$?\")",
+      "Bash(dig www.taka-techblog.com)",
+      "Bash(dig taka-techblog.com)",
+      "Bash(aws route53 *)"
     ]
   }
 }
