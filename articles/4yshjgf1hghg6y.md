@@ -3,13 +3,13 @@ title: "mainブランチを捨てた——リリース1時間前のgit修羅場"
 emoji: "🔥"
 type: "tech"
 topics: ["Git", "DevOps"]
-published: true
+published: false
 published_at: "2025-03-11 09:00"
-canonical_url: "https://taka-techblog.com/blog/git-chaos-1hour-before-release"
+canonical_url: "https://www.taka-techblog.com/blog/git-chaos-1hour-before-release"
 ---
 
 :::message
-この記事は [taka-techblog](https://taka-techblog.com/blog/git-chaos-1hour-before-release?utm_source=zenn&utm_medium=referral) にも掲載しています。
+この記事は [taka-techblog](https://www.taka-techblog.com/blog/git-chaos-1hour-before-release?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
 
 リリース1時間前だった。
@@ -72,5 +72,5 @@ git cherry-pick <リリース対象のコミットのみ>
 
 ---
 
-他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
-X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)
+他の記事も読む → [taka-techblog.com](https://www.taka-techblog.com?utm_source=zenn&utm_medium=referral)
+X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)

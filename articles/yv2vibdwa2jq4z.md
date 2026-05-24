@@ -3,13 +3,13 @@ title: "グループ会社のIT環境をゼロから整備した話——MakeSho
 emoji: "🏪"
 type: "tech"
 topics: ["JavaScript", "DevOps"]
-published: true
+published: false
 published_at: "2025-06-24 09:00"
-canonical_url: "https://taka-techblog.com/blog/makeshop-technical-notes"
+canonical_url: "https://www.taka-techblog.com/blog/makeshop-technical-notes"
 ---
 
 :::message
-この記事は [taka-techblog](https://taka-techblog.com/blog/makeshop-technical-notes?utm_source=zenn&utm_medium=referral) にも掲載しています。
+この記事は [taka-techblog](https://www.taka-techblog.com/blog/makeshop-technical-notes?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
 
 グループ会社が新しく設立されたとき、IT周りの整備を代行することになった。
@@ -97,5 +97,5 @@ MakeShopのテンプレートにはこの独自タグが散在している。`{{
 
 ---
 
-他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
-X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)
+他の記事も読む → [taka-techblog.com](https://www.taka-techblog.com?utm_source=zenn&utm_medium=referral)
+X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)

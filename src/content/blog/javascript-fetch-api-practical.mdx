@@ -1,0 +1,232 @@
+---
+title: "Fetch APIで非同期通信をマスターする——GET・POST・エラーハンドリング・React連携まで"
+description: "JavaScriptのFetch APIの基本から、POST送信・エラーハンドリング・タイムアウト・ReactのuseEffectとの組み合わせまで実務で使うパターンをコード例で整理する。"
+pubDate: "2026-07-15"
+tags: ["JavaScript", "TypeScript", "React"]
+---
+
+import AmazonCard from '../../components/AmazonCard.astro';
+
+`XMLHttpRequest`の時代は終わり、今はFetch APIが非同期通信の標準だ。
+
+async/awaitと組み合わせれば直感的に書けるが、エラーハンドリングやタイムアウトなど、知っておかないとハマるポイントがある。実務でよく使うパターンをまとめる。
+
+---
+
+## 基本のGETリクエスト
+
+```ts
+// シンプルなGET
+const res = await fetch('https://api.example.com/users');
+const data = await res.json();
+console.log(data);
+```
+
+**注意点:** `fetch`はHTTPエラー（404・500など）でも`Promise`を`reject`しない。`res.ok`で確認が必要だ。
+
+```ts
+// ❌ これだとHTTPエラーを検知できない
+const res = await fetch('/api/users');
+const data = await res.json(); // 404でもここが実行される
+
+// ✅ res.ok を確認する
+const res = await fetch('/api/users');
+if (!res.ok) {
+  throw new Error(`HTTP error: ${res.status}`);
+}
+const data = await res.json();
+```
+
+---
+
+## 汎用のfetchラッパーを作る
+
+毎回エラーチェックを書くのは冗長なので、ラッパー関数を作るのが実務では定石だ。
+
+```ts
+class HttpError extends Error {
+  constructor(public status: number, message: string) {
+    super(message);
+    this.name = 'HttpError';
+  }
+}
+
+async function apiFetch<T>(
+  url: string,
+  options?: RequestInit
+): Promise<T> {
+  const res = await fetch(url, {
+    headers: {
+      'Content-Type': 'application/json',
+      ...options?.headers,
+    },
+    ...options,
+  });
+
+  if (!res.ok) {
+    const message = await res.text().catch(() => `HTTP ${res.status}`);
+    throw new HttpError(res.status, message);
+  }
+
+  return res.json() as Promise<T>;
+}
+
+// 使い方
+type User = { id: number; name: string };
+const user = await apiFetch<User>('/api/users/1');
+```
+
+---
+
+## POSTリクエスト
+
+```ts
+type CreateUserInput = { name: string; email: string };
+type User = { id: number; name: string; email: string };
+
+async function createUser(input: CreateUserInput): Promise<User> {
+  return apiFetch<User>('/api/users', {
+    method: 'POST',
+    body: JSON.stringify(input),
+  });
+}
+```
+
+---
+
+## 認証ヘッダーの付与
+
+```ts
+// JWTトークンをAuthorizationヘッダーに含める
+async function authenticatedFetch<T>(url: string, options?: RequestInit): Promise<T> {
+  const token = localStorage.getItem('access_token');
+  return apiFetch<T>(url, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ...options?.headers,
+    },
+  });
+}
+```
+
+---
+
+## タイムアウトの実装
+
+Fetch APIにはタイムアウト機能が標準でないため、`AbortController`で実装する。
+
+```ts
+async function fetchWithTimeout<T>(
+  url: string,
+  timeoutMs: number = 10000,
+  options?: RequestInit
+): Promise<T> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await apiFetch<T>(url, {
+      ...options,
+      signal: controller.signal,
+    });
+  } catch (error) {
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      throw new Error(`Request timed out after ${timeoutMs}ms`);
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+```
+
+---
+
+## ReactのuseEffectと組み合わせる
+
+```tsx
+type Post = { id: number; title: string; body: string };
+
+function PostDetail({ postId }: { postId: number }) {
+  const [post, setPost] = useState<Post | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false; // クリーンアップ時の二重実行を防ぐ
+
+    async function loadPost() {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const data = await apiFetch<Post>(`/api/posts/${postId}`);
+        if (!cancelled) setPost(data);
+      } catch (err) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'エラーが発生しました');
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    }
+
+    loadPost();
+    return () => { cancelled = true; }; // クリーンアップ
+  }, [postId]);
+
+  if (isLoading) return <p>読み込み中...</p>;
+  if (error) return <p>エラー: {error}</p>;
+  if (!post) return null;
+
+  return (
+    <article>
+      <h1>{post.title}</h1>
+      <p>{post.body}</p>
+    </article>
+  );
+}
+```
+
+---
+
+## Next.js App Router でのfetch
+
+App Routerでは`fetch`がキャッシュ拡張されており、Server Components内でそのまま使える。
+
+```ts
+// app/users/page.tsx（Server Component）
+export default async function UsersPage() {
+  // デフォルトでキャッシュされる
+  const users = await fetch('https://api.example.com/users').then(r => r.json());
+
+  // キャッシュしない（毎回フェッチ）
+  const liveData = await fetch('/api/realtime', { cache: 'no-store' }).then(r => r.json());
+
+  // 一定時間でrevalidate
+  const news = await fetch('/api/news', { next: { revalidate: 60 } }).then(r => r.json());
+
+  return <div>{/* ... */}</div>;
+}
+```
+
+---
+
+## まとめ
+
+| パターン | ポイント |
+|---|---|
+| 基本GET | `res.ok`チェックを忘れない |
+| POST | `body: JSON.stringify()`でシリアライズ |
+| エラーハンドリング | ラッパー関数で共通化する |
+| タイムアウト | `AbortController`で実装 |
+| React連携 | `cancelled`フラグでアンマウント後の更新を防ぐ |
+| Next.js App Router | `cache`オプションでキャッシュ戦略を指定 |
+
+Fetch APIの基礎は[JavaScript本格入門](/blog/javascript-honkaku-nyumon-review)の10章で丁寧に解説されている。
+
+<AmazonCard
+  asin="4297132885"
+  title="改訂3版 JavaScript本格入門 ～モダンスタイルによる基礎から現場での応用まで"
+  description="山田祥寛 著 ／ 技術評論社"
+/>

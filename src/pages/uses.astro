@@ -185,7 +185,23 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
       {
         name: 'Google Chrome',
         description:
-          'DevTools の使い勝手が一番慣れている。拡張機能も含めて開発用途はChrome一択。',
+          'DevTools の使い勝手が一番慣れている。開発用途はChrome一択。',
+      },
+      {
+        name: 'Wappalyzer',
+        description: '訪問しているサイトで使われている技術スタック（フレームワーク・CMS・解析ツールなど）を一目で確認できる。競合調査や技術選定の参考に。',
+      },
+      {
+        name: 'Eye Dropper（カラーピッカー）',
+        description: '画面上の任意の色のカラーコードをワンクリックで取得。デザイン確認や配色合わせのときに常用。',
+      },
+      {
+        name: 'GoFullPage',
+        description: 'ページ全体をスクロールなしで1枚の画像としてキャプチャ。仕様共有・デザインレビュー・スクリーンショット撮影に使っている。',
+      },
+      {
+        name: 'Meta SEO Inspector',
+        description: 'ページのメタタグ・OGPタグ・JSON-LDを一覧で確認できる。SEO設定の検証に必須。',
       },
     ],
   },
@@ -211,6 +227,10 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
         name: 'Notion',
         description:
           'タスク管理・議事録・仕様書まとめをNotionで一元管理。チームの情報共有基盤としても活用。',
+      },
+      {
+        name: 'Metalife',
+        description: 'バーチャルオフィスツール。在宅ワーク中のチームコミュニケーションに使用。アバターで同じ空間にいる感覚があり、ちょっとした声かけがしやすい。',
       },
     ],
   },
@@ -240,6 +260,48 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
       {
         name: 'Docker',
         description: '開発環境の統一とCI/CDに使用。本番はECSではなくEC2運用が多い。',
+      },
+      {
+        name: 'TablePlus',
+        description: 'GUIのDBクライアント。MySQL・PostgreSQL・Redisに対応。テーブル編集・クエリ実行がシンプルで使いやすく、開発中のデータ確認に常用。',
+      },
+    ],
+  },
+  {
+    title: 'サブスクリプション',
+    items: [
+      {
+        name: 'Claude MAX（会社用）',
+        description: 'Anthropicの最上位プラン。Claude Codeとあわせて開発フロー全体に組み込んでいる。コードレビュー・設計議論・ドキュメント整理を日常的に活用。会社で契約してチームに展開中。',
+      },
+      {
+        name: 'Udemy',
+        description: '技術領域のキャッチアップにサブスクリプションで契約。AWS・AI系のコースを中心に活用している。',
+      },
+    ],
+  },
+  {
+    title: 'おすすめ技術書',
+    items: [
+      {
+        name: 'TypeScript×React×Next.js 実践ガイド',
+        description: 'TypeScript・React・Next.jsを一冊で体系化したい人向け。実務で使える知識がコンパクトにまとまっており、チームの共通教材としても使いやすい。',
+        asin: '4297129167',
+      },
+      {
+        name: '改訂3版 JavaScript本格入門',
+        description: 'JSの基礎から現場での応用まで網羅したロングセラー。独学エンジニアが土台を固めるための一冊としておすすめ。',
+        asin: '4297132885',
+      },
+      {
+        name: 'Webを支える技術',
+        description: 'HTTP・REST・URI設計を根本から理解できる名著。フロントエンド・バックエンド問わず一度は読んでほしい。',
+        asin: '4774142042',
+      },
+      {
+        name: '24時間365日 サーバ/インフラを支える技術',
+        description: 'サーバー運用・インフラ設計の基礎が体系的にまとまっている。インフラ担当に限らずWebエンジニア全般に役立つ。',
+        asin: '4774135666',
       },
     ],
   },

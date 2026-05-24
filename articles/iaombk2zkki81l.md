@@ -3,13 +3,13 @@ title: "React×Next.jsの選択基準を実務から考える —SPA・SSR・SSG
 emoji: "⚛️"
 type: "tech"
 topics: ["React", "Next.js", "TypeScript"]
-published: true
+published: false
 published_at: "2026-05-12 09:00"
-canonical_url: "https://taka-techblog.com/blog/react-nextjs-selection"
+canonical_url: "https://www.taka-techblog.com/blog/react-nextjs-selection"
 ---
 
 :::message
-この記事は [taka-techblog](https://taka-techblog.com/blog/react-nextjs-selection?utm_source=zenn&utm_medium=referral) にも掲載しています。
+この記事は [taka-techblog](https://www.taka-techblog.com/blog/react-nextjs-selection?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
 
 ## はじめに
@@ -121,5 +121,5 @@ export async function generateStaticParams() {
 
 ---
 
-他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
-X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)
+他の記事も読む → [taka-techblog.com](https://www.taka-techblog.com?utm_source=zenn&utm_medium=referral)
+X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)

@@ -3,13 +3,13 @@ title: "CSV（コンピュータ化システムバリデーション）とは何
 emoji: "📋"
 type: "tech"
 topics: ["DevOps", "品質保証"]
-published: true
+published: false
 published_at: "2025-02-18 09:00"
-canonical_url: "https://taka-techblog.com/blog/csv-validation-guide"
+canonical_url: "https://www.taka-techblog.com/blog/csv-validation-guide"
 ---
 
 :::message
-この記事は [taka-techblog](https://taka-techblog.com/blog/csv-validation-guide?utm_source=zenn&utm_medium=referral) にも掲載しています。
+この記事は [taka-techblog](https://www.taka-techblog.com/blog/csv-validation-guide?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
 
 「CSV対応してますか？」と製薬メーカーから最初に聞かれたとき、正直「CSVってスプレッドシートのことじゃないの？」と思った。
@@ -93,5 +93,5 @@ CSVを「余計な手続き」と感じる時期があった。
 
 ---
 
-他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
-X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)
+他の記事も読む → [taka-techblog.com](https://www.taka-techblog.com?utm_source=zenn&utm_medium=referral)
+X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)

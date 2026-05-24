@@ -1,0 +1,191 @@
+---
+title: "JavaScriptのMap・Setを使いこなす——Arrayとの使い分けを実務目線で整理する"
+description: "JavaScriptのMapとSetを、よく使うArrayと比較しながら解説。重複除去・高速キー検索・順序保証など、実務でMapとSetを選ぶべき場面をコード例とともに整理する。"
+pubDate: "2026-07-08"
+tags: ["JavaScript", "TypeScript"]
+---
+
+import AmazonCard from '../../components/AmazonCard.astro';
+
+JavaScriptで連想配列や集合を扱うとき、オブジェクトやArrayで代用していないだろうか。
+
+`Map`と`Set`はES6で導入されたが、実務のコードで使われているケースはまだ少ない。「Arrayで書けるから」と惰性で選んでいると、パフォーマンスや可読性で損をしている場面がある。
+
+---
+
+## Mapとは
+
+キーと値のペアを管理するコレクション。オブジェクト（`{}`）との最大の違いは、**キーに任意の型を使える**ことと、**挿入順が保証される**ことだ。
+
+```ts
+// オブジェクトのキーは文字列またはSymbolのみ
+const obj: Record<string, number> = {};
+obj['user'] = 1;
+
+// Mapはオブジェクト・数値・関数などもキーにできる
+const map = new Map<string, number>();
+map.set('active', 10);
+map.set('inactive', 5);
+
+// 値の取得
+console.log(map.get('active')); // 10
+console.log(map.has('inactive')); // true
+console.log(map.size); // 2
+```
+
+### Mapの主要メソッド
+
+```ts
+const userRoles = new Map<number, string>();
+
+userRoles.set(1, 'admin');
+userRoles.set(2, 'editor');
+userRoles.set(3, 'viewer');
+
+// 取得
+userRoles.get(1); // 'admin'
+
+// 存在確認
+userRoles.has(4); // false
+
+// 削除
+userRoles.delete(3);
+
+// 全件ループ
+for (const [id, role] of userRoles) {
+  console.log(`${id}: ${role}`);
+}
+
+// 配列に変換
+const entries = [...userRoles.entries()];
+const keys = [...userRoles.keys()];
+const values = [...userRoles.values()];
+```
+
+---
+
+## Setとは
+
+重複しない値の集合を管理するコレクション。Arrayの重複除去・存在確認に使う場面が多い。
+
+```ts
+const tags = new Set<string>();
+tags.add('TypeScript');
+tags.add('React');
+tags.add('TypeScript'); // 重複は無視される
+
+console.log(tags.size); // 2
+console.log(tags.has('React')); // true
+
+// 削除
+tags.delete('React');
+
+// ループ
+for (const tag of tags) {
+  console.log(tag);
+}
+```
+
+---
+
+## ArrayとMap・Setの使い分け
+
+### 重複除去
+
+```ts
+// Array で重複除去（よく使われるがSetの方がシンプル）
+const arr = [1, 2, 2, 3, 3, 3];
+const unique = [...new Set(arr)]; // [1, 2, 3]
+```
+
+### 存在確認の速度
+
+```ts
+const items = ['apple', 'banana', 'cherry', /* 数万件 */];
+
+// ❌ Array.includes は O(n) — 大量データでは遅い
+items.includes('cherry');
+
+// ✅ Set.has は O(1) — 件数に関わらず高速
+const itemSet = new Set(items);
+itemSet.has('cherry');
+```
+
+大量データへの存在確認が頻繁に発生するなら、SetかMapを選ぶ。
+
+### カウント集計
+
+```ts
+const words = ['apple', 'banana', 'apple', 'cherry', 'banana', 'apple'];
+
+// Mapでカウント集計
+const countMap = new Map<string, number>();
+for (const word of words) {
+  countMap.set(word, (countMap.get(word) ?? 0) + 1);
+}
+// Map { 'apple' => 3, 'banana' => 2, 'cherry' => 1 }
+
+// 多い順にソート
+const sorted = [...countMap.entries()].sort((a, b) => b[1] - a[1]);
+```
+
+### キャッシュ（メモ化）
+
+```ts
+// 関数の結果をキャッシュする
+const cache = new Map<string, string>();
+
+function fetchWithCache(key: string): string {
+  if (cache.has(key)) {
+    return cache.get(key)!;
+  }
+  const result = expensiveOperation(key);
+  cache.set(key, result);
+  return result;
+}
+```
+
+---
+
+## TypeScriptでの型定義
+
+```ts
+// Map
+const userMap = new Map<number, { name: string; role: 'admin' | 'user' }>();
+
+// Set
+const selectedIds = new Set<number>();
+
+// 読み取り専用
+const readonlyMap: ReadonlyMap<string, number> = new Map([['a', 1]]);
+const readonlySet: ReadonlySet<string> = new Set(['x', 'y']);
+```
+
+---
+
+## 比較まとめ
+
+| 観点 | Array | Map | Set |
+|---|---|---|---|
+| 順序 | インデックス順 | 挿入順 | 挿入順 |
+| 重複 | 許可 | キー重複不可 | 値重複不可 |
+| 検索速度 | O(n) | O(1) | O(1) |
+| キーの型 | — | 任意の型 | — |
+| 主な用途 | リスト管理 | キー→値のマッピング | 重複なし集合 |
+
+---
+
+## 使い分けの指針
+
+- **順序付きリストの管理** → Array
+- **キーから値を引く（辞書・キャッシュ）** → Map
+- **重複除去・存在確認** → Set
+- **オブジェクトキーが文字列以外** → Map一択
+
+このトピックは[JavaScript本格入門](/blog/javascript-honkaku-nyumon-review)の5章（組み込みオブジェクト）で詳しく解説されている。
+
+<AmazonCard
+  asin="4297132885"
+  title="改訂3版 JavaScript本格入門 ～モダンスタイルによる基礎から現場での応用まで"
+  description="山田祥寛 著 ／ 技術評論社"
+/>

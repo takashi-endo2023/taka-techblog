@@ -58,7 +58,7 @@ const relatedPosts = allPosts
   .map(({ post }) => post);
 
 // JSON-LD
-const siteUrl = 'https://taka-techblog.com';
+const siteUrl = 'https://www.taka-techblog.com';
 const pageUrl = `${siteUrl}/blog/${post.id}`;
 const jsonLd = JSON.stringify({
   '@context': 'https://schema.org',
@@ -81,7 +81,7 @@ const jsonLd = JSON.stringify({
 });
 
 // X share URL
-const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(pageUrl)}&via=taka_tech1988`;
+const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(pageUrl)}&via=_taka_tech`;
 ---
 
 <BaseLayout

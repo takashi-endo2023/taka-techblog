@@ -1,0 +1,208 @@
+---
+title: "TypeScript Utility Types実践ガイド——Partial・Pick・Omitを実務でどう使うか"
+description: "TypeScriptのUtility Types（Partial、Required、Pick、Omit、Record、ReturnTypeなど）をReact/Next.js実務で使うパターンをコード例付きで解説。any禁止チームが型安全を保つための具体的なテクニック集。"
+pubDate: "2026-05-27"
+tags: ["TypeScript", "React"]
+---
+
+import AmazonCard from '../../components/AmazonCard.astro';
+
+TypeScriptを「なんとなく型をつけている」状態から抜け出すための最短ルートが、Utility Typesの習得だ。
+
+業務でReact/Next.jsを書いていると、「既存の型を少しだけ変形したい」という場面が頻繁に出てくる。そのたびに新しいinterfaceを書いていると型定義が爆発する。Utility Typesはそれを防ぐための道具箱だ。
+
+---
+
+## よく使うUtility Types一覧
+
+### `Partial<T>` — すべてのプロパティをオプショナルに
+
+```ts
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+// フォームの更新処理など、一部だけ変更するときに使う
+function updateUser(id: number, patch: Partial<User>) {
+  // patch.name, patch.email などが undefined でも型エラーにならない
+}
+```
+
+フォームの「編集」処理でよく使う。全フィールドを必須にしてしまうと、1フィールドだけ更新するAPIに対応できない。
+
+---
+
+### `Required<T>` — すべてのプロパティを必須に
+
+```ts
+interface Config {
+  host?: string;
+  port?: number;
+  timeout?: number;
+}
+
+// 初期値適用済みの設定オブジェクトは全フィールド保証したい
+type ResolvedConfig = Required<Config>;
+```
+
+デフォルト値を埋めた後のオブジェクトに使うことが多い。
+
+---
+
+### `Pick<T, K>` — 必要なプロパティだけ取り出す
+
+```ts
+interface Post {
+  id: number;
+  title: string;
+  body: string;
+  authorId: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// 一覧表示では id・title・createdAt だけ使う
+type PostSummary = Pick<Post, 'id' | 'title' | 'createdAt'>;
+```
+
+APIレスポンス全体の型から、コンポーネントが必要な部分だけを切り出すときに便利だ。
+
+---
+
+### `Omit<T, K>` — 不要なプロパティを除外する
+
+```ts
+// 作成時はIDと日時はまだない
+type CreatePostInput = Omit<Post, 'id' | 'createdAt' | 'updatedAt'>;
+```
+
+`Pick`と`Omit`は表裏の関係。除外するフィールドが少ないなら`Omit`、使うフィールドが少ないなら`Pick`を選ぶ。
+
+---
+
+### `Record<K, V>` — キーと値の型を指定したオブジェクト型
+
+```ts
+type Status = 'active' | 'inactive' | 'pending';
+type StatusLabel = Record<Status, string>;
+
+const labels: StatusLabel = {
+  active: '有効',
+  inactive: '無効',
+  pending: '審査中',
+};
+```
+
+Union型をキーにしてマッピングを作るときに最もよく使う。`{ [key: string]: string }` より型安全で、キーの網羅チェックも効く。
+
+---
+
+### `ReturnType<T>` — 関数の戻り値型を取得する
+
+```ts
+function fetchUser() {
+  return { id: 1, name: 'Taka', role: 'admin' as const };
+}
+
+type User = ReturnType<typeof fetchUser>;
+// → { id: number; name: string; role: "admin" }
+```
+
+関数の戻り値型を手動で定義するのではなく、実装から自動的に取り出せる。APIクライアント関数の戻り値型を使い回すときに便利だ。
+
+---
+
+### `Parameters<T>` — 関数の引数型を取得する
+
+```ts
+function createOrder(userId: number, items: string[], coupon?: string) {}
+
+type CreateOrderArgs = Parameters<typeof createOrder>;
+// → [userId: number, items: string[], coupon?: string]
+```
+
+既存関数の引数型を再利用したいときに使う。ラッパー関数を作るときに特に便利だ。
+
+---
+
+## 実務でよくある組み合わせパターン
+
+### フォーム入力値の型定義
+
+```ts
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  imageUrl: string;
+  isPublished: boolean;
+  createdAt: Date;
+}
+
+// フォームで編集できる項目だけ、かつすべてオプショナル
+type ProductFormInput = Partial<Omit<Product, 'id' | 'createdAt'>>;
+```
+
+---
+
+### APIレスポンス型からコンポーネントのProps型を導出する
+
+```ts
+type UserCardProps = Pick<User, 'id' | 'name' | 'email'> & {
+  onClick: (id: number) => void;
+};
+```
+
+型定義ファイルを1箇所で管理し、コンポーネントのPropsはそこから導出するパターン。`User`の定義が変わったとき、コンポーネント側の型も追従する。
+
+---
+
+### `Record` + Union型でマッピングを作る
+
+```ts
+type Permission = 'read' | 'write' | 'delete';
+type Role = 'admin' | 'editor' | 'viewer';
+
+const rolePermissions: Record<Role, Permission[]> = {
+  admin: ['read', 'write', 'delete'],
+  editor: ['read', 'write'],
+  viewer: ['read'],
+};
+```
+
+`Role`に新しい値を追加したとき、`rolePermissions`に追記し忘れるとコンパイルエラーになる。これがUtility Types + Union型の真価だ。
+
+---
+
+## チームで運用するときのコツ
+
+`any`を禁止しているチームでは、Utility Typesの使い方をドキュメントにまとめておくと効果的だ。よくある「型がうまく合わない」の9割は`Partial`・`Pick`・`Omit`で解決できる。
+
+型定義をどこに置くかも重要で、`types/`ディレクトリに集約して`Omit<User, 'password'>`のようなセキュリティ上の考慮が必要な型は必ずここで一元管理する。
+
+---
+
+## まとめ
+
+| Utility Type | 主な用途 |
+|---|---|
+| `Partial<T>` | フォーム更新・PATCHリクエスト |
+| `Required<T>` | デフォルト値適用後の型 |
+| `Pick<T, K>` | 一覧表示・Props型の絞り込み |
+| `Omit<T, K>` | 作成フォーム・パスワード除外 |
+| `Record<K, V>` | ステータスマッピング・権限定義 |
+| `ReturnType<T>` | 関数戻り値型の再利用 |
+| `Parameters<T>` | ラッパー関数の引数型 |
+
+これらを組み合わせることで、型定義の重複を減らしながら型安全を保てる。「型をつけるのが面倒」と感じている段階から抜け出す起点になるはずだ。
+
+この章の基礎は[TypeScriptとReact/Next.js実践本](/blog/typescript-react-nextjs-book-review)の2章で学んだ。入門書として今も手元に置いている。
+
+<AmazonCard
+  asin="4297129167"
+  title="TypeScriptとReact/Next.jsでつくる実践Webアプリケーション開発"
+  description="手島拓也 著 ／ 技術評論社"
+/>

@@ -3,13 +3,13 @@ title: "JavaScriptの非同期処理を整理する——コールバック・Pr
 emoji: "⏳"
 type: "tech"
 topics: ["JavaScript", "TypeScript"]
-published: true
+published: false
 published_at: "2023-08-22 09:00"
-canonical_url: "https://taka-techblog.com/blog/javascript-async-promise"
+canonical_url: "https://www.taka-techblog.com/blog/javascript-async-promise"
 ---
 
 :::message
-この記事は [taka-techblog](https://taka-techblog.com/blog/javascript-async-promise?utm_source=zenn&utm_medium=referral) にも掲載しています。
+この記事は [taka-techblog](https://www.taka-techblog.com/blog/javascript-async-promise?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
 
 非同期処理は、JavaScriptを「使える」人間と「わかっている」人間を分ける最初の壁だと思っている。
@@ -162,5 +162,5 @@ const fastExample = async (ids: number[]) => {
 
 ---
 
-他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
-X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)
+他の記事も読む → [taka-techblog.com](https://www.taka-techblog.com?utm_source=zenn&utm_medium=referral)
+X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)

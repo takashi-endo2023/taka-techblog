@@ -83,20 +83,30 @@ function isActive(href: string): boolean {
 </header>
 
 <script>
-  const toggle = document.getElementById('menu-toggle')!;
-  const mobileNav = document.getElementById('mobile-nav')!;
+  // View Transitions でページ遷移するたびにヘッダー DOM が差し替わるため、
+  // astro:page-load で毎回リスナーを再登録する
+  function initMenu() {
+    const toggle = document.getElementById('menu-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+    if (!toggle || !mobileNav) return;
 
-  toggle.addEventListener('click', (e) => {
-    e.stopPropagation(); // document の外側クリックハンドラに伝播させない
-    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-    toggle.setAttribute('aria-expanded', String(!isOpen));
-    mobileNav.setAttribute('aria-hidden', String(isOpen));
-    toggle.classList.toggle('open', !isOpen);
-    mobileNav.classList.toggle('open', !isOpen);
-  });
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+      mobileNav.setAttribute('aria-hidden', String(isOpen));
+      toggle.classList.toggle('open', !isOpen);
+      mobileNav.classList.toggle('open', !isOpen);
+    });
+  }
 
-  // Close on outside click
+  document.addEventListener('astro:page-load', initMenu);
+
+  // 外側クリックで閉じる — document に一度だけ登録し、毎回要素を参照し直す
   document.addEventListener('click', (e) => {
+    const toggle = document.getElementById('menu-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+    if (!toggle || !mobileNav) return;
     if (!toggle.contains(e.target as Node) && !mobileNav.contains(e.target as Node)) {
       toggle.setAttribute('aria-expanded', 'false');
       mobileNav.setAttribute('aria-hidden', 'true');

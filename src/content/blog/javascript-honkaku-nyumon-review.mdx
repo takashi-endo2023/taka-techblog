@@ -1,0 +1,114 @@
+---
+title: "改訂3版 JavaScript本格入門——100万部超えロングセラーを独学エンジニアが読んだ正直な評価"
+description: "ECMAScript 2022対応に大幅改訂されたJavaScript本格入門を、独学からテックリードになったエンジニアが評価。どの章が実務で役立ったか、どんな読者に向いているかを正直に書く。"
+pubDate: "2026-07-01"
+tags: ["JavaScript", "TypeScript", "書評"]
+---
+
+import AmazonCard from '../../components/AmazonCard.astro';
+
+JavaScriptの入門書を探すと必ずこの本の名前が出てくる。
+
+累計100万部超え、2010年の刊行から約100,000部の実績を持つロングセラーが、ECMAScript 2022対応で200ページ増の大幅改訂を経た。「日本で一番売れているJavaScriptの本」というキャッチフレーズに偽りはなく、今でも入門書の筆頭候補として挙がる一冊だ。
+
+<AmazonCard
+  asin="4297132885"
+  title="改訂3版 JavaScript本格入門 ～モダンスタイルによる基礎から現場での応用まで"
+  description="山田祥寛 著 ／ 技術評論社"
+/>
+
+独学でJavaScriptを始めたとき、そしてチームでJavaScript/TypeScriptを教える立場になったとき、この本を手元に置いてきた。その経験から正直に評価する。
+
+---
+
+## 本の全体構成
+
+章立てはこうなっている。
+
+1. **イントロダクション** — JavaScript/ECMAScriptとは、Node.jsと開発環境
+2. **基本的な書き方** — 変数・データ型・記法
+3. **演算子** — 算術・比較・論理・ビット演算
+4. **制御構文** — 条件分岐・繰り返し
+5. **組み込みオブジェクト** — String・Number・Date・Array・Map・Set・RegExp
+6. **関数** — 基本・3種の記法・スコープ・クロージャ・高度なテーマ
+7. **Objectオブジェクト** — プロトタイプの仕組み
+8. **オブジェクト指向構文** — クラス・カプセル化・継承・モジュール
+9. **DOM** — HTML操作・イベント処理
+10. **クライアントサイド応用** — Fetch API・Promise・Storage・Web Worker
+11. **現場の応用知識** — Node.js・Jest・Vite・ESLint・JSDoc
+
+前半（1〜6章）で構文の基礎、中盤（7〜8章）でオブジェクト指向、後半（9〜11章）で実践的な応用技術を扱う構成だ。
+
+---
+
+## 章ごとの評価
+
+### 5章：組み込みオブジェクト
+
+String・Number・Date・Array・Map・Set・RegExpをひとまとめに解説している。
+
+特に **Map・Setの解説が充実している点**は他の入門書と一線を画す。「Arrayとの使い分けをどこで学ぶか」と悩む読者が多いが、この章を読めばそれが解決する。RegExpも実務で使うレベルまで丁寧に扱われており、正規表現アレルギーを解消するのに良い章だ。
+
+### 6章：関数
+
+スコープ・クロージャ・thisの扱いが特に丁寧だ。JavaScriptで最もつまずきやすいポイントがここに集中しており、この章だけでも読む価値がある。アロー関数とthisの関係、クロージャを使ったプライベート変数パターンなど、実務直結の内容だ。
+
+### 7〜8章：プロトタイプ・オブジェクト指向
+
+プロトタイプチェーンの仕組みから入り、classはその「シンタックスシュガーである」という本質まで解説している。TypeScriptのclassを書くとき、内部でプロトタイプが動いていることを理解しているかどうかでデバッグ力が変わる。
+
+### 10〜11章：実践知識
+
+Fetch API・Promise・async/await・Jestなど、現場で避けて通れないトピックが揃っている。Vite・ESLint・JSDocまでカバーしており「この1冊で開発環境の全体像が把握できる」構成になっている。
+
+---
+
+## 既存のスピンオフ記事
+
+この本の各章をもとに、当ブログでは以下の深掘り記事を書いている。
+
+- [ES6+の新構文を実務でどう使うか](/blog/javascript-es6-modern-syntax) — Ch.2
+- [JavaScriptのスコープとthis](/blog/javascript-scope-closure) — Ch.6
+- [JavaScriptのArray高階関数](/blog/javascript-array-methods) — Ch.5
+- [JavaScriptの非同期処理](/blog/javascript-async-promise) — Ch.10
+- [JavaScriptのクラスとモジュール](/blog/javascript-class-module) — Ch.8
+- [ESLint・Jest・Viteで開発環境構築](/blog/javascript-dev-tools-eslint-jest) — Ch.11
+- [JavaScriptのMap・Setを使いこなす](/blog/javascript-map-set-practical) — Ch.5
+- [Fetch APIで非同期通信をマスターする](/blog/javascript-fetch-api-practical) — Ch.10
+- [JavaScriptの正規表現入門](/blog/javascript-regexp-practical) — Ch.5
+
+---
+
+## どんな人に向いているか
+
+| 読者タイプ | おすすめ度 |
+|---|---|
+| JavaScriptを初めて本格的に学ぶ | ★★★★★ |
+| 他言語経験者がJSに入門する | ★★★★★ |
+| 「なんとなく書けるが基礎が不安」な人 | ★★★★★ |
+| チームの新人に渡す1冊を探している | ★★★★☆ |
+| すでにTypeScriptで実務経験がある | ★★☆☆☆ |
+
+---
+
+## 正直に言うと
+
+辞書的に分厚い。800ページ超の本なので「最初から通読する」より「気になる章から読む」スタイルが合っている。
+
+DOM操作（9章）については、ReactやVueを使うモダンな開発では直接DOMを触るケースが減っているため、実務優先なら読み飛ばしても支障ない。むしろFetch API・Promise・Map/Setあたりに重点を置く方が費用対効果は高い。
+
+ECMAScript 2022対応の改訂3版は、古い版に比べて`structuredClone`・プライベートフィールド（`#field`）・論理代入演算子など最新構文がきちんと追加されている点が評価できる。
+
+---
+
+## まとめ
+
+JavaScriptを「なんとなく」から「わかって書く」状態に引き上げてくれる一冊だ。
+
+辞書的に手元に置いておき、詰まったときに参照するスタイルが長続きする使い方だと思う。独学エンジニアの最初の1冊としても、チームの新人に渡す教科書としても、今なお筆頭候補に挙がる理由がある。
+
+<AmazonCard
+  asin="4297132885"
+  title="改訂3版 JavaScript本格入門 ～モダンスタイルによる基礎から現場での応用まで"
+  description="山田祥寛 著 ／ 技術評論社"
+/>

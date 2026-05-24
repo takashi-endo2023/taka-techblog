@@ -3,13 +3,13 @@ title: "治験データが増えるにつれてシステムが遅くなった—
 emoji: "⚡"
 type: "tech"
 topics: ["NestJS", "TypeORM", "データベース", "パフォーマンス"]
-published: true
+published: false
 published_at: "2025-07-28 09:00"
-canonical_url: "https://taka-techblog.com/blog/clinical-trial-system-performance"
+canonical_url: "https://www.taka-techblog.com/blog/clinical-trial-system-performance"
 ---
 
 :::message
-この記事は [taka-techblog](https://taka-techblog.com/blog/clinical-trial-system-performance?utm_source=zenn&utm_medium=referral) にも掲載しています。
+この記事は [taka-techblog](https://www.taka-techblog.com/blog/clinical-trial-system-performance?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
 
 サービスインから1年半が過ぎた頃、治験システムの被験者一覧画面とレポート出力機能が「重い」と言われ始めた。
@@ -159,5 +159,5 @@ async getSubjects(page: number, perPage: number) {
 
 ---
 
-他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
-X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)
+他の記事も読む → [taka-techblog.com](https://www.taka-techblog.com?utm_source=zenn&utm_medium=referral)
+X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)

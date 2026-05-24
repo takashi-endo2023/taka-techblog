@@ -3,13 +3,13 @@ title: "コードより先に要件を言語化させる——会話が成立し
 emoji: "📐"
 type: "idea"
 topics: ["チーム開発", "マネジメント"]
-published: true
+published: false
 published_at: "2025-02-04 09:00"
-canonical_url: "https://taka-techblog.com/blog/junior-engineer-spec-before-code"
+canonical_url: "https://www.taka-techblog.com/blog/junior-engineer-spec-before-code"
 ---
 
 :::message
-この記事は [taka-techblog](https://taka-techblog.com/blog/junior-engineer-spec-before-code?utm_source=zenn&utm_medium=referral) にも掲載しています。
+この記事は [taka-techblog](https://www.taka-techblog.com/blog/junior-engineer-spec-before-code?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
 
 「会話が成立しない」と書くと聞こえが悪いが、正直なところそういう状態だった。
@@ -80,5 +80,5 @@ YesかNoで答えられるように聞いても、聞いていないことまで
 
 ---
 
-他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
-X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)
+他の記事も読む → [taka-techblog.com](https://www.taka-techblog.com?utm_source=zenn&utm_medium=referral)
+X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)

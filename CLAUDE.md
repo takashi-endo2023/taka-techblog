@@ -13,6 +13,8 @@
 
 ## 記事を書くとき（必須）
 
+**週次運用の詳細手順 → `docs/operations.md`**
+
 ブログ記事を新規作成・更新するときは、**必ず以下の2ファイルをセットで作成・更新する**。
 
 ### 1. ブログ記事（taka-techblog.com）
@@ -30,6 +32,7 @@
   ```
 - `updatedDate` は既存記事を更新したときのみ追加
 - `.mdx` は AmazonCard コンポーネントを使う記事のみ。通常は `.md`
+- **新記事を書いたら、既存記事の本文中に今書いた記事へのリンクを1つ貼る**（SEO内部リンク強化。ウィジェットではなく本文中に自然な文脈で）
 
 ### 2. Zenn記事（zenn.dev）
 
@@ -43,33 +46,22 @@
   type: "tech"   # tech: 技術記事 / idea: アイデア・考察
   topics: []     # 最大5つ、Zennの既存トピック名に合わせる
   published: true
+  canonical_url: "https://www.taka-techblog.com/blog/<slug>"
   ---
   ```
 - 本文冒頭に必ずメッセージブロックを追加:
   ```
   :::message
-  この記事は [taka-techblog](https://taka-techblog.com/blog/<slug>?utm_source=zenn&utm_medium=referral) にも掲載しています。
+  この記事は [taka-techblog](https://www.taka-techblog.com/blog/<slug>?utm_source=zenn&utm_medium=referral) にも掲載しています。
   :::
   ```
 - 本文末尾に必ずフッターを追加:
   ```
   ---
 
-  他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
-  X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)
+  他の記事も読む → [taka-techblog.com](https://www.taka-techblog.com?utm_source=zenn&utm_medium=referral)
+  X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)
   ```
-
-### よく使う Zenn topics 対応表
-
-| ブログ tags | Zenn topics |
-|---|---|
-| TypeScript | TypeScript |
-| React / Next.js | React, Next.js |
-| NestJS | NestJS |
-| AWS | AWS |
-| Claude Code / LangChain | AI, LLM |
-| チーム開発 | チーム開発 |
-| キャリア | キャリア |
 
 ---
 
@@ -136,7 +128,7 @@ src/
 articles/             ← Zenn記事（push で自動公開）
 books/                ← Zenn本（現在未使用）
 infra/                ← AWS CDK
-docs/                 ← 運営ドキュメント（todo.md, article-plan.md など）
+docs/                 ← 運営ドキュメント（operations.md, article-plan.md）
 public/
   images/portfolio/   ← ポートフォリオのスクリーンショット置き場
   logo.png            ← 猫ロゴ（ファビコン・アバターに使用）
@@ -150,7 +142,7 @@ public/
 - 新しいサブドメイン/サービスを追加するときは `infra/cdk.json` にコンテキスト値を追加し、`infra/lib/blog-stack.ts` で参照する
 - CDK デプロイ前に `npx tsc --noEmit` でタイプチェックを通す
 - Lambda のコードは CI/CD でデプロイするため、CDK では `Code.fromInline` のプレースホルダーを使う
-- デプロイ後の Output 値は `docs/todo.md` の表に記録する
+- デプロイ後の Output 値は `docs/operations.md` の進行中タスクに記録する
 
 ### 新しいサービスを追加するパターン（CDK）
 
@@ -163,10 +155,21 @@ public/
 
 ---
 
+## X（@_taka_tech）投稿
+
+**詳細フォーマット・投稿順リスト → `docs/operations.md`**
+
+- 記事公開時は必ずX告知する。リンクはブログURL（AdSense・アフィリエイト収益のため）
+- ハッシュタグは1〜2個まで
+- ZennのURLは貼らない（Zennは自然流入に任せる）
+- 自己紹介ポストはプロフィールに固定したまま維持する
+
+---
+
 ## ブランド・表記のルール
 
 - サイト名: `taka-techblog`（小文字ハイフン繋ぎ、スペースなし）
-- X アカウント: `@taka_tech1988`
+- X アカウント: `@_taka_tech`
 - GitHub: `takashi-endo2023`
 - ページタイトル形式: `ページ名 | taka-techblog`
 - 絵文字はコードには書かない（ユーザーから明示的に求められた場合のみ）

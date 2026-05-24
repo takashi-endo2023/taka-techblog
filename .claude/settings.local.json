@@ -120,7 +120,20 @@
       "Bash(grep -v \"^$\")",
       "Bash(mkdir -p /Users/takashi/projects/taka-techblog/src/pages/blog/tags/\\\\[tag\\\\])",
       "Bash(grep -v '^$')",
-      "WebSearch"
+      "WebSearch",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://www.taka-techblog.com/sitemap.xml)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://www.taka-techblog.com/sitemap-index.xml)",
+      "Bash(curl -s -o /dev/null -w \"taka-techblog.com → %{http_code} → %{redirect_url}\\\\n\" https://taka-techblog.com/blog/career-change-to-engineer/)",
+      "Bash(curl -s -o /dev/null -w \"www.taka-techblog.com → %{http_code} → %{redirect_url}\\\\n\" https://www.taka-techblog.com/blog/career-change-to-engineer/)",
+      "Bash(grep -v \"\\\\.mdx$\")",
+      "Bash(xargs -I{} bash -c 'echo \"=== {} ===\"; head -3 {}')",
+      "Bash(grep ^title: articles/__TRACKED_VAR__)",
+      "Bash(xargs -I{} head -3 {})",
+      "Bash(sed -i '' 's/^published: false$/published: false\\\\ncanonical_url: \"https:\\\\/\\\\/www.taka-techblog.com\\\\/blog\\\\/server-infra-book-review\"/' articles/47dc7ddfc7c40f.md)",
+      "Bash(sed -i '' 's/^published: false$/published: false\\\\ncanonical_url: \"https:\\\\/\\\\/www.taka-techblog.com\\\\/blog\\\\/web-technology-book-review\"/' articles/0d3f099034a005.md)",
+      "Bash(sed -i '' 's/^published: false$/published: false\\\\ncanonical_url: \"https:\\\\/\\\\/www.taka-techblog.com\\\\/blog\\\\/javascript-honkaku-nyumon-review\"/' articles/ec31073bda0f55.md)",
+      "Bash(sed -i '' 's/^published: false$/published: false\\\\ncanonical_url: \"https:\\\\/\\\\/www.taka-techblog.com\\\\/blog\\\\/typescript-react-nextjs-book-review\"/' articles/6fd4ae4ee5f36f.md)",
+      "Bash(xargs sed -i '' 's/taka_tech1988/_taka_tech/g')"
     ]
   }
 }

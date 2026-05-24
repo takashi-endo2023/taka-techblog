@@ -4,11 +4,11 @@ emoji: "🧭"
 type: "idea"
 topics: ["チーム開発", "キャリア", "マネジメント"]
 published: true
-canonical_url: "https://taka-techblog.com/blog/techLead-first-90-days"
+canonical_url: "https://www.taka-techblog.com/blog/techLead-first-90-days"
 ---
 
 :::message
-この記事は [taka-techblog](https://taka-techblog.com/blog/techLead-first-90-days?utm_source=zenn&utm_medium=referral) にも掲載しています。
+この記事は [taka-techblog](https://www.taka-techblog.com/blog/techLead-first-90-days?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
 
 テックリードになった最初の週、私は「何をすべきかわからない」状態だった。
@@ -109,5 +109,5 @@ PRに記載すべき項目をテンプレート化した。
 
 ---
 
-他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
-X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)
+他の記事も読む → [taka-techblog.com](https://www.taka-techblog.com?utm_source=zenn&utm_medium=referral)
+X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)

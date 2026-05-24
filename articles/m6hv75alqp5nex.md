@@ -3,13 +3,13 @@ title: "テックリードと係長を兼任するプレイングマネージャ
 emoji: "⚖️"
 type: "idea"
 topics: ["マネジメント", "キャリア", "チーム開発"]
-published: true
+published: false
 published_at: "2025-04-22 09:00"
-canonical_url: "https://taka-techblog.com/blog/playing-manager-reality"
+canonical_url: "https://www.taka-techblog.com/blog/playing-manager-reality"
 ---
 
 :::message
-この記事は [taka-techblog](https://taka-techblog.com/blog/playing-manager-reality?utm_source=zenn&utm_medium=referral) にも掲載しています。
+この記事は [taka-techblog](https://www.taka-techblog.com/blog/playing-manager-reality?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
 
 「プレイングマネージャー」という言葉は聞こえがいい。でも実態は、**常に間に入り続ける人間**だ。
@@ -66,5 +66,5 @@ canonical_url: "https://taka-techblog.com/blog/playing-manager-reality"
 
 ---
 
-他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
-X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)
+他の記事も読む → [taka-techblog.com](https://www.taka-techblog.com?utm_source=zenn&utm_medium=referral)
+X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)

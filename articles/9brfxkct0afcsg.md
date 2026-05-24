@@ -3,13 +3,13 @@ title: "NestJS + LangChainで治験CRMにAI機能を追加した構成メモ"
 emoji: "⚙️"
 type: "tech"
 topics: ["NestJS", "LangChain", "AI"]
-published: true
+published: false
 published_at: "2025-10-07 09:00"
-canonical_url: "https://taka-techblog.com/blog/nestjs-langchain-crm-architecture"
+canonical_url: "https://www.taka-techblog.com/blog/nestjs-langchain-crm-architecture"
 ---
 
 :::message
-この記事は [taka-techblog](https://taka-techblog.com/blog/nestjs-langchain-crm-architecture?utm_source=zenn&utm_medium=referral) にも掲載しています。
+この記事は [taka-techblog](https://www.taka-techblog.com/blog/nestjs-langchain-crm-architecture?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
 
 引き継いだ治験CRMにAI機能を追加したときの構成と判断を記録しておく。
@@ -138,5 +138,5 @@ Re-Actエージェントは動いている。プロンプトとツールのdescr
 
 ---
 
-他の記事も読む → [taka-techblog.com](https://taka-techblog.com?utm_source=zenn&utm_medium=referral)
-X でも発信中 → [@taka_tech1988](https://x.com/taka_tech1988)
+他の記事も読む → [taka-techblog.com](https://www.taka-techblog.com?utm_source=zenn&utm_medium=referral)
+X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)
