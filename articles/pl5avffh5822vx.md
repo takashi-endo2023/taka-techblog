@@ -84,7 +84,7 @@ canonical_url: "https://www.taka-techblog.com/blog/techlead-mask-3years"
 
 ---
 
-**戦術的なテックリードの話はこちら**: [テックリード就任最初の90日でやったこと](/blog/techLead-first-90-days)
+**戦術的なテックリードの話はこちら**: [テックリード就任最初の90日でやったこと](/blog/techlead-first-90-days)
 
 ---
 
