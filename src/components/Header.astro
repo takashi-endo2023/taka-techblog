@@ -124,8 +124,9 @@ function isActive(href: string): boolean {
     menuAbortCtrl = new AbortController();
     const { signal } = menuAbortCtrl;
 
-    const toggle = document.getElementById('menu-toggle') as HTMLButtonElement | null;
-    const overlay = document.getElementById('mobile-overlay') as HTMLElement | null;
+    // null キャストを外してクロージャ内の型エラーを回避。ランタイムガードは直後の if で担保。
+    const toggle = document.getElementById('menu-toggle') as HTMLButtonElement;
+    const overlay = document.getElementById('mobile-overlay') as HTMLElement;
     if (!toggle || !overlay) return;
 
     const focusableEls = overlay.querySelectorAll<HTMLElement>('[tabindex]');
@@ -188,15 +189,16 @@ function isActive(href: string): boolean {
   // ページ遷移開始直前（戻るボタン含む）にスクロールロックを必ず解除。
   // メニューを開いたまま遷移した場合に body { position:fixed } が残るのを防ぐ。
   document.addEventListener('astro:before-preparation', () => {
-    const toggle = document.getElementById('menu-toggle');
-    const overlay = document.getElementById('mobile-overlay');
-    if (toggle?.getAttribute('aria-expanded') === 'true') {
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.classList.remove('open');
-      overlay?.classList.remove('open');
-      overlay?.setAttribute('aria-hidden', 'true');
-      unlockScroll();
-    }
+    const toggle = document.getElementById('menu-toggle') as HTMLButtonElement | null;
+    const overlay = document.getElementById('mobile-overlay') as HTMLElement | null;
+    // null チェックと aria-expanded を一括確認（optional chaining では TS が非 null に絞れないため明示的に分岐）
+    if (!toggle || toggle.getAttribute('aria-expanded') !== 'true') return;
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'メニューを開く');
+    toggle.classList.remove('open');
+    overlay?.classList.remove('open');
+    overlay?.setAttribute('aria-hidden', 'true');
+    unlockScroll();
   });
 
   // 初回ロード用フォールバック（<ClientRouter> が先に astro:page-load を発火するレース対策）

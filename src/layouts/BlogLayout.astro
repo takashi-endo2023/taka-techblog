@@ -92,7 +92,7 @@ const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tit
   pubDate={pubDate}
 >
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={jsonLd} />
+    <script type="application/ld+json" is:inline set:html={jsonLd} />
   </Fragment>
 
   <!-- Reading progress bar -->
