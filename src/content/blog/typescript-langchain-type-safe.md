@@ -4,6 +4,10 @@ description: "LangChain.jsの型定義の扱い方からストリーミングレ
 pubDate: "2026-02-04"
 updatedDate: "2026-05-22"
 tags: ["TypeScript", "LangChain", "AI開発"]
+zennHash: "ifgf7vdg029g81"
+zennEmoji: "🔷"
+zennType: "tech"
+zennTopics: ["TypeScript","LangChain","AI"]
 ---
 
 ## はじめに

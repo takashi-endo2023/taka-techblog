@@ -2,7 +2,7 @@
 title: "誰も採用をやらないから、自分でやることにした"
 emoji: "🙋"
 type: "idea"
-topics: ["マネジメント", "キャリア"]
+topics: ["マネジメント","キャリア"]
 published: false
 published_at: "2025-06-03 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/engineer-hiring-lessons"
@@ -11,6 +11,7 @@ canonical_url: "https://www.taka-techblog.com/blog/engineer-hiring-lessons"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/engineer-hiring-lessons?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 「最終面接、通しますか？通しませんか？」
 

@@ -2,7 +2,7 @@
 title: "グループ会社のIT環境をゼロから整備した話——MakeShopとGA4と諸々"
 emoji: "🏪"
 type: "tech"
-topics: ["JavaScript", "DevOps"]
+topics: ["JavaScript","DevOps"]
 published: false
 published_at: "2025-06-24 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/makeshop-technical-notes"
@@ -11,6 +11,7 @@ canonical_url: "https://www.taka-techblog.com/blog/makeshop-technical-notes"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/makeshop-technical-notes?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 グループ会社が新しく設立されたとき、IT周りの整備を代行することになった。
 
@@ -94,6 +95,8 @@ MakeShopのテンプレートにはこの独自タグが散在している。`{{
 もう一つ気づいたのは、**エンジニアじゃない人が引き継いで使う**システムを作ることの難しさだ。設定の余地を残しすぎると混乱を招く。逆に制約しすぎると何もできなくなる。「引き継ぎやすい状態」を意識してドキュメントを整備したのは、本業の経験が活きた部分だった。
 
 コーポレートサイトのWordPressも含め、最終的にはグループ会社のスタッフが一通り自分で触れる状態で引き渡した。
+
+グループ会社のIT整備と同様に、本体の治験CRMを外部ベンダーから内製化した3年間の全プロセスは[外部ベンダーから内製化した3年間 — 年間480万円の固定費をゼロにするまで](/blog/naisei-kansei)に書いている。
 
 ---
 

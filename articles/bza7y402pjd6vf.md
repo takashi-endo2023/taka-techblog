@@ -2,7 +2,7 @@
 title: "Claude Codeを設計の壁打ち相手として使う：アーキテクチャ相談の実践"
 emoji: "🤖"
 type: "tech"
-topics: ["AI", "LLM", "Claude Code"]
+topics: ["AI","LLM","Claude Code"]
 published: false
 published_at: "2026-04-15 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/claude-code-as-design-partner"
@@ -11,6 +11,7 @@ canonical_url: "https://www.taka-techblog.com/blog/claude-code-as-design-partner
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/claude-code-as-design-partner?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 「自分が知らない領域の機能を設計する」という場面が、エンジニアには思ったより多い。
 

@@ -3,6 +3,10 @@ title: "Docker開発環境を標準化してチームの「動かない」を減
 description: "「自分のPCでは動く」問題を撲滅するためにDocker開発環境を整備した話。docker-compose設計・.env管理・M1/M2 Macの罠・NestJS+PostgreSQL構成まで実践的にまとめます。"
 pubDate: "2025-02-02"
 tags: ["DevOps", "チーム開発", "NestJS"]
+zennHash: "3b3k0kxr0bvqfz"
+zennEmoji: "🐳"
+zennType: "tech"
+zennTopics: ["Docker","チーム開発","DevOps"]
 ---
 
 ## 「自分のPCでは動く」が多発していた

@@ -2,7 +2,7 @@
 title: "Next.jsのSSR・SSG・ISRを実務でどう使い分けるか"
 emoji: "⚡"
 type: "tech"
-topics: ["Next.js", "React", "フロントエンド"]
+topics: ["Next.js","React","フロントエンド"]
 published: false
 published_at: "2024-04-02 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/nextjs-rendering-deep-dive"
@@ -11,6 +11,8 @@ canonical_url: "https://www.taka-techblog.com/blog/nextjs-rendering-deep-dive"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/nextjs-rendering-deep-dive?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
+
 
 Next.jsを使い始めたとき、SSR・SSG・ISRの使い分けで最初に詰まった。
 
@@ -134,10 +136,7 @@ ISRのつもりで `revalidate` を書いたが、ページコンポーネント
 
 レンダリング手法の選択は「最新データが必要か」「誰に対しても同じ内容か」の2軸で整理すると判断しやすい。
 
-SSRをデフォルトにすると安全に見えるが、パフォーマンスとコストで損をする。実務ではページごとに最適な手法を選ぶ習慣をつけることが重要だ。
-
-
-📚 **[TypeScriptとReact/Next.jsでつくる実践Webアプリケーション開発](https://www.amazon.co.jp/dp/4297129167)** — 手島拓也 著 ／ 技術評論社 —Atomic Design・Storybook・Next.jsレンダリング・SEO・テストまで網羅
+SSRをデフォルトにすると安全に見えるが、パフォーマンスとコストで損をする。実務ではページごとに最適な手法を選ぶ習慣をつけることが重要だ。レンダリング手法を選んだ後に取り組むべきSEO実装については、[Next.jsでSEOを実装するときに押さえるべきこと——メタデータからJSON-LDまで](/blog/nextjs-seo-implementation)にまとめている。
 
 ---
 

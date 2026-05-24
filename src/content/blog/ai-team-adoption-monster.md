@@ -3,6 +3,10 @@ title: "AIを社内に広めたら、本部長がモンスターになった話"
 description: "個人アカウントでこっそり使い始めたAIを社内に広めた経緯。使わない部下、使われすぎた本部長、その間でAIの限界値を知った自分。3者の姿から見えてきたこと。"
 pubDate: "2026-05-10"
 tags: ["AI開発", "Claude Code", "チーム開発", "組織設計"]
+zennHash: "5tnkntl5zu16g8"
+zennEmoji: "👾"
+zennType: "idea"
+zennTopics: ["AI","LLM","チーム開発"]
 ---
 
 最初は個人アカウントで、こっそり使っていた。

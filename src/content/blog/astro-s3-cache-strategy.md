@@ -3,6 +3,10 @@ title: "AstroサイトのS3+CloudFrontキャッシュ戦略：静的サイトを
 description: "AstroのビルドアーティファクトをS3+CloudFrontで配信するときのキャッシュ設計。immutableキャッシュとno-cacheの使い分け・デプロイ後の即時反映・CloudFront Invalidationのコスト管理まで。"
 pubDate: "2025-03-15"
 tags: ["DevOps", "AWS", "パフォーマンス"]
+zennHash: "ub7xsifddzdvwm"
+zennEmoji: "⚡"
+zennType: "tech"
+zennTopics: ["AWS","DevOps"]
 ---
 
 ## 静的サイトのキャッシュ設計は意外と奥が深い

@@ -2,7 +2,7 @@
 title: "CSV（コンピュータ化システムバリデーション）とは何か — 医療ITエンジニア目線で解説"
 emoji: "📋"
 type: "tech"
-topics: ["DevOps", "品質保証"]
+topics: ["DevOps","品質保証"]
 published: false
 published_at: "2025-02-18 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/csv-validation-guide"
@@ -11,6 +11,7 @@ canonical_url: "https://www.taka-techblog.com/blog/csv-validation-guide"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/csv-validation-guide?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 「CSV対応してますか？」と製薬メーカーから最初に聞かれたとき、正直「CSVってスプレッドシートのことじゃないの？」と思った。
 
@@ -60,7 +61,7 @@ CSVの代表的なドキュメント構成：
 - **OQ（Operational Qualification）**: 仕様通りに動作するか確認（機能テスト）
 - **PQ（Performance Qualification）**: 実際の業務環境で意図した通りに機能するか確認
 
-自社では、OQをCI/CDパイプラインの自動テストと対応づけ、テスト実行ログをバリデーション証跡として保管している。
+自社では、OQをCI-CDパイプラインの自動テストと対応づけ、テスト実行ログをバリデーション証跡として保管している。
 
 ## 開発フローへの組み込み方
 

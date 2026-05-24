@@ -2,7 +2,7 @@
 title: "コードより先に要件を言語化させる——会話が成立しない部下への対処"
 emoji: "📐"
 type: "idea"
-topics: ["チーム開発", "マネジメント"]
+topics: ["チーム開発","マネジメント"]
 published: false
 published_at: "2025-02-04 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/junior-engineer-spec-before-code"
@@ -11,6 +11,7 @@ canonical_url: "https://www.taka-techblog.com/blog/junior-engineer-spec-before-c
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/junior-engineer-spec-before-code?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 「会話が成立しない」と書くと聞こえが悪いが、正直なところそういう状態だった。
 

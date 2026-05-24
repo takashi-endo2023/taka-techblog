@@ -177,7 +177,13 @@
       "Bash(grep -E \"\\\\.\\(astro|ts\\)$\")",
       "Bash(awk -F'|' '{print $4}')",
       "Bash(awk -F'|' '{print $5}')",
-      "Bash(awk -F'|' '{print $2 \" | \" $3}')"
+      "Bash(awk -F'|' '{print $2 \" | \" $3}')",
+      "Bash(grep \"\\\\.md$\")",
+      "mcp__filesystem__read_multiple_files",
+      "Bash(sed -n '180,186p' /Users/takashi/projects/taka-techblog/src/content/blog/nextjs-seo-implementation.mdx)",
+      "Bash(sed -n '133,139p' /Users/takashi/projects/taka-techblog/src/content/blog/aws-rds-dynamodb-choice.mdx)",
+      "mcp__filesystem__search_files",
+      "Bash(sort -t: -k2 -n)"
     ]
   }
 }

@@ -2,7 +2,7 @@
 title: "サーバ/インフラを支える技術——止まらないサービスを作るための設計思想を学んだ正直な評価"
 emoji: "🖥️"
 type: "tech"
-topics: ["インフラ", "Linux", "AWS", "チーム開発"]
+topics: ["インフラ","Linux","AWS","チーム開発"]
 published: false
 canonical_url: "https://www.taka-techblog.com/blog/server-infra-book-review"
 ---
@@ -11,11 +11,13 @@ canonical_url: "https://www.taka-techblog.com/blog/server-infra-book-review"
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/server-infra-book-review?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
 
+
+
 「止まらないサービスを作りたい」という意識はWebに携わるエンジニアに共通するものだ。
 
 しかし「止まらない」を実現するための設計——冗長化・フェイルオーバー・負荷分散・パフォーマンスチューニング——を体系的に学ぼうとすると、どこから手をつければいいか迷う。この本はその体系化の起点になった一冊だ。
 
-https://www.amazon.co.jp/dp/4774135666
+---
 
 ## 本の全体構成
 
@@ -28,38 +30,49 @@ https://www.amazon.co.jp/dp/4774135666
 | 5章 | 省力運用——監視・Puppet・daemontools・ログ管理 |
 | 6章 | はてな・DSASの実際の構成事例 |
 
+---
+
 ## 章ごとの評価
 
 ### 1章：冗長化/負荷分散の基本
 
 「障害を想定する→予備機を用意する→切り替える」という冗長化の本質から入り、コールドスタンバイ・ホットスタンバイ・フェイルオーバー・VIPの仕組みまで説明している。
 
-この考え方は今でも変わらない。AWSのMulti-AZ・ALB・Auto Scalingも、本書が説く冗長化の原則に沿っている。
+この考え方は今でも変わらない。AWSのMulti-AZ・ALB・Auto Scalingも、本書が説く冗長化の原則に沿っている。詳細は[高可用性設計の基本](/blog/high-availability-design-spof)にまとめた。
 
 ### 2章：ワンランク上の構築
 
 リバースプロキシの役割（バッファリング・Keep-Alive・URLルーティング）、Squid/memcachedによるキャッシュ、MySQLレプリケーションを扱う。
 
-リバースプロキシとキャッシュ設計、DBレプリケーションはそれぞれ深掘り記事を書いた。
+リバースプロキシの設計は[リバースプロキシの役割と設計](/blog/reverse-proxy-cache-design)、DBレプリケーションは[MySQLレプリケーション設計](/blog/mysql-replication-design)に深掘り記事を書いた。
 
 ### 4章：パフォーマンスチューニング
 
 本書で最も価値が高い章だと思っている。「推測するな、計測せよ」というアプローチで、ロードアベレージの正体・CPU/IOのボトルネックの見極め方・`sar`・`vmstat`・`ps`の使い方を体系的に解説している。
 
-「ロードアベレージが高い＝CPUが重い」という誤解はここを読んで解消できた。
+「ロードアベレージが高い＝CPUが重い」という誤解はここを読んで解消できた。詳細は[Linuxロードアベレージを正確に理解する](/blog/linux-load-average-deep-dive)にまとめた。
 
 ### 5章：省力運用
 
 監視（Nagios）・設定管理（Puppet）・デーモン管理（daemontools）を扱っている。ツール自体は今は別のもの（Datadog・Ansible・systemd）に置き換わっているが、「なぜ監視が必要か」「設定管理を自動化する意義」という考え方は変わっていない。
 
-## スピンオフ記事
+現代的な監視設計は[CloudWatchでAWSを監視する](/blog/aws-cloudwatch-monitoring)にまとめている。
+
+---
+
+## スピンオフ記事一覧
 
 | 記事 | 対応章 |
 |---|---|
-| [Linuxロードアベレージを正確に理解する](https://www.taka-techblog.com/blog/linux-load-average-deep-dive?utm_source=zenn&utm_medium=referral) | 4章 |
-| [MySQLレプリケーション設計](https://www.taka-techblog.com/blog/mysql-replication-design?utm_source=zenn&utm_medium=referral) | 2章 |
-| [リバースプロキシの役割と設計](https://www.taka-techblog.com/blog/reverse-proxy-cache-design?utm_source=zenn&utm_medium=referral) | 2章 |
-| [高可用性設計の基本](https://www.taka-techblog.com/blog/high-availability-design-spof?utm_source=zenn&utm_medium=referral) | 1章 |
+| [高可用性設計の基本](/blog/high-availability-design-spof) | 1章 |
+| [フロントエンドエンジニアがサーバ/インフラを学んだ記録](/blog/server-infra-basics-for-frontend) | 1〜3章 |
+| [Linux運用で最低限知るべきこと](/blog/linux-server-operations-basics) | 4章 |
+| [Linuxロードアベレージを正確に理解する](/blog/linux-load-average-deep-dive) | 4章 |
+| [MySQLレプリケーション設計](/blog/mysql-replication-design) | 2章 |
+| [リバースプロキシの役割と設計](/blog/reverse-proxy-cache-design) | 2章 |
+| [CloudWatchでAWSを監視する](/blog/aws-cloudwatch-monitoring) | 5章 |
+
+---
 
 ## どんな人に向いているか
 
@@ -70,11 +83,21 @@ https://www.amazon.co.jp/dp/4774135666
 | パフォーマンス問題の原因特定が苦手 | ★★★★★ |
 | インフラ全体像をつかみたいアプリエンジニア | ★★★★☆ |
 
+---
+
 ## 正直に言うと
 
 2008年刊行のため、具体的なツール（Nagios・Puppet・IPVS・daemontools）は今の現場では別のものに置き換わっている。Nagios→Datadog、Puppet→Ansible/Terraform、IPVS→AWS ALBという読み替えが必要だ。
 
 しかし「止まらないサービスをどう設計するか」という本質は変わっていない。特に4章のLinuxパフォーマンス分析の考え方は、今でもサーバのボトルネックを調査するときに直接使える。
+
+---
+
+## まとめ
+
+インフラを「なんとなく動いている」から「なぜ動くのかわかる」状態に引き上げてくれる一冊だ。
+
+AWSを使っていてもこの本の内容は活きる。ELBのヘルスチェック・RDSのMulti-AZ・ElastiCacheのキャッシュ戦略は、本書が解説する原則の現代的な実装だからだ。
 
 ---
 

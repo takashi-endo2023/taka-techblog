@@ -4,6 +4,10 @@ description: "治験システムの被験者管理・来院記録が蓄積され
 pubDate: "2025-12-12"
 updatedDate: "2026-05-21"
 tags: ["パフォーマンス", "データベース", "NestJS", "医療IT"]
+zennHash: "f35fbfd57c2bf9"
+zennEmoji: "⚡"
+zennType: "tech"
+zennTopics: ["NestJS","TypeORM","データベース","パフォーマンス"]
 ---
 
 「システムが重い」という声が来た。最初は、全くわからなかった。

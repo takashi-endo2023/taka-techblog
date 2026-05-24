@@ -4,6 +4,10 @@ description: "医療・製薬業界で必須のCSV（コンピュータ化シス
 pubDate: "2025-11-15"
 updatedDate: "2026-05-22"
 tags: ["医療IT", "品質管理"]
+zennHash: "0ojtx3rb4ppf91"
+zennEmoji: "📋"
+zennType: "tech"
+zennTopics: ["DevOps","品質保証"]
 ---
 
 「CSV対応してますか？」と製薬メーカーから最初に聞かれたとき、正直「CSVってスプレッドシートのことじゃないの？」と思った。

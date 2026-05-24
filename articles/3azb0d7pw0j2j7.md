@@ -2,7 +2,7 @@
 title: "JavaScriptの非同期処理を整理する——コールバック・Promise・async/awaitの使い分け"
 emoji: "⏳"
 type: "tech"
-topics: ["JavaScript", "TypeScript"]
+topics: ["JavaScript","TypeScript"]
 published: false
 published_at: "2023-08-22 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/javascript-async-promise"
@@ -11,6 +11,8 @@ canonical_url: "https://www.taka-techblog.com/blog/javascript-async-promise"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/javascript-async-promise?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
+
 
 非同期処理は、JavaScriptを「使える」人間と「わかっている」人間を分ける最初の壁だと思っている。
 
@@ -155,10 +157,7 @@ const fastExample = async (ids: number[]) => {
 
 コールバック→Promise→async/awaitという変遷は、「非同期処理をどう表現するか」の試行錯誤の歴史だ。それぞれに出番があり、Promiseを理解せずにasync/awaitだけ覚えても詰まる場面が必ず来る。
 
-テックリードとして「なぜこう書くのか」を説明できるための地図を持っておきたい人には、本書の非同期処理の章は読む価値がある。書き方を覚える本ではなく、仕組みを理解するための本として使うのが正しいと感じた。
-
-
-📚 **[改訂3版JavaScript本格入門 ～モダンスタイルによる基礎から現場での応用まで](https://www.amazon.co.jp/dp/4297132885)** — 山田祥寛 著 ／ 技術評論社 —ES6+・非同期処理・クロージャ・クラスまで体系的に学べる決定版
+テックリードとして「なぜこう書くのか」を説明できるための地図を持っておきたい人には、本書の非同期処理の章は読む価値がある。書き方を覚える本ではなく、仕組みを理解するための本として使うのが正しいと感じた。非同期処理と組み合わせて使う機会が多いArray高階関数の使いこなしについては、[JavaScriptのArray高階関数を実務で使いこなす——map・filter・reduceの使い分け](/blog/javascript-array-methods)にまとめている。
 
 ---
 

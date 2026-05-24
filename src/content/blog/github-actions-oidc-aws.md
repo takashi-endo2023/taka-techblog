@@ -3,6 +3,10 @@ title: "GitHub ActionsとAWS OIDCでキーレスデプロイを実現する"
 description: "AWSアクセスキーをSecretsに保存するのをやめた。GitHub ActionsのOIDC認証でIAMロールを一時取得するキーレスデプロイの設定方法を実例つきで解説。"
 pubDate: "2025-05-08"
 tags: ["GitHub Actions", "AWS", "DevOps", "セキュリティ"]
+zennHash: "t4n0ltv5ya47hr"
+zennEmoji: "🔑"
+zennType: "tech"
+zennTopics: ["GitHubActions","AWS","セキュリティ"]
 ---
 
 ## アクセスキーをSecretsに入れるのは怖い

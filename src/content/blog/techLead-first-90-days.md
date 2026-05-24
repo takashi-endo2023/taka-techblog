@@ -4,6 +4,10 @@ description: "横並びだった同僚と突然「上下関係」になる日が
 pubDate: "2025-10-05"
 updatedDate: "2026-05-22"
 tags: ["テックリード", "チーム開発", "キャリア", "組織設計"]
+zennHash: "c456bbb0adeb5d"
+zennEmoji: "🧭"
+zennType: "idea"
+zennTopics: ["チーム開発","キャリア","マネジメント"]
 ---
 
 任命されたのは、システムローンチの直後だった。

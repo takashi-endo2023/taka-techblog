@@ -4,6 +4,10 @@ description: "ベンダーから引き継いだリリースフローを、監査
 pubDate: "2025-11-01"
 updatedDate: "2026-05-22"
 tags: ["品質管理", "DevOps", "医療IT"]
+zennHash: "kfsbi9rdmo6u7z"
+zennEmoji: "🚢"
+zennType: "tech"
+zennTopics: ["DevOps","GitLab"]
 ---
 
 引き継いだとき、リリースフローの意味はよくわかっていなかった。

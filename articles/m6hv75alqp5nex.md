@@ -2,7 +2,7 @@
 title: "テックリードと係長を兼任するプレイングマネージャーの現実"
 emoji: "⚖️"
 type: "idea"
-topics: ["マネジメント", "キャリア", "チーム開発"]
+topics: ["マネジメント","キャリア","チーム開発"]
 published: false
 published_at: "2025-04-22 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/playing-manager-reality"
@@ -11,6 +11,7 @@ canonical_url: "https://www.taka-techblog.com/blog/playing-manager-reality"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/playing-manager-reality?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 「プレイングマネージャー」という言葉は聞こえがいい。でも実態は、**常に間に入り続ける人間**だ。
 

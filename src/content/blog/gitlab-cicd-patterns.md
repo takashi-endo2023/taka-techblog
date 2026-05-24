@@ -4,6 +4,10 @@ description: "医療系スタートアップのNestJS+React構成でGitLab CI-CD
 pubDate: "2025-04-11"
 updatedDate: "2026-05-22"
 tags: ["DevOps", "インフラ"]
+zennHash: "dnrvjkvr3lbykv"
+zennEmoji: "🏗️"
+zennType: "tech"
+zennTopics: ["GitLab","DevOps","CI/CD"]
 ---
 
 本番デプロイは、最後に人間が判断する。

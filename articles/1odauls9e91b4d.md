@@ -2,7 +2,7 @@
 title: "AstroとAWS CDK + CloudFrontで技術ブログを構築した話"
 emoji: "🚀"
 type: "tech"
-topics: ["AWS", "DevOps", "GitHubActions"]
+topics: ["AWS","DevOps","GitHubActions"]
 published: false
 published_at: "2025-10-28 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/astro-aws-cdk-cloudfront-blog"
@@ -11,6 +11,7 @@ canonical_url: "https://www.taka-techblog.com/blog/astro-aws-cdk-cloudfront-blog
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/astro-aws-cdk-cloudfront-blog?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 さくらのレンタルサーバーでWordPressのブログを持っていた。更新もほとんどせず、放置気味になっていた。
 

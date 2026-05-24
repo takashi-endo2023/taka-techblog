@@ -2,7 +2,7 @@
 title: "未経験エンジニア2名をコーチング型で育てた方法"
 emoji: "🌱"
 type: "idea"
-topics: ["チーム開発", "マネジメント", "キャリア"]
+topics: ["チーム開発","マネジメント","キャリア"]
 published: false
 published_at: "2025-01-28 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/coaching-junior-engineers"
@@ -11,6 +11,7 @@ canonical_url: "https://www.taka-techblog.com/blog/coaching-junior-engineers"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/coaching-junior-engineers?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 「幼稚園じゃないんだよ」と、心の中で毎日思っている。
 
@@ -84,6 +85,10 @@ canonical_url: "https://www.taka-techblog.com/blog/coaching-junior-engineers"
 コーチングの話を書いていて思うのは、「育てる余裕がある状態でやっていたわけじゃない」ということだ。余裕がないまま、それでもやるしかなかった。
 
 「幼稚園じゃないんだよ」と思いながら、明日もまた1on1をする。
+
+---
+
+**関連記事**: [テックリードとして3年間、仮面を被り続けた話](/blog/techlead-mask-3years)
 
 ---
 

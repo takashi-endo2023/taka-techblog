@@ -2,7 +2,7 @@
 title: "AIを社内に広めたら、本部長がモンスターになった話"
 emoji: "👾"
 type: "idea"
-topics: ["AI", "LLM", "チーム開発"]
+topics: ["AI","LLM","チーム開発"]
 published: false
 published_at: "2026-05-21 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/ai-team-adoption-monster"
@@ -11,6 +11,7 @@ canonical_url: "https://www.taka-techblog.com/blog/ai-team-adoption-monster"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/ai-team-adoption-monster?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 最初は個人アカウントで、こっそり使っていた。
 
@@ -73,6 +74,8 @@ canonical_url: "https://www.taka-techblog.com/blog/ai-team-adoption-monster"
 どれが正解かは言わない。ただ、自分が目指しているのは「AIに使われない人間」でいることだ。
 
 AIは、自分の思考の質以上のものは出してくれない。結局、使う人間の解像度がそのまま出力される。だから、AIを使いこなすより先に、自分の頭を鍛えることの方が大事だと今は思っている。
+
+組織内の意識が揃ってきたタイミングで、実際の開発フローがどう変わったかは[Claude Codeを実務導入して開発フローが変わった話](/blog/claude-code-workflow)にまとめている。
 
 ---
 

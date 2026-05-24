@@ -4,6 +4,10 @@ description: "治験依頼会社による社内システムの監査に、テッ
 pubDate: "2025-11-28"
 updatedDate: "2026-05-22"
 tags: ["医療IT", "品質管理", "セキュリティ"]
+zennHash: "80gsybo71sanbn"
+zennEmoji: "🔍"
+zennType: "idea"
+zennTopics: ["DevOps","品質保証","セキュリティ"]
 ---
 
 「監査が入ります」という連絡が来たとき、心拍数が上がった。相手は大手製薬メーカーの品質保証部門。治験データを扱う自社の治験CRMシステムが、GCP（Good Clinical Practice）に準拠した運用をしているかを確認しに来る、というものだった。

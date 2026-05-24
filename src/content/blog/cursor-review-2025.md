@@ -3,6 +3,10 @@ title: "Cursor実務レビュー2025：Claude Codeと使い分けて気づいた
 description: "Cursorを実務で半年使い込んだ正直レビュー。Claude Codeとの使い分け・Agent機能の実力・Composer vs Chat・コスト感・NestJSでの実践まで。"
 pubDate: "2026-03-03"
 tags: ["AI開発", "Claude Code"]
+zennHash: "5137l1okz0o0z7"
+zennEmoji: "🖱️"
+zennType: "tech"
+zennTopics: ["AI","LLM","開発効率化"]
 ---
 
 ## 「AIエディタ」を実務で使い続けた感想

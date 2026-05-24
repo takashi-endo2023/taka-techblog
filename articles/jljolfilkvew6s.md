@@ -2,7 +2,7 @@
 title: "Linux運用で最低限知るべきこと——ターミナル作業を怖くなくするための基礎知識"
 emoji: "🐧"
 type: "tech"
-topics: ["Linux", "インフラ", "DevOps"]
+topics: ["Linux","インフラ","DevOps"]
 published: false
 published_at: "2023-11-15 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/linux-server-operations-basics"
@@ -11,6 +11,8 @@ canonical_url: "https://www.taka-techblog.com/blog/linux-server-operations-basic
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/linux-server-operations-basics?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
+
 
 本番サーバにSSHしてトラブル対応をするのは、フロントエンド出身のエンジニアにとって緊張する場面のひとつだ。
 
@@ -181,8 +183,7 @@ Linuxのコマンドは種類が多すぎて全部を覚えようとすると気
 
 「コマンドを覚える」より「今何を確認したいか」を考える習慣をつけると、ターミナルへの苦手意識はかなり薄れる。最初は怖くて当然だが、仕組みを理解すれば怖さは消えていく。
 
-
-📚 **[24時間365日 サーバ/インフラを支える技術](https://www.amazon.co.jp/dp/4774135666)** — 安井真伸 他著 ／ 技術評論社 — スケーラビリティ・ハイパフォーマンス・省力運用を体系的に解説
+Linuxの基礎を身につけた先には、DNSや負荷分散・冗長化など「システム全体の設計」の視点が必要になる。フロントエンド出身のエンジニアがインフラの全体像をつかんでいく過程は[フロントエンドエンジニアがサーバ/インフラを学んで気づいたこと——見えていなかった仕組み](/blog/server-infra-basics-for-frontend)にまとめている。
 
 ---
 

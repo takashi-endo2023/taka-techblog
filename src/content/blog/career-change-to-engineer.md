@@ -4,6 +4,10 @@ description: "ドラッグストアの主任から、転勤続きで限界が来
 pubDate: "2023-06-15"
 updatedDate: "2026-05-22"
 tags: ["キャリア", "テックリード"]
+zennHash: "e4d8874f0c25b0"
+zennEmoji: "🐱"
+zennType: "idea"
+zennTopics: ["キャリア","テックリード","転職","未経験エンジニア"]
 ---
 
 屋久島に転勤が決まったとき、「もう無理」と思った。

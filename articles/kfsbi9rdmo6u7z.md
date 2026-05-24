@@ -2,7 +2,7 @@
 title: "引き継いだリリースフローが、監査で初めて意味を持った"
 emoji: "🚢"
 type: "tech"
-topics: ["DevOps", "GitLab"]
+topics: ["DevOps","GitLab"]
 published: false
 published_at: "2025-04-01 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/release-flow-regulated-industry"
@@ -11,6 +11,7 @@ canonical_url: "https://www.taka-techblog.com/blog/release-flow-regulated-indust
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/release-flow-regulated-industry?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 引き継いだとき、リリースフローの意味はよくわかっていなかった。
 

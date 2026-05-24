@@ -2,7 +2,7 @@
 title: "JavaScriptのスコープとthisで詰まったこと——本格入門で理解が深まった概念"
 emoji: "🔭"
 type: "tech"
-topics: ["JavaScript", "TypeScript"]
+topics: ["JavaScript","TypeScript"]
 published: false
 published_at: "2023-08-01 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/javascript-scope-closure"
@@ -11,6 +11,8 @@ canonical_url: "https://www.taka-techblog.com/blog/javascript-scope-closure"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/javascript-scope-closure?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
+
 
 JavaScriptで最初に「こんなはずじゃなかった」と思った経験は、だいたいスコープか`this`がらみだと思う。
 
@@ -168,10 +170,7 @@ outer();
 
 スコープ・クロージャ・`this`は、JavaScriptの「なぜ動く/動かないか」の根幹にある概念だ。雰囲気で書いていても動くコードは書けるが、バグったときに原因を見つけられない、チームメンバーに説明できない、という場面で壁にぶつかる。
 
-本書を通じて改めて整理したことで、「この書き方はなぜ問題なのか」をコードレビューで言語化できる精度が上がった。理解が足りない状態でも動くのがJavaScriptの怖さであり、だからこそ意識的に学び直す機会が必要だと感じる。
-
-
-📚 **[改訂3版JavaScript本格入門 ～モダンスタイルによる基礎から現場での応用まで](https://www.amazon.co.jp/dp/4297132885)** — 山田祥寛 著 ／ 技術評論社 —ES6+・非同期処理・クロージャ・クラスまで体系的に学べる決定版
+本書を通じて改めて整理したことで、「この書き方はなぜ問題なのか」をコードレビューで言語化できる精度が上がった。理解が足りない状態でも動くのがJavaScriptの怖さであり、だからこそ意識的に学び直す機会が必要だと感じる。スコープを理解した次は、非同期処理の仕組みを掴むと実務での詰まりが大幅に減る——[JavaScriptの非同期処理を整理する——コールバック・Promise・async/awaitの使い分け](/blog/javascript-async-promise)に続けて読むことをおすすめする。
 
 ---
 

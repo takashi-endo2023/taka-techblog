@@ -2,7 +2,7 @@
 title: "Docker開発環境を標準化してチームの「動かない」を減らす"
 emoji: "🐳"
 type: "tech"
-topics: ["Docker", "チーム開発", "DevOps"]
+topics: ["Docker","チーム開発","DevOps"]
 published: false
 published_at: "2024-12-10 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/docker-dev-environment"
@@ -11,6 +11,7 @@ canonical_url: "https://www.taka-techblog.com/blog/docker-dev-environment"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/docker-dev-environment?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 ## 「自分のPCでは動く」が多発していた
 
@@ -153,6 +154,8 @@ Docker環境の標準化で得たものは以下の通りです：
 - 「自分のPCで動いた」を言い訳にできない文化が定着
 
 環境構築でメンバーの時間を奪わないことは、チームの生産性と心理的安全性の両方に効きます。
+
+ローカル環境が整ったら次はCI/CDの整備です。パイプラインの設計パターンは[GitLab CI-CDを実務で運用するときの設計パターン](/blog/gitlab-cicd-patterns)にまとめています。
 
 ---
 

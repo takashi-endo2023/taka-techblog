@@ -10,7 +10,8 @@
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "check": "astro check",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "sync:zenn": "node scripts/sync-zenn.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",

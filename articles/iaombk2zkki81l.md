@@ -2,7 +2,7 @@
 title: "React×Next.jsの選択基準を実務から考える —SPA・SSR・SSGをどう使い分けるか"
 emoji: "⚛️"
 type: "tech"
-topics: ["React", "Next.js", "TypeScript"]
+topics: ["React","Next.js","TypeScript"]
 published: false
 published_at: "2026-05-12 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/react-nextjs-selection"
@@ -11,6 +11,7 @@ canonical_url: "https://www.taka-techblog.com/blog/react-nextjs-selection"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/react-nextjs-selection?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 ## はじめに
 
@@ -117,7 +118,11 @@ export async function generateStaticParams() {
 - **ブログ・ドキュメント（静的・SEO重視）** →SSG（Astro or Next.js）
 - **ECサイト・ニュース（動的・SEO重視）** →SSR or ISR
 
-判断軸は「SEOが必要か」「データは静的か動的か」「リアルタイム性が必要か」の3点に尽きます。この軸を持っているだけで、技術選定の説明責任を果たせるようになります。
+判断軸は「SEOが必要か」「データは静的か動的か」「リアルタイム性が必要か」の3点に尽きます。この軸を持っているだけで、技術選定の説明責任を果たせるようになります。各レンダリング手法の実装詳細や実務で踏んだ落とし穴については、[Next.jsのSSR・SSG・ISRを実務でどう使い分けるか](/blog/nextjs-rendering-deep-dive)でより深く解説しています。
+
+---
+
+**実装例**: この記事で触れたReact SPAとSSGの判断を実際に適用したプロジェクトは[ポートフォリオ](/portfolios)で確認できます。
 
 ---
 

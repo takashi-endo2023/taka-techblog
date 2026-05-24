@@ -1,8 +1,8 @@
 ---
-title: "GitLab CI/CDを実務で運用するときの設計パターン"
+title: "GitLab CI-CDを実務で運用するときの設計パターン"
 emoji: "🏗️"
 type: "tech"
-topics: ["GitLab", "DevOps", "CI/CD"]
+topics: ["GitLab","DevOps","CI/CD"]
 published: false
 published_at: "2026-02-25 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/gitlab-cicd-patterns"
@@ -12,11 +12,12 @@ canonical_url: "https://www.taka-techblog.com/blog/gitlab-cicd-patterns"
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/gitlab-cicd-patterns?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
 
+
 本番デプロイは、最後に人間が判断する。
 
 事故が起きたからそうしたわけではない。事故を起こさないためにそうしている。医療系スタートアップで規制対象のシステムを扱う以上、「自動で本番に上がる」という状態は選ばなかった。
 
-これが自分のCI/CDの基本方針だ。
+これが自分のCI-CDの基本方針だ。
 
 ## 環境構成と承認フロー
 
@@ -126,7 +127,7 @@ test:unit:
 
 ## 「誰でも読めるyaml」が長く使える
 
-CI/CDはチーム全員が日常的に触るものだ。
+CI-CDはチーム全員が日常的に触るものだ。
 
 設定を複雑にしすぎると、「CIが壊れたときに直せる人間が限られる」という状態になる。小さいチームでは特に問題だ。変更の意図がコメントに書いてある、ステージの流れが自明、これくらいシンプルに保つのが長期運用のコツだと思っている。
 

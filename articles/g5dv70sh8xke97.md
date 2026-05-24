@@ -2,7 +2,7 @@
 title: "AWSのIAM設計を正しく理解する——最小権限の原則と実務での落とし穴"
 emoji: "🔐"
 type: "tech"
-topics: ["AWS", "セキュリティ"]
+topics: ["AWS","セキュリティ"]
 published: false
 published_at: "2024-07-16 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/aws-iam-least-privilege"
@@ -11,6 +11,8 @@ canonical_url: "https://www.taka-techblog.com/blog/aws-iam-least-privilege"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/aws-iam-least-privilege?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
+
 
 AWSの権限管理は「なんとなく動けばいい」で済ませると、後から必ず痛い目に遭う。私自身、テックリードとして複数のプロジェクトでIAM設計に関わってきたが、初期に雑に作った権限が数ヶ月後にセキュリティレビューで引っかかる、というケースを何度も目にした。
 
@@ -179,8 +181,7 @@ IAM設計のポイントをまとめると次のとおりだ。
 
 IAMは「設計の質がそのままセキュリティリスクに直結する」レイヤーだ。面倒でも最初から正しく設計しておくほうが、後の修正コストより絶対に安い。
 
-
-📚 **[AWSの基本・仕組み・重要用語が全部わかる教科書](https://www.amazon.co.jp/dp/4815607850)** — 川畑光平 著 ／SBクリエイティブ — 図解でAWSの全体像をつかむ入門書
+IAMと合わせて設計すべきなのがネットワーク層だ。どのリソースをどのサブネットに置くか、セキュリティグループをどう構成するかについては[AWS VPCのサブネット設計を理解する——パブリック・プライベートの分け方とセキュリティ設定](/blog/aws-vpc-subnet-design)で整理している。
 
 ---
 

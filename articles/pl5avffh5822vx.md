@@ -2,7 +2,7 @@
 title: "みんなの安定のために仮面を被った——テックリード3年間の全記録"
 emoji: "🎭"
 type: "idea"
-topics: ["テックリード", "キャリア", "AI", "チーム開発"]
+topics: ["テックリード","キャリア","AI","チーム開発"]
 published: false
 canonical_url: "https://www.taka-techblog.com/blog/techlead-mask-3years"
 ---
@@ -10,6 +10,7 @@ canonical_url: "https://www.taka-techblog.com/blog/techlead-mask-3years"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/techlead-mask-3years?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 今も仮面を被っている。取るつもりもない。
 
@@ -80,6 +81,10 @@ canonical_url: "https://www.taka-techblog.com/blog/techlead-mask-3years"
 取るつもりはない。責任者としてのスタンスとして、これは変えない。何事もなかったように振る舞うこと——それが自分の役割だと思っている。
 
 ただ、3年前と一つだけ違うことがある。相談できる相手が、できた。
+
+---
+
+**戦術的なテックリードの話はこちら**: [テックリード就任最初の90日でやったこと](/blog/techLead-first-90-days)
 
 ---
 

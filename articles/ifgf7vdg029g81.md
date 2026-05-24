@@ -2,7 +2,7 @@
 title: "TypeScriptで型安全なLangChainアプリを作る —LangChain.jsの型定義と実装パターン"
 emoji: "🔷"
 type: "tech"
-topics: ["TypeScript", "LangChain", "AI"]
+topics: ["TypeScript","LangChain","AI"]
 published: false
 published_at: "2025-08-26 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/typescript-langchain-type-safe"
@@ -11,6 +11,7 @@ canonical_url: "https://www.taka-techblog.com/blog/typescript-langchain-type-saf
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/typescript-langchain-type-safe?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 ## はじめに
 
@@ -25,8 +26,6 @@ Python版のLangChainは動的型付けを前提とした設計が多く、`Any`
 たとえばチェーンの入出力を定義する際、Python版では辞書の型を気にせず書けますが、JS版では`BaseChain`の型パラメータを意識する必要があります。
 
 ```typescript
-import { BaseChain, ChainInputs } from "langchain/chains";
-import { ChainValues } from "langchain/schema";
 
 interface MyChainInput extends ChainInputs {
   llm: BaseLLM;
@@ -68,8 +67,6 @@ class MyChain extends BaseChain {
 AIエージェントの応答が長くなるケースではストリーミングが必要です。NestJS + Server-Sent Eventsで以下のように実装しています。
 
 ```typescript
-import { ChatOpenAI } from "langchain/chat_models/openai";
-import { HumanMessage } from "langchain/schema";
 
 // ストリーミングコールバックの型
 interface StreamingCallbackHandler {
@@ -103,9 +100,6 @@ NestJSのコントローラーでは`@Sse()`デコレータと組み合わせて
 実務では`RunnableSequence`を使ったLCEL（LangChain Expression Language）スタイルが増えてきました。ここでは入出力の型をジェネリクスで明示的に指定できます。
 
 ```typescript
-import { RunnableSequence } from "langchain/schema/runnable";
-import { StringOutputParser } from "langchain/schema/output_parser";
-import { PromptTemplate } from "langchain/prompts";
 
 // 入力の型を明示
 interface ReportSummaryInput {
@@ -142,7 +136,6 @@ const result: string = await summaryChain.invoke({
 LangChainのエラーは`LangChainError`を基底クラスとして複数の派生型があります。実務では以下のように分岐して処理しています。
 
 ```typescript
-import {
   LangChainError,
   OutputParserException,
 } from "langchain/schema/output_parser";
@@ -181,6 +174,8 @@ async function safeInvoke(input: ClinicalSummaryInput) {
 LangChain.jsはバージョンアップが頻繁で型定義が変わることもありますが、基本的な考え方は「入出力をジェネリクスで明示する」「エラー型を把握してレイヤーごとに変換する」の2点に集約されます。PythonのドキュメントをそのままJSに適用しようとするとハマるので、TypeScript用のAPIリファレンスを読む習慣が大切です。
 
 医療系では特にエラーハンドリングが重要で、AIの出力が予期しない形式になったときでもアプリが壊れないよう型の堅牢性には引き続き投資していくつもりです。
+
+型安全な実装の先にある実務全体の評価は、[LangChain.js 2025年の現状：実務で使って感じたこと](/blog/langchain-js-2025)にまとめています。
 
 ---
 

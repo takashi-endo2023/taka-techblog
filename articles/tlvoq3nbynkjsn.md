@@ -2,7 +2,7 @@
 title: "JavaScriptのクラスとモジュールを理解する——TypeScriptに活きるOOPの基礎"
 emoji: "📐"
 type: "tech"
-topics: ["JavaScript", "TypeScript"]
+topics: ["JavaScript","TypeScript"]
 published: false
 published_at: "2023-10-03 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/javascript-class-module"
@@ -11,6 +11,8 @@ canonical_url: "https://www.taka-techblog.com/blog/javascript-class-module"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/javascript-class-module?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
+
 
 TypeScriptを書いていると `class`・`interface`・`abstract class` を使う場面がある。しかし「なぜそう書くのか」を説明できるかというと、転職直後の自分には自信がなかった。
 
@@ -185,7 +187,6 @@ export function formatDate(date: Date): string {
 export const MAX_RETRY = 3;
 
 // named import：波括弧で指定
-import { formatDate, MAX_RETRY } from "./utils";
 
 // default export：1ファイル1つまで
 // UserCard.tsx
@@ -194,8 +195,6 @@ export default function UserCard({ name }: { name: string }) {
 }
 
 // default import：名前は自由に付けられる
-import UserCard from "./UserCard";
-import MyUserCard from "./UserCard"; // 同じものを別名でimportできる
 ```
 
 チームで使う場合、default exportは「import時に名前が統一されない」という問題がある。ESLintのルール `import/no-default-export` で縛るプロジェクトも多い。一方でReactコンポーネントはdefault exportが慣習的に使われることも多く、プロジェクトの規約に合わせるのが実際のところだ。
@@ -250,10 +249,7 @@ class Circle extends Shape {
 
 ---
 
-「改訂3版JavaScript本格入門」はクラス・モジュールだけでなく、プロトタイプ・クロージャ・非同期処理まで一気通貫で体系化されている。TypeScriptを書いていて「JSの仕組みからわかり直したい」と感じたら、手に取る価値がある一冊だ。
-
-
-📚 **[改訂3版JavaScript本格入門 ～モダンスタイルによる基礎から現場での応用まで](https://www.amazon.co.jp/dp/4297132885)** — 山田祥寛 著 ／ 技術評論社 —ES6+・非同期処理・クロージャ・クラスまで体系的に学べる決定版
+「改訂3版JavaScript本格入門」はクラス・モジュールだけでなく、プロトタイプ・クロージャ・非同期処理まで一気通貫で体系化されている。TypeScriptを書いていて「JSの仕組みからわかり直したい」と感じたら、手に取る価値がある一冊だ。クラスやモジュールを実際に書く環境を整えることも同じくらい重要で、[ESLint・Jest・Viteを最初に整備する——JavaScriptプロジェクトの開発環境構築](/blog/javascript-dev-tools-eslint-jest)で開発ツールの導入手順をまとめている。
 
 ---
 

@@ -15,53 +15,61 @@
 
 **週次運用の詳細手順 → `docs/operations.md`**
 
-ブログ記事を新規作成・更新するときは、**必ず以下の2ファイルをセットで作成・更新する**。
+**ブログ記事が唯一の正解。Zenn記事はスクリプトで自動生成する。**
 
-### 1. ブログ記事（taka-techblog.com）
+> `articles/<hash>.md` を直接編集しない。ブログ記事を編集したあと必ず `npm run sync:zenn` を実行する。
 
-- パス: `src/content/blog/<slug>.md`
-- slug はタイトルを英語ハイフン繋ぎで命名（例: `nestjs-lambda-deployment.md`）
-- frontmatter フォーマット（全フィールド必須）:
-  ```yaml
-  ---
-  title: ""
-  description: ""   # 120文字前後、検索結果に表示されるので具体的に
-  pubDate: "YYYY-MM-DD"
-  tags: []           # 2〜5個。既存タグと表記を合わせる
-  ---
-  ```
-- `updatedDate` は既存記事を更新したときのみ追加
+### 記事作成・更新のフロー
+
+**既存記事を更新するとき:**
+```bash
+# 1. ブログ記事を編集
+# 2. Zennに同期
+npm run sync:zenn
+# 3. push
+```
+
+**新記事を作るとき:**
+```bash
+# 1. ブログ記事を作成（src/content/blog/<slug>.md）
+# 2. Zennのハッシュを取得（1回だけ）
+npx zenn-cli new:article
+# 3. 生成されたハッシュをブログ frontmatter に追加
+#    zennHash: "<hash>"
+#    zennEmoji: "📝"
+#    zennType: "tech"   # tech（技術） or idea（体験・考察）
+#    zennTopics: ["topic1", "topic2"]
+# 4. Zennに同期
+npm run sync:zenn
+# 5. push
+```
+
+### ブログ記事の frontmatter（全フィールド必須）
+
+```yaml
+---
+title: ""
+description: ""   # 80〜120文字。日本語はPC表示で120文字・モバイルで60文字が上限。200文字以上は検索結果で途切れる
+pubDate: "YYYY-MM-DD"
+tags: []           # 2〜5個。既存タグと表記を合わせる
+zennHash: ""       # articles/<hash>.md のハッシュ部分
+zennEmoji: ""      # 記事の内容に合った絵文字1つ
+zennType: "tech"   # tech: 技術記事 / idea: アイデア・考察
+zennTopics: []     # 最大5つ、Zennの既存トピック名に合わせる
+---
+```
+
+- `updatedDate` は既存記事を更新したときのみ追加（例: `updatedDate: "2026-05-25"`）
 - `.mdx` は AmazonCard コンポーネントを使う記事のみ。通常は `.md`
 - **新記事を書いたら、既存記事の本文中に今書いた記事へのリンクを1つ貼る**（SEO内部リンク強化。ウィジェットではなく本文中に自然な文脈で）
 
-### 2. Zenn記事（zenn.dev）
+### sync:zenn スクリプトの動作
 
-- パス: `articles/<hash>.md`
-- 新規作成時は `npx zenn-cli new:article` でファイル名を生成
-- frontmatter フォーマット:
-  ```yaml
-  ---
-  title: ""
-  emoji: ""      # 記事の内容に合った絵文字1つ
-  type: "tech"   # tech: 技術記事 / idea: アイデア・考察
-  topics: []     # 最大5つ、Zennの既存トピック名に合わせる
-  published: true
-  canonical_url: "https://www.taka-techblog.com/blog/<slug>"
-  ---
-  ```
-- 本文冒頭に必ずメッセージブロックを追加:
-  ```
-  :::message
-  この記事は [taka-techblog](https://www.taka-techblog.com/blog/<slug>?utm_source=zenn&utm_medium=referral) にも掲載しています。
-  :::
-  ```
-- 本文末尾に必ずフッターを追加:
-  ```
-  ---
-
-  他の記事も読む → [taka-techblog.com](https://www.taka-techblog.com?utm_source=zenn&utm_medium=referral)
-  X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)
-  ```
+`npm run sync:zenn`（`scripts/sync-zenn.js`）は以下を自動で行う：
+- ブログ記事の本文をそのまま Zenn 記事に反映
+- `:::message` ブロックとフッターを自動で付与
+- `import` 文・`<AmazonCard/>` コンポーネント・末尾の関連記事セクションを除去
+- Zenn 側の `published` / `published_at` は変更しない（公開状態は保持）
 
 ---
 
@@ -118,6 +126,10 @@ src/
   content/blog/       ← ブログ記事（.md / .mdx）
   components/         ← 共通コンポーネント（BlogCard, AmazonCard, Header, Footer, Pagination）
   layouts/            ← BaseLayout, BlogLayout
+  lib/
+    db.ts             ← IndexedDB CRUD ユーティリティ（idb使用・ポートフォリオページで使用）
+  data/
+    mock-projects.json ← ポートフォリオのモックデータ（デモ環境用）
   pages/
     blog/             ← 一覧（ページネーション）・記事詳細・タグ・RSS
     portfolios/       ← 実績一覧
@@ -132,11 +144,48 @@ src/
 articles/             ← Zenn記事（push で自動公開）
 books/                ← Zenn本（現在未使用）
 infra/                ← AWS CDK
-docs/                 ← 運営ドキュメント（operations.md, article-plan.md）
+docs/                 ← 運営ドキュメント（operations.md, article-plan.md, affiliate-strategy.md）
 public/
-  images/portfolio/   ← ポートフォリオのスクリーンショット置き場
-  logo.png            ← 猫ロゴ（ファビコン・アバターに使用）
+  scripts/
+    menu.js           ← ハンバーガーメニュー（CSP対応・Header.astroから読込）
+    ui.js             ← バックトゥトップボタン（BaseLayout.astroから読込）
+    blog.js           ← 記事ページ制御（進捗バー・コードコピー・TOC）
+    ga.js             ← Google Analytics 初期化
+  images/portfolio/   ← ポートフォリオのスクリーンショット（PNG + WebP）
+  logo.png            ← 猫ロゴ（OGP・アバターに使用）
+  logo-small.png      ← ヘッダー用小サイズロゴ
+  logo-small.webp     ← ヘッダー用小サイズロゴ（WebP版）
+  favicon.svg         ← ファビコン
+  og-default.svg      ← OGPデフォルト画像（SVG）
 ```
+
+---
+
+## JavaScript の追加・変更ルール（CSP対応）
+
+本番環境は CloudFront の CSP ヘッダー `script-src 'self'` が設定されており、**インラインの `<script>` ブロックは動作しない**（ローカルでは動くが本番で無効になる）。
+
+### ルール
+- JavaScript は必ず `public/scripts/` に外部ファイルとして配置する
+- Astro コンポーネントから読み込む際は `<script is:inline src="/scripts/xxx.js">` を使う
+- `<script>` ブロックをコンポーネントに直接書かない
+
+### 既存ファイルの担当範囲
+| ファイル | 読み込み元 | 担当機能 |
+|---|---|---|
+| `menu.js` | `Header.astro` | ハンバーガーメニュー開閉・スクロールロック |
+| `ui.js` | `BaseLayout.astro` | バックトゥトップボタンの表示制御 |
+| `blog.js` | `BlogLayout.astro` | 進捗バー・コードコピーボタン・TOCハイライト |
+| `ga.js` | `BaseLayout.astro` | Google Analytics（gtag）初期化 |
+
+---
+
+## astro.config.mjs の変更ルール
+
+- インテグレーション（`@astrojs/mdx`, `@astrojs/sitemap` など）の追加・削除はここで行う
+- `site` は `https://www.taka-techblog.com` で固定。変更しない
+- `build.format: 'directory'` は URL末尾スラッシュ統一のため固定。変更しない
+- 新しいインテグレーションを追加したら `package.json` の dependencies も確認する
 
 ---
 

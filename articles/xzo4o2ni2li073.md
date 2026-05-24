@@ -2,7 +2,7 @@
 title: "RDSとDynamoDBの使い分け——データ構造とアクセスパターンで選ぶ基準"
 emoji: "🗄️"
 type: "tech"
-topics: ["AWS", "データベース"]
+topics: ["AWS","データベース"]
 published: false
 published_at: "2024-10-08 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/aws-rds-dynamodb-choice"
@@ -11,6 +11,8 @@ canonical_url: "https://www.taka-techblog.com/blog/aws-rds-dynamodb-choice"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/aws-rds-dynamodb-choice?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
+
 
 データベースの選択は、システムの性能・コスト・スケール特性を長期にわたって左右する意思決定だ。にもかかわらず「とりあえずRDS（MySQL/PostgreSQL）でいいか」という理由で選ばれることが多い。
 
@@ -176,8 +178,7 @@ RDSとDynamoDBの選択基準をまとめる。
 
 「なんとなくRDS」は今すぐやめよう。まず**アクセスパターンを洗い出し**、次に**スケール・レイテンシ要件を確認**する。その結果から逆算してDBを選ぶことが、後悔しないデータベース設計の第一歩だ。
 
-
-📚 **[AWSの基本・仕組み・重要用語が全部わかる教科書](https://www.amazon.co.jp/dp/4815607850)** — 川畑光平 著 ／SBクリエイティブ — 図解でAWSの全体像をつかむ入門書
+DBを選んだあとに考えるのが可用性設計だ。RDSのMulti-AZ構成やフェイルオーバーの仕組みを含め、「止まらないサービス」を作るための考え方は[高可用性設計の基本——SPOF排除とフェイルオーバーで「止まらないサービス」を作る](/blog/high-availability-design-spof)でまとめている。
 
 ---
 

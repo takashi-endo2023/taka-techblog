@@ -4,6 +4,10 @@ description: "人事は「システムわからない」、本部長は丸投げ
 pubDate: "2025-08-12"
 updatedDate: "2026-05-22"
 tags: ["組織設計", "マネジメント"]
+zennHash: "h9rsspjmuru38j"
+zennEmoji: "🙋"
+zennType: "idea"
+zennTopics: ["マネジメント","キャリア"]
 ---
 
 「最終面接、通しますか？通しませんか？」

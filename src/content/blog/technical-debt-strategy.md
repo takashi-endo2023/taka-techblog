@@ -4,6 +4,10 @@ description: "ベンダーのコードを引き継いだ日から、技術的負
 pubDate: "2025-09-21"
 updatedDate: "2026-05-22"
 tags: ["テックリード", "アーキテクチャ", "医療IT"]
+zennHash: "bxbuu3zypx5k2i"
+zennEmoji: "💸"
+zennType: "idea"
+zennTopics: ["チーム開発","マネジメント","テックリード"]
 ---
 
 「遅いですよね、あなたのせいですよ」

@@ -3,6 +3,10 @@ title: "AWS CDKを初めて使って詰まった5つのこと"
 description: "IaC初挑戦でAWS CDKを選んでこのブログのインフラを構築した際に直面した5つの壁と、その解決策をまとめました。CDK初心者が同じ穴にはまらないように。"
 pubDate: "2025-02-16"
 tags: ["AWS", "DevOps"]
+zennHash: "nax4pimbscwtuv"
+zennEmoji: "🔧"
+zennType: "tech"
+zennTopics: ["AWS","TypeScript"]
 ---
 
 ## なぜCDKを選んだのか

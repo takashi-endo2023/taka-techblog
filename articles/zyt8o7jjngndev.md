@@ -2,7 +2,7 @@
 title: "CloudWatchでAWSを監視する——メトリクス・アラーム・ログの実務パターン"
 emoji: "📊"
 type: "tech"
-topics: ["AWS", "DevOps", "インフラ"]
+topics: ["AWS","DevOps","インフラ"]
 published: false
 published_at: "2024-08-27 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/aws-cloudwatch-monitoring"
@@ -11,6 +11,8 @@ canonical_url: "https://www.taka-techblog.com/blog/aws-cloudwatch-monitoring"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/aws-cloudwatch-monitoring?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
+
 
 「デプロイしたら終わり」ではなく「デプロイしてからが本番」だと思っている。どんなにコードの品質が高くても、本番環境で何が起きているか見えない状態では安心して運用できない。AWSにおける監視の中心はCloudWatchだ。
 
@@ -225,8 +227,7 @@ CloudWatchを実務で活かすポイントをまとめる。
 
 監視は「何かあったとき用」ではなく「普段から状態を把握し続けるため」にある。設計と運用の両面でCloudWatchを使いこなすことが、安定したAWS運用の基盤になる。
 
-
-📚 **[AWSの基本・仕組み・重要用語が全部わかる教科書](https://www.amazon.co.jp/dp/4815607850)** — 川畑光平 著 ／SBクリエイティブ — 図解でAWSの全体像をつかむ入門書
+監視と合わせて考えておきたいのが可用性設計だ。障害を検知するだけでなく、起きても止まらない仕組みを作るための考え方は[高可用性設計の基本——SPOF排除とフェイルオーバーで「止まらないサービス」を作る](/blog/high-availability-design-spof)で整理している。
 
 ---
 

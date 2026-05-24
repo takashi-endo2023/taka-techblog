@@ -2,7 +2,7 @@
 title: "AIがなかったら死んでた——一人で全部背負うテックリードの現実"
 emoji: "🤖"
 type: "idea"
-topics: ["テックリード", "AI", "LLM", "チーム開発"]
+topics: ["テックリード","AI","LLM","チーム開発"]
 published: false
 canonical_url: "https://www.taka-techblog.com/blog/solo-techlead-ai-survival"
 ---
@@ -10,6 +10,7 @@ canonical_url: "https://www.taka-techblog.com/blog/solo-techlead-ai-survival"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/solo-techlead-ai-survival?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 AIがなかったら、たぶん死んでいた。
 

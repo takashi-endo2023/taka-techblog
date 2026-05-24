@@ -4,6 +4,10 @@ description: "「会話が成立しない」「手が止まると考え込む」
 pubDate: "2025-08-25"
 updatedDate: "2026-05-22"
 tags: ["チーム開発", "組織設計", "テックリード", "アーキテクチャ"]
+zennHash: "0yh2itbqgsc0et"
+zennEmoji: "📐"
+zennType: "idea"
+zennTopics: ["チーム開発","マネジメント"]
 ---
 
 「会話が成立しない」と書くと聞こえが悪いが、正直なところそういう状態だった。

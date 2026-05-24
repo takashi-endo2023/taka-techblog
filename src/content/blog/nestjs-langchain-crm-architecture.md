@@ -4,6 +4,10 @@ description: "ベンダーから引き継いだNestJS+React+PostgreSQLの治験C
 pubDate: "2026-02-18"
 updatedDate: "2026-05-22"
 tags: ["NestJS", "LangChain", "アーキテクチャ", "AI開発", "医療IT"]
+zennHash: "9brfxkct0afcsg"
+zennEmoji: "⚙️"
+zennType: "tech"
+zennTopics: ["NestJS","LangChain","AI"]
 ---
 
 引き継いだ治験CRMにAI機能を追加したときの構成と判断を記録しておく。

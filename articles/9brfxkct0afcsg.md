@@ -2,7 +2,7 @@
 title: "NestJS + LangChainで治験CRMにAI機能を追加した構成メモ"
 emoji: "⚙️"
 type: "tech"
-topics: ["NestJS", "LangChain", "AI"]
+topics: ["NestJS","LangChain","AI"]
 published: false
 published_at: "2025-10-07 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/nestjs-langchain-crm-architecture"
@@ -11,6 +11,7 @@ canonical_url: "https://www.taka-techblog.com/blog/nestjs-langchain-crm-architec
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/nestjs-langchain-crm-architecture?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 引き継いだ治験CRMにAI機能を追加したときの構成と判断を記録しておく。
 
@@ -135,6 +136,8 @@ AIモジュールも例外ではなく、ツールの入出力の型はzodで定
 Re-Actエージェントは動いている。プロンプトとツールのdescriptionのチューニングに時間を溶かすことが多く、「プロンプトエンジニアリング」の地味さを実感している。
 
 「エージェントに何をさせるか」の設計が一番難しく、コードより自然言語の調整で詰まることが多い。
+
+AI機能を追加した後に顕在化したパフォーマンス問題とその改善プロセスは、[治験データが増えるにつれてシステムが遅くなった——パフォーマンス改善の実記録](/blog/clinical-trial-system-performance)に記録している。
 
 ---
 

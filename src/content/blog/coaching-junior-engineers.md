@@ -4,6 +4,10 @@ description: "答えを教えないコーチング型の指導で未経験エン
 pubDate: "2025-09-08"
 updatedDate: "2026-05-21"
 tags: ["組織設計", "チーム開発", "マネジメント"]
+zennHash: "n98llcuymohyie"
+zennEmoji: "🌱"
+zennType: "idea"
+zennTopics: ["チーム開発","マネジメント","キャリア"]
 ---
 
 「幼稚園じゃないんだよ」と、心の中で毎日思っている。

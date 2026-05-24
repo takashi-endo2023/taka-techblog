@@ -6,7 +6,16 @@ import { getCollection } from 'astro:content';
 const now = new Date();
 const allPosts = (await getCollection('blog')).filter((p) => p.data.pubDate <= now);
 const sorted = [...allPosts].sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
-const recentPosts = sorted.slice(0, 6);
+const recentPosts = sorted.slice(0, 3);
+
+const featuredSlugs = [
+  'career-change-to-engineer',
+  'techLead-first-90-days',
+  'git-chaos-1hour-before-release',
+];
+const featuredPosts = featuredSlugs
+  .map((slug) => allPosts.find((p) => p.id === slug))
+  .filter((p): p is NonNullable<typeof p> => p != null);
 
 function getReadingTime(body: string): number {
   return Math.max(1, Math.ceil(body.length / 300));
@@ -49,6 +58,30 @@ const categories = categoryDefs.map(({ label, tag }) => ({
         <a href="/blog" class="btn btn-primary">記事を読む</a>
         <a href="/portfolios" class="btn btn-outline">実績を見る</a>
       </div>
+    </div>
+  </section>
+
+  <!-- Featured Posts -->
+  <section class="section container">
+    <div class="section-header">
+      <div class="featured-title-group">
+        <h2>おすすめ記事</h2>
+        <span class="featured-label">まずはここから</span>
+      </div>
+    </div>
+    <div class="card-grid">
+      {featuredPosts.map((post) => (
+        <div class="featured-card-wrapper">
+          <BlogCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            slug={post.id}
+            tags={post.data.tags}
+            readingTime={getReadingTime(post.body ?? '')}
+          />
+        </div>
+      ))}
     </div>
   </section>
 
@@ -229,6 +262,23 @@ const categories = categoryDefs.map(({ label, tag }) => ({
     display: grid;
     gap: 1.25rem;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  /* ── Featured Posts ── */
+  .featured-title-group {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  .featured-label {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .featured-card-wrapper :global(.card-top-line) {
+    opacity: 1;
   }
 
   /* ── Category picks ── */

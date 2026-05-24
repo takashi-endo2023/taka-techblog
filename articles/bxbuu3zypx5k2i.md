@@ -2,7 +2,7 @@
 title: "直したいのに直せない——技術的負債と向き合う3年間"
 emoji: "💸"
 type: "idea"
-topics: ["チーム開発", "マネジメント", "テックリード"]
+topics: ["チーム開発","マネジメント","テックリード"]
 published: false
 published_at: "2025-01-21 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/technical-debt-strategy"
@@ -11,6 +11,7 @@ canonical_url: "https://www.taka-techblog.com/blog/technical-debt-strategy"
 :::message
 この記事は [taka-techblog](https://www.taka-techblog.com/blog/technical-debt-strategy?utm_source=zenn&utm_medium=referral) にも掲載しています。
 :::
+
 
 「遅いですよね、あなたのせいですよ」
 

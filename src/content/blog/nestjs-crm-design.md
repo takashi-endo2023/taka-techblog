@@ -4,6 +4,10 @@ description: "ベンダーから引き継いだNestJS製治験CRMの保守・改
 pubDate: "2025-12-25"
 updatedDate: "2026-05-22"
 tags: ["NestJS", "TypeScript", "アーキテクチャ"]
+zennHash: "2rq66b1w1t1rp4"
+zennEmoji: "🏥"
+zennType: "tech"
+zennTopics: ["NestJS","TypeScript"]
 ---
 
 ベンダーから引き継いだ治験CRMのバックエンドはNestJSで書かれていた。
