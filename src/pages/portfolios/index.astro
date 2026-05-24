@@ -112,7 +112,12 @@ const portfolios = [
         <article class="portfolio-card">
           <div class="card-screenshot">
             {item.screenshot
-              ? <img src={item.screenshot} alt={`${item.title} スクリーンショット`} loading="lazy" />
+              ? (
+                <picture>
+                  <source srcset={item.screenshot.replace(/\.png$/, '.webp')} type="image/webp" />
+                  <img src={item.screenshot} alt={`${item.title} スクリーンショット`} loading="lazy" />
+                </picture>
+              )
               : <div class="screenshot-placeholder"><span>screenshot coming soon</span></div>
             }
           </div>
