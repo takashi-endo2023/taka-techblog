@@ -102,9 +102,5 @@ const ogImageURL = new URL(ogImage, Astro.site);
   </body>
 </html>
 
-<script>
-  const btn = document.getElementById('back-to-top')!;
-  window.addEventListener('scroll', () => {
-    btn.classList.toggle('visible', window.scrollY > 400);
-  }, { passive: true });
-</script>
+<!-- CSP (script-src 'self') はインラインスクリプトをブロックするため外部ファイルに切り出す -->
+<script is:inline src="/scripts/ui.js"></script>
