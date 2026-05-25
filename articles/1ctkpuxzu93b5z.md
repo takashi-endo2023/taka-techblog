@@ -12,6 +12,7 @@ canonical_url: "https://www.taka-techblog.com/blog/solo-techlead-ai-survival"
 :::
 
 
+
 AIがなかったら、たぶん死んでいた。
 
 比喩だが、あながち冗談でもない。

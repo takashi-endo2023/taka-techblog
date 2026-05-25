@@ -13,6 +13,7 @@ canonical_url: "https://www.taka-techblog.com/blog/technical-debt-strategy"
 :::
 
 
+
 「遅いですよね、あなたのせいですよ」
 
 冗談で言われたんだとわかってる。みんなで笑ってた。自分も愛想笑いをした。

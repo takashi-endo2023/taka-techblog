@@ -47,6 +47,10 @@ function stripBlogSpecific(body) {
     .replace(/^import .+\n/gm, '')
     // AmazonCard コンポーネントを除去（複数行対応）
     .replace(/<AmazonCard[\s\S]*?\/>/g, '')
+    // GeeklyAffiliate コンポーネントを除去（A8 アフィリエイトは Zenn には掲載しない）
+    .replace(/<GeeklyAffiliate[\s\S]*?\/>/g, '')
+    // アフィリエイト訴求セクションを除去（lookahead で 関連記事 区切りは残す）
+    .replace(/\n---\n\n## この記事を読んだ方へ[\s\S]*?(?=\n---\n)/, '')
     // 関連記事セクション（末尾）を除去
     .replace(/\n---\n\n\*\*関連記事\*\*[：:]\n[\s\S]*$/, '')
     .replace(/\n---\n\n\*\*関連記事\*\*\n[\s\S]*$/, '')

@@ -1,0 +1,163 @@
+---
+interface Props {
+  variant?: 'banner' | 'cta' | 'inline';
+}
+
+const { variant = 'banner' } = Astro.props;
+
+const LINKS = {
+  banner: {
+    href: 'https://px.a8.net/svt/ejp?a8mat=4B3YV5+4BE5O2+3GVA+61RI9',
+    img: 'https://www27.a8.net/svt/bgt?aid=260525633261&wid=001&eno=01&mid=s00000016183001016000&mc=1',
+    pixel: 'https://www13.a8.net/0.gif?a8mat=4B3YV5+4BE5O2+3GVA+61RI9',
+  },
+  cta: {
+    href: 'https://px.a8.net/svt/ejp?a8mat=4B3YV5+4BE5O2+3GVA+5YJRM',
+    pixel: 'https://www19.a8.net/0.gif?a8mat=4B3YV5+4BE5O2+3GVA+5YJRM',
+    text: 'IT・WEB・ソーシャルゲーム業界への転職ならGeekly',
+  },
+  inline: {
+    href: 'https://px.a8.net/svt/ejp?a8mat=4B3YV5+4BE5O2+3GVA+66WOY',
+    pixel: 'https://www13.a8.net/0.gif?a8mat=4B3YV5+4BE5O2+3GVA+66WOY',
+    text: 'ギークリー',
+  },
+} as const;
+---
+
+{variant === 'banner' && (
+  <div class="geekly-banner">
+    <span class="pr-label">PR</span>
+    <a href={LINKS.banner.href} rel="nofollow sponsored" target="_blank">
+      <img
+        src={LINKS.banner.img}
+        width="300"
+        height="250"
+        alt="ギークリー - ITエンジニア専門の転職エージェント"
+        loading="lazy"
+      />
+    </a>
+    <img class="tracking-pixel" src={LINKS.banner.pixel} width="1" height="1" alt="" aria-hidden="true" />
+  </div>
+)}
+
+{variant === 'cta' && (
+  <div class="geekly-cta">
+    <span class="pr-label">PR</span>
+    <a href={LINKS.cta.href} rel="nofollow sponsored" target="_blank" class="geekly-cta-link">
+      {LINKS.cta.text}
+      <span class="geekly-cta-arrow">→</span>
+    </a>
+    <img class="tracking-pixel" src={LINKS.cta.pixel} width="1" height="1" alt="" aria-hidden="true" />
+  </div>
+)}
+
+{variant === 'inline' && (
+  <span class="geekly-inline">
+    <a href={LINKS.inline.href} rel="nofollow sponsored" target="_blank">{LINKS.inline.text}</a>
+    <img class="tracking-pixel" src={LINKS.inline.pixel} width="1" height="1" alt="" aria-hidden="true" />
+  </span>
+)}
+
+<style>
+  .geekly-banner {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+    max-width: 100%;
+    margin: 2rem auto;
+    padding: 1.25rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+  }
+
+  .geekly-banner:hover {
+    border-color: var(--color-accent);
+  }
+
+  .geekly-banner a {
+    display: block;
+    line-height: 0;
+  }
+
+  .geekly-banner a img {
+    display: block;
+    width: 300px;
+    height: 250px;
+    max-width: 100%;
+    border: 0 !important;
+    border-radius: 4px;
+    margin: 0 !important;
+  }
+
+  .geekly-cta {
+    position: relative;
+    margin: 2rem 0;
+    padding: 1.25rem 1.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+  }
+
+  .geekly-cta:hover {
+    border-color: var(--color-accent);
+  }
+
+  .geekly-cta-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .geekly-cta:hover .geekly-cta-link {
+    color: var(--color-accent);
+  }
+
+  .geekly-cta-arrow {
+    color: var(--color-accent);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .pr-label {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    line-height: 1.4;
+  }
+
+  .geekly-inline a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .geekly-inline a:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .tracking-pixel {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+    border: 0;
+  }
+</style>

@@ -13,6 +13,7 @@ canonical_url: "https://www.taka-techblog.com/blog/engineer-hiring-lessons"
 :::
 
 
+
 「最終面接、通しますか？通しませんか？」
 
 本部長から言われることはそれだけだった。採用要件の整理も、候補者への訴求も、カジュアル面接での印象確認も、全部自分がやってきた後に返ってくる言葉がそれだ。
