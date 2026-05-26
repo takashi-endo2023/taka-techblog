@@ -120,7 +120,7 @@ function handler(event) {
       "default-src 'self'",
       "script-src 'self' https://www.googletagmanager.com",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://bat.bing.com",
+      "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://bat.bing.com https://*.a8.net",
       "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.googletagmanager.com",
       "font-src 'self'",
       "worker-src 'self'",
