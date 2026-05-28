@@ -1,6 +1,6 @@
 # 記事計画・アイデアメモ
 
-最終更新: 2026-05-25
+最終更新: 2026-05-27
 
 ---
 
@@ -274,36 +274,6 @@
 | 4 | AWS CDK インフラ構成の解説 | このブログのインフラをコードと構成図で解説 | 現場エンジニアへの訴求力がある。IaC設計判断まで語れる |
 
 > ブログ記事（`langchain-nestjs-ai-integration.md`, `cloudformation-to-cdk.md` など）との連携でポートフォリオ→ブログの動線を作る
-
----
-
-## 📤 Zenn 掲載済み記事
-
-| ブログ記事 | Zenn ファイル |
-|---|---|
-| career-change-to-engineer.md | e4d8874f0c25b0.md |
-| naisei-kansei.md | 46a0ca17e07591.md |
-| claude-code-workflow.md | ed32a95b5e4802.md |
-| techLead-first-90-days.md | c456bbb0adeb5d.md |
-| clinical-trial-system-performance.md | f35fbfd57c2bf9.md |
-| web-technology-book-review.mdx | 0d3f099034a005.md |
-| web-architecture-rest-history.mdx | c6c4de13a0cdb2.md |
-| http-cache-guide.mdx | 721c49e186f713.md |
-| rest-api-write-design.mdx | d850972b4a7b49.md |
-| javascript-honkaku-nyumon-review.mdx | ec31073bda0f55.md |
-| javascript-map-set-practical.mdx | f38804b70d22be.md |
-| javascript-fetch-api-practical.mdx | 28fac32146d7b9.md |
-| javascript-regexp-practical.mdx | 60fa04f1663c92.md |
-| typescript-react-nextjs-book-review.mdx | 6fd4ae4ee5f36f.md |
-| typescript-utility-types-practical.mdx | 945f46c541fbdb.md |
-| css-in-js-styled-components-vs-modules.mdx | d3ce068b762988.md |
-| nextjs-deployment-strategy.mdx | 103c1c4d7b0a43.md |
-| frontend-accessibility-intro.mdx | d5e66fde2ad28d.md |
-| nextjs-stripe-payment.mdx | 657f7c4b4cebfd.md |
-| server-infra-book-review.mdx | 47dc7ddfc7c40f.md |
-| linux-load-average-deep-dive.mdx | 08428d8bf20838.md |
-| mysql-replication-design.mdx | 79279979f9fe68.md |
-| reverse-proxy-cache-design.mdx | 7ee61b358adca8.md |
 
 ---
 
