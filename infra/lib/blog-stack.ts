@@ -118,13 +118,13 @@ function handler(event) {
     // COOP: same-origin でポップアップ経由の情報漏洩を防止
     const csp = [
       "default-src 'self'",
-      "script-src 'self' https://www.googletagmanager.com",
+      "script-src 'self' https://www.googletagmanager.com https://pagead2.googlesyndication.com https://partner.googleadservices.com https://tpc.googlesyndication.com https://www.googletagservices.com https://adservice.google.com",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://bat.bing.com https://*.a8.net",
-      "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.googletagmanager.com",
+      "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://bat.bing.com https://*.a8.net https://*.googlesyndication.com https://*.g.doubleclick.net https://*.google.com",
+      "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.googletagmanager.com https://pagead2.googlesyndication.com https://*.g.doubleclick.net https://*.google.com",
       "font-src 'self'",
       "worker-src 'self'",
-      "frame-src https://docs.google.com",
+      "frame-src https://docs.google.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.google.com",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "object-src 'none'",
