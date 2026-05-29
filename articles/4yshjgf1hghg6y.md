@@ -4,7 +4,7 @@ emoji: "🔥"
 type: "tech"
 topics: ["Git","DevOps"]
 published: true
-published_at: "2025-03-11 09:00"
+published_at: "2026-05-30 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/git-chaos-1hour-before-release"
 ---
 

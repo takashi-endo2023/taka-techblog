@@ -144,7 +144,7 @@ src/
 articles/             ← Zenn記事（push で自動公開）
 books/                ← Zenn本（現在未使用）
 infra/                ← AWS CDK
-docs/                 ← 運営ドキュメント（operations.md, article-plan.md, affiliate-strategy.md）
+docs/                 ← 運営ドキュメント（operations.md, article-plan.md, affiliate-strategy.md, growth-strategy.md, note-strategy.md）
 public/
   scripts/
     menu.js           ← ハンバーガーメニュー（CSP対応・Header.astroから読込）
@@ -226,6 +226,32 @@ public/
 - GitHub: `takashi-endo2023`
 - ページタイトル形式: `ページ名 | taka-techblog`
 - 絵文字はコードには書かない（ユーザーから明示的に求められた場合のみ）
+
+---
+
+## 運営ドキュメントのルール（docs/）
+
+運営系ドキュメントは役割を分離し、情報の重複を避ける。**1つの情報は1箇所にだけ書く**。
+
+### 各ドキュメントの責務（single source of truth）
+
+| ファイル | 責務（ここにしか書かない情報） | 見る頻度 |
+|---|---|---|
+| `operations.md` | 週次運用手順・出稿スケジュール・投稿ログ・出稿キュー・計測ガイド | 毎日〜毎週 |
+| `article-plan.md` | 記事カタログ・未執筆アイデア・資格計画・タグ一覧 | 記事を書くとき |
+| `growth-strategy.md` | **収益源ステータス・マネタイズ全体・KPI目標・X運用戦略・情報源** | 月次振り返り |
+| `affiliate-strategy.md` | アフィリエイト個別の配置記事・配置パターン | アフィリ配置時 |
+| `note-strategy.md` | note 有料コンテンツの刊行計画（着手は3ヶ月後目安） | note着手時 |
+| `x-content-examples.html` | X投稿の実例（画像・スレッド）。アーカイブ参照用 | 必要時 |
+
+### ルール
+
+- **マネタイズ・収益源ステータス・KPIは `growth-strategy.md` が正**。他docは参照のみ（数値を二重に書かない）
+- 同じ情報を複数docに書きたくなったら、片方に書いて他方からリンクする
+- 各docの冒頭に `最終更新: YYYY-MM-DD` を置き、更新時に必ず直す
+- 完了したタスク・使用済みのコピペ文は消す（履歴は投稿ログにのみ残す）
+- 新しい運営docを増やす前に、既存docに追記できないか検討する（安易に増やさない）
+- ステータス変更（承認・実装・公開など）は、関連する全docを同時に更新する
 
 ---
 
