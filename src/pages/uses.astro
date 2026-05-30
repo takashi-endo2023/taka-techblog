@@ -79,6 +79,12 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
         asin: 'B0GNM15YP2',
       },
       {
+        name: 'ブルーエア 空気清浄機 Blue Pure 411',
+        description:
+          'デスクのある部屋に置いている空気清浄機。集中が続く作業部屋の空気を整えてくれる。静音で動作音が気にならず、つけっぱなしでも邪魔にならない。',
+        asin: 'B076K6PSJ8',
+      },
+      {
         name: 'USB-C ドッキングステーション',
         description:
           'MacBook はポートが少ないので、モニター・有線LAN・USB機器をこれ1台に集約。ケーブル1本の抜き差しでデスクから離脱・復帰できる。ポート不足のストレスが消えた。',
@@ -124,6 +130,12 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
         description:
           '指圧突起が座面からお尻・太ももの血行を促してくれる座布団。長時間座り続けると出てくる疲れが明らかに軽減された。厚みがあって底付き感もない。',
         asin: 'B07PC1RV1H',
+      },
+      {
+        name: 'RENPHO Active ハンディガン（マッサージガン）',
+        description:
+          '長時間のデスクワークで凝った肩・腰・脚をほぐす。作業の合間に数分当てるだけで張りがリセットされる。座りっぱなしの体のメンテに欠かせない。',
+        asin: 'B0BVVTPSCW',
       },
     ],
   },
@@ -227,6 +239,16 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
         description:
           'エアコン・照明・テレビを1台に集約し、スマホや音声で操作できる。Echo と連携して「行ってきます」で部屋の家電をまとめてオフにできる。エンジニア的に「家のAPI化」が地味に楽しい。',
         asin: 'B07TTH5TMW',
+      },
+      {
+        name: 'SwitchBot LED電球',
+        description: '声やスマホで明るさ・色を変えられるスマート電球。作業時は白くはっきり、夜は暖色に落として目を休める。Echoと連携して音声でオンオフできる。',
+        asin: 'B09DGBYQD4',
+      },
+      {
+        name: 'SwitchBot LEDテープライト',
+        description: 'デスク裏やモニター背面に貼る間接照明。画面と周囲の明暗差が和らいで目が楽になる。色も自由に変えられて、作業の気分転換にもなる。',
+        asin: 'B09KCGK8NK',
       },
     ],
   },
@@ -372,12 +394,17 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
     ],
   },
   {
-    title: '開発ツール',
+    title: '開発ツール・ユーティリティ',
     items: [
       {
         name: 'Postman',
         description:
           'NestJSで作ったAPIの動作確認に使う。リクエストを保存・整理しておけるので、エンドポイントが増えても検証がぶれない。チームでコレクションを共有すれば動作仕様の共通理解にもなる。',
+      },
+      {
+        name: 'Figma',
+        description:
+          '画面設計・UIの検討に使用。実装前にレイアウトや遷移をFigmaでざっくりFIXさせておくと、コードに落とすときの手戻りが減る。デザイナーがいないチームなので、自分でラフを作る場面が多い。',
       },
       {
         name: 'GitHub Desktop / Git Graph',
@@ -393,6 +420,21 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
         name: 'nvm（Node.js / npm）',
         description:
           'プロジェクトごとにNode.jsのバージョンが違うので、nvmで切り替える。Node.js + npm はフロント・バックともに開発の土台。',
+      },
+      {
+        name: 'Logicool Options+',
+        description:
+          'MX KEYS S / MX Master のボタン割り当て・スクロール挙動をカスタムするアプリ。アプリごとにショートカットを変えられるので、エディタとブラウザで操作を最適化している。設定がクラウド保存されるのも地味に助かる。',
+      },
+      {
+        name: 'RunCat',
+        description:
+          'メニューバーで猫が走るアニメーションでCPU負荷を可視化するアプリ。ビルドや重い処理で猫が走り出すので、PCの状態が直感的にわかる。実用と癒やしを兼ねている。',
+      },
+      {
+        name: 'Google Authenticator',
+        description:
+          '各種サービスの2段階認証に使用。パスワードは標準管理だが、2FAはこれで分離している。',
       },
       {
         name: 'パスワード管理（macOS / Google 標準）',
@@ -412,6 +454,10 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
       {
         name: 'Metalife',
         description: 'バーチャルオフィスツール（仕事）。部署内での画面共有や、過去に開発会社とのMTGで使用。アバターで同じ空間にいる感覚があり、ちょっとした声かけがしやすい。',
+      },
+      {
+        name: 'Slack',
+        description: 'チームの連絡・情報共有の基盤（仕事）。チャンネルで話題を分け、通知や連携で開発の動きを追っている。',
       },
     ],
   },
