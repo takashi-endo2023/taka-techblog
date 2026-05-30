@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    # 毎日 00:00 UTC（09:00 JST）にビルド&デプロイ。
+    # 未来日 pubDate の記事を「その日が来たら自動公開」するための定期ビルド。
+    - cron: '0 0 * * *'
 
 permissions:
   id-token: write   # OIDC 認証に必須

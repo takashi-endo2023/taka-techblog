@@ -32,17 +32,30 @@ npm run sync:zenn
 **新記事を作るとき:**
 ```bash
 # 1. ブログ記事を作成（src/content/blog/<slug>.md）
-# 2. Zennのハッシュを取得（1回だけ）
+# 2. pubDate を「次の公開枠」に自動算出（最新記事 + cadence日数）
+node scripts/content-plan.js --next   # → 使うべき pubDate を出力
+# 3. Zennのハッシュを取得（1回だけ）
 npx zenn-cli new:article
-# 3. 生成されたハッシュをブログ frontmatter に追加
+# 4. 生成されたハッシュをブログ frontmatter に追加
 #    zennHash: "<hash>"
 #    zennEmoji: "📝"
 #    zennType: "tech"   # tech（技術） or idea（体験・考察）
 #    zennTopics: ["topic1", "topic2"]
-# 4. Zennに同期
+# 5. Zennに同期
 npm run sync:zenn
-# 5. push
+# 6. push
 ```
+
+### 公開スケジュール・時系列のルール（自動）
+
+記事の `pubDate` が「ブログ公開日」を兼ねる。**未来日 = 予約公開**（一覧ページが `pubDate <= now` でフィルタ。日次 cron ビルドでその日が来たら自動公開される）。
+
+- **新記事の pubDate は必ず「最新記事 + cadence日数」に揃える**（`node scripts/content-plan.js --next` で算出）。バラバラな日付・同日クラスターにしない
+- cadence は現在 **7日（週1）**。`scripts/content-plan.js` の `CADENCE_DAYS` 1箇所で変更可。ネタ詰まり時は 14（隔週）や 30（月1）に落とす
+- **既存記事の pubDate は書き換えない**（時系列は構築済み。SEOリスク回避）
+- Zenn の `published_at` と X 告知も、その記事の pubDate に揃える（同じ日に公開・告知）
+- 出稿の優先度は **書評・体験談 > 技術記事**（技術記事は Zenn では埋もれやすく、ブログSEO流入に任せる）
+- 公開計画の確認は `node scripts/content-plan.js`（cadence違反検出・予約キュー・Zenn未公開キュー・在庫週数を表示）
 
 ### ブログ記事の frontmatter（全フィールド必須）
 
