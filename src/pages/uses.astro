@@ -60,6 +60,24 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
           'モニター上部に引っ掛けるだけで設置できるバーライト。演色性 Ra≥98 で目が疲れにくい。照度 700Lux 以上・無段階調光で夜間作業の手元が格段に見やすくなった。モニターへの映り込みもない。',
         asin: 'B08DKQ3JG1',
       },
+      {
+        name: 'ノートPCスタンド（折りたたみ式）',
+        description:
+          'MacBook を立てて目線を上げるためのスタンド。外部モニターと併用するとき、ノート側の高さが揃って首が楽になる。折りたためるので持ち運びにも使える。',
+        asin: 'B07GB42ZT9',
+      },
+      {
+        name: '机上台（モニター下ラック）',
+        description:
+          'モニターの下に置く台。高さが出てモニター位置が上がるうえ、台の下にキーボードやマウスをしまえる。使わないときデスクがフラットになって作業面が広く使える。',
+        asin: 'B0CJ23TD4D',
+      },
+      {
+        name: '山善 キャスター付きワゴン（LBTL-3）',
+        description:
+          'デスク下に置けるキャリー型の3段ワゴン。書類・ケーブル・備品をまとめて収納でき、キャスターで動かせるので掃除も楽。デスク周りが散らからなくなった。',
+        asin: 'B0GNM15YP2',
+      },
     ],
   },
   {
@@ -156,6 +174,29 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
         description:
           'iPhone・Apple Watch・AirPods を1台でまとめて充電。Qi2 認証で 15W 急速ワイヤレス充電対応。ケーブルが1本で済むのでデスクがすっきりした。',
         asin: 'B0D5D4HLWW',
+      },
+      {
+        name: 'Amazonベーシック PCケース（スリーブ・14インチ）',
+        description:
+          'MacBook を持ち運ぶときのクッションケース。ノートパソコンバッグ型で衝撃から守ってくれる。カフェや出先に持ち出すとき、これに入れてリュックに放り込んでいる。安価だが必要十分。',
+        asin: 'B00CD8AFFW',
+      },
+    ],
+  },
+  {
+    title: 'スマートホーム',
+    items: [
+      {
+        name: 'Amazon Echo Dot',
+        description:
+          'デスク横に置いて、タイマー・音楽・天気・リマインダーを声で操作。作業の手を止めずにちょっとした操作ができるのが在宅ワークと相性がいい。',
+        asin: 'B09B8SZLLG',
+      },
+      {
+        name: 'スマートリモコン',
+        description:
+          'エアコン・照明・テレビを1台に集約し、スマホや音声で操作できる。Echo と連携して「行ってきます」で部屋の家電をまとめてオフにできる。エンジニア的に「家のAPI化」が地味に楽しい。',
+        asin: 'B07TTH5TMW',
       },
     ],
   },
@@ -323,9 +364,15 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
       <p class="page-subtitle">普段の開発で使っているもの一覧</p>
     </header>
 
+    <nav class="uses-toc animate-fade-in-up" aria-label="セクション一覧">
+      {sections.map((section, i) => (
+        <a href={`#sec-${i}`} class="toc-link">{section.title}</a>
+      ))}
+    </nav>
+
     <div class="uses-content">
-      {sections.map((section) => (
-        <section class="uses-section animate-fade-in-up">
+      {sections.map((section, i) => (
+        <section id={`sec-${i}`} class="uses-section animate-fade-in-up">
           <h2 class="section-title">{section.title}</h2>
           <ul class="item-list">
             {section.items.map((item) => (
@@ -378,10 +425,41 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
     font-size: 1rem;
   }
 
+  .uses-toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    max-width: 720px;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .toc-link {
+    font-size: 0.8rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    text-decoration: none;
+    padding: 0.35em 0.8em;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .toc-link:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
   .uses-content {
     display: grid;
     gap: 3rem;
     max-width: 720px;
+  }
+
+  .uses-section {
+    scroll-margin-top: calc(var(--header-height) + 1rem);
   }
 
   .section-title {
