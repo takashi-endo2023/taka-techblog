@@ -407,6 +407,11 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
           '画面設計・UIの検討に使用。実装前にレイアウトや遷移をFigmaでざっくりFIXさせておくと、コードに落とすときの手戻りが減る。デザイナーがいないチームなので、自分でラフを作る場面が多い。',
       },
       {
+        name: 'Swagger（OpenAPI）',
+        description:
+          'NestJSの @nestjs/swagger でAPI仕様書を自動生成。コードと仕様が同期するので、フロントとの認識合わせが楽になる。Postmanでの動作確認とセットで使っている。',
+      },
+      {
         name: 'GitHub Desktop / Git Graph',
         description:
           '基本はCursor内蔵のGit機能だが、コミットの分割や履歴の確認はGUIの方が速いときがある。GitHub Desktopで操作、Git Graph拡張でブランチの流れを可視化して使っている。',
@@ -459,6 +464,10 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
         name: 'Slack',
         description: 'チームの連絡・情報共有の基盤（仕事）。チャンネルで話題を分け、通知や連携で開発の動きを追っている。',
       },
+      {
+        name: 'Backlog',
+        description: 'プロジェクト管理（仕事）。課題・進捗・マイルストーンの管理に使用。GitLabのIssue（コード寄り）やNotion（個人のドキュメント）とは別に、関係者を含めた案件管理の軸として使い分けている。',
+      },
     ],
   },
   {
@@ -499,6 +508,10 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
       {
         name: 'GA4 / Google タグマネージャー',
         description: '業務サイトと自分のブログ両方で、アクセス解析とタグ設置に使用。GTMでタグを一元管理し、GA4で流入・行動を計測している。',
+      },
+      {
+        name: 'SQL（データ抽出・分析）',
+        description: 'TablePlusでの開発時のデータ確認はもちろん、GA4データをBigQueryに連携してSQLで抽出・集計することも。「数字を見て判断する」ための基本道具。',
       },
     ],
   },
