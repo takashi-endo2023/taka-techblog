@@ -77,6 +77,8 @@ AIは、自分の思考の質以上のものは出してくれない。結局、
 
 組織内の意識が揃ってきたタイミングで、実際の開発フローがどう変わったかは[Claude Codeを実務導入して開発フローが変わった話](/blog/claude-code-workflow)にまとめている。
 
+その後、AIを全社に広げようとして2グループで止まっている現在地は[AIを全社に広めたいのに、システム部と本部長で止まっている](/blog/ai-rollout-stuck-state)に書いた。本部長の暴走の本質が「ゴールの欠如」だったと気づいた話でもある。
+
 ---
 
 他の記事も読む → [taka-techblog.com](https://www.taka-techblog.com?utm_source=zenn&utm_medium=referral)
