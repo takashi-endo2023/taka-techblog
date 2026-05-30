@@ -71,12 +71,14 @@ const posts = readdirSync(BLOG_DIR)
   .filter((f) => f.endsWith('.md') || f.endsWith('.mdx'))
   .map((f) => {
     const data = parseFrontmatter(readFileSync(join(BLOG_DIR, f), 'utf-8'));
-    const slug = basename(f).replace(/\.mdx?$/, '');
+    // Astro の glob loader は id を小文字化する（github-slugger）。それに合わせる
+    const slug = basename(f).replace(/\.mdx?$/, '').toLowerCase();
     return {
       slug,
       title: data.title || slug,
       pubDate: data.pubDate ? new Date(data.pubDate) : null,
       zennHash: data.zennHash || null,
+      tags: data.tags || '',
       type: classify(data, slug),
     };
   })
@@ -104,6 +106,40 @@ if (process.argv.includes('--next')) {
 
 // ───────── レポート出力 ─────────
 console.log(`\n=== 公開計画レポート（cadence: ${CADENCE_DAYS}日 / 今日: ${fmtDate(TODAY)}）===\n`);
+
+// 0. トップページ構成プレビュー＆検証（index.astro の おすすめ/最近/カテゴリ）
+const visibleDesc = posts.filter((p) => p.pubDate <= TODAY).sort((a, b) => b.pubDate - a.pubDate);
+
+console.log('■ トップページ「おすすめ」（src/data/featured.json）');
+let featured = [];
+try {
+  featured = JSON.parse(readFileSync('src/data/featured.json', 'utf-8'));
+} catch {
+  console.log('  ⚠️ featured.json が読めない');
+}
+for (const slug of featured) {
+  const p = posts.find((x) => x.slug === slug);
+  if (!p) console.log(`  ⚠️ ${slug} — 記事が見つからない（typo?）`);
+  else if (p.pubDate > TODAY) console.log(`  ⚠️ ${slug} — 未来日(${fmtDate(p.pubDate)})で未公開→トップに出ない`);
+  else console.log(`  ✓ [${p.type}] ${p.title}`);
+}
+
+console.log('\n■ トップページ「最近」（自動・pubDate順・上位3）');
+visibleDesc.slice(0, 3).forEach((p) => console.log(`  ${fmtDate(p.pubDate)}  ${p.slug}`));
+
+// index.astro の categoryDefs と一致させること
+const CATEGORIES = [
+  { label: 'AI・Claude Code', tag: 'AI開発' },
+  { label: 'テックリード・組織', tag: 'テックリード' },
+  { label: 'インフラ・DevOps', tag: 'DevOps' },
+  { label: '医療IT', tag: '医療IT' },
+];
+console.log('\n■ トップページ「カテゴリ」（タグ+新着・各3本）');
+for (const c of CATEGORIES) {
+  const m = visibleDesc.filter((p) => p.tags.includes(`"${c.tag}"`) || p.tags.includes(c.tag));
+  console.log(`  [${c.label}] ${m.length}本`);
+  m.slice(0, 3).forEach((p) => console.log(`     ${fmtDate(p.pubDate)}  ${p.slug}`));
+}
 
 // 1. cadence 違反検出（理想間隔から大きくズレてる箇所）
 console.log('■ cadence チェック（直近10件の間隔）');

@@ -2,18 +2,16 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BlogCard from '../components/BlogCard.astro';
 import { getCollection } from 'astro:content';
+import featuredSlugs from '../data/featured.json';
 
 const now = new Date();
 const allPosts = (await getCollection('blog')).filter((p) => p.data.pubDate <= now);
 const sorted = [...allPosts].sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 const recentPosts = sorted.slice(0, 3);
 
-const featuredSlugs = [
-  'career-change-to-engineer',
-  'techlead-first-90-days',
-  'git-chaos-1hour-before-release',
-];
-const featuredPosts = featuredSlugs
+// おすすめ記事は src/data/featured.json で管理（content-plan.js と共有）。
+// 公開済み（pubDate <= now）のものだけ表示。未来日・typo は自動的に除外される。
+const featuredPosts = (featuredSlugs as string[])
   .map((slug) => allPosts.find((p) => p.id === slug))
   .filter((p): p is NonNullable<typeof p> => p != null);
 
