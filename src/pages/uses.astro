@@ -263,6 +263,31 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
         description: '繰り返し使えるマジックテープ式のケーブルタイ。モニター・充電・周辺機器のケーブルを束ねるとデスク裏がすっきりする。配線を変えても付け外しが楽。',
         asin: 'B095RTGT13',
       },
+      {
+        name: '手書き用バインダー',
+        description: '設計を考えるときや頭を整理したいときは、一度手で書き出す。クリップボード型のバインダーに紙を挟んで、デスクの脇に常備している。',
+        asin: 'B0825Y61Y7',
+      },
+      {
+        name: 'ケーブル収納カバー',
+        description: '電源タップやアダプタごとケーブルを隠せる収納ボックス。デスク下の配線がごちゃつくのを物理的に隠してくれる。結束バンドと併用して配線を完全に視界から消した。',
+        asin: 'B07FM5HBCG',
+      },
+    ],
+  },
+  {
+    title: 'ドリンク環境',
+    items: [
+      {
+        name: 'サーモス 真空断熱マグ 280ml（JCP-280C）',
+        description: '淹れたコーヒーが冷めない真空断熱マグ。長時間の作業でも温かいまま飲めるので、何度も淹れ直さなくて済む。フタ付きでキーボードへの飛び散りも防げる。',
+        asin: 'B001EJNTE0',
+      },
+      {
+        name: 'ティファール 電気ケトル 0.8L（パフォーマ）',
+        description: 'コーヒー・お茶用にすぐ沸く電気ケトル。0.8Lのコンパクトサイズでデスク近くに置ける。作業の合間にサッと一杯淹れられるのが在宅ワークの小さな幸せ。',
+        asin: 'B07G12ZCHX',
+      },
     ],
   },
   {
@@ -282,6 +307,11 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
         name: 'Terminal.app（macOS標準）',
         description:
           'サードパーティ製に乗り換える理由が今のところない。シンプルで十分。',
+      },
+      {
+        name: 'Cursor 内蔵ターミナル',
+        description:
+          'コードを書きながらのコマンド実行は、エディタを離れずCursor内蔵ターミナルで完結させることが多い。AIにエラー出力をそのまま渡せるのも地味に便利。',
       },
     ],
   },
@@ -329,6 +359,16 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
         description:
           'LangChain アプリの実行をトレース・デバッグするツール。プロンプトやツール呼び出しがどう流れたかを可視化できるので、AI機能の不具合調査が一気に楽になる。治験CRMのAI連携を実装するときに使っている。',
       },
+      {
+        name: 'OpenAI API',
+        description:
+          '業務のAI機能で利用。用途に応じてClaudeと使い分け、モデルの特性やコストを見ながら選定している。',
+      },
+      {
+        name: 'Google AI Studio',
+        description:
+          'プライベートの学習・検証用。Geminiの挙動を手軽に試せるので、各社モデルの違いを掴むのに使っている。',
+      },
     ],
   },
   {
@@ -338,6 +378,21 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
         name: 'Postman',
         description:
           'NestJSで作ったAPIの動作確認に使う。リクエストを保存・整理しておけるので、エンドポイントが増えても検証がぶれない。チームでコレクションを共有すれば動作仕様の共通理解にもなる。',
+      },
+      {
+        name: 'GitHub Desktop / Git Graph',
+        description:
+          '基本はCursor内蔵のGit機能だが、コミットの分割や履歴の確認はGUIの方が速いときがある。GitHub Desktopで操作、Git Graph拡張でブランチの流れを可視化して使っている。',
+      },
+      {
+        name: 'Homebrew',
+        description:
+          'macの開発環境はこれが土台。CLIツールもアプリもbrewで入れて管理を一元化。新しいマシンのセットアップもbrewのリストから一気に復元できる。',
+      },
+      {
+        name: 'nvm（Node.js / npm）',
+        description:
+          'プロジェクトごとにNode.jsのバージョンが違うので、nvmで切り替える。Node.js + npm はフロント・バックともに開発の土台。',
       },
       {
         name: 'パスワード管理（macOS / Google 標準）',
@@ -391,6 +446,14 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
         name: 'TablePlus',
         description: 'GUIのDBクライアント。MySQL・PostgreSQL・Redisに対応。テーブル編集・クエリ実行がシンプルで使いやすく、開発中のデータ確認に常用。',
       },
+      {
+        name: 'GCP（GA4 データ連携）',
+        description: 'AWSが主軸だが、GA4のデータ連携・分析まわりはGCP（BigQuery等）を使う。クラウドは用途で使い分ける。',
+      },
+      {
+        name: 'GA4 / Google タグマネージャー',
+        description: '業務サイトと自分のブログ両方で、アクセス解析とタグ設置に使用。GTMでタグを一元管理し、GA4で流入・行動を計測している。',
+      },
     ],
   },
   {
@@ -403,6 +466,10 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
       {
         name: 'Udemy',
         description: '技術領域のキャッチアップにサブスクリプションで契約。AWS・AI系のコースを中心に活用している。',
+      },
+      {
+        name: 'AWS Skill Builder',
+        description: 'AWS公式の学習プラットフォーム。資格対策やサービスの体系的なキャッチアップに使っている。実務で触らないサービスの全体像を掴むのに便利。',
       },
     ],
   },
