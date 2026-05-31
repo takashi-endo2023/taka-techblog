@@ -618,6 +618,44 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
       },
     ],
   },
+  {
+    title: '作業場所',
+    items: [
+      {
+        name: '自宅',
+        description: 'メインの作業場所。デスク環境を整えて、個人開発・ブログ・勉強はここで集中する。',
+      },
+      {
+        name: 'カフェ',
+        description: 'スターバックス・タリーズ・プロント・珈琲館・シアトルズベスト・近所のおしゃれカフェなど。環境を変えると集中できるタイプなので、アイデア出しや読書はカフェが多い。',
+      },
+      {
+        name: 'ファミレス（ココス）',
+        description: 'ドリンクバーで長時間こもれる。資料を広げて手を動かしたいときに使う。',
+      },
+    ],
+  },
+  {
+    title: '情報収集',
+    items: [
+      {
+        name: 'X（旧Twitter）',
+        description: 'AI・Claude Code・テックリード界隈をフォロー。新しい情報が一番速い。自分も発信側で運用中。',
+      },
+      {
+        name: 'Zenn / 技術ブログ',
+        description: '実務者の知見を読む場所。自分も書く側で発信している。',
+      },
+      {
+        name: '公式ドキュメント',
+        description: 'Claude・AWS・各フレームワークの一次情報。最終確認は必ず公式で取る。',
+      },
+      {
+        name: 'Udemy / 技術書',
+        description: '体系的にキャッチアップしたいときはこちら。読んだ本はブログの書評でも紹介している。',
+      },
+    ],
+  },
 ];
 ---
 
@@ -629,7 +667,21 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
     <header class="page-header animate-fade-in-up">
       <h1>Uses</h1>
       <p class="page-subtitle">普段の開発で使っているもの一覧</p>
+      <p class="uses-updated">最終更新: 2026年6月</p>
     </header>
+
+    {/* TODO: デスク環境の写真をここに追加（撮影後にコメント解除）
+    <figure class="uses-photo animate-fade-in-up">
+      <img src="/images/desk-setup.webp" alt="自宅の作業デスク全体" width="860" height="484" loading="lazy" />
+    </figure>
+    */}
+
+    <div class="uses-intro animate-fade-in-up">
+      <p>
+        仕事はオフィス、自宅は個人開発・ブログ・勉強の場。
+        このページは主に<strong>自宅の作業環境</strong>と、<strong>仕事で使うツール</strong>をまとめたものです。
+      </p>
+    </div>
 
     <nav class="uses-toc animate-fade-in-up" aria-label="セクション一覧">
       {sections.map((section, i) => (
