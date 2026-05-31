@@ -214,13 +214,13 @@ function handler(event) {
         {
           httpStatus: 403,
           responseHttpStatus: 404,
-          responsePagePath: '/404/index.html',
+          responsePagePath: '/404.html',
           ttl: cdk.Duration.seconds(0),
         },
         {
           httpStatus: 404,
           responseHttpStatus: 404,
-          responsePagePath: '/404/index.html',
+          responsePagePath: '/404.html',
           ttl: cdk.Duration.seconds(0),
         },
       ],
