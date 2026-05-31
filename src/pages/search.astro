@@ -202,4 +202,14 @@ const categories = [
     --pagefind-ui-image-border-radius: 6px;
     --pagefind-ui-font: inherit;
   }
+
+  /* 入力欄の文字色を明示（CSS変数だけでは効かないため直接指定） */
+  #search :global(.pagefind-ui__search-input) {
+    color: #e2e4ea;
+    background: #13151e;
+  }
+
+  #search :global(.pagefind-ui__search-input::placeholder) {
+    color: #8892a4;
+  }
 </style>
