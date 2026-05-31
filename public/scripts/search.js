@@ -21,7 +21,7 @@
         resetStyles: false,
         translations: {
           placeholder: 'キーワードを入力...',
-          zero_results: '"[QUERY]" に一致する記事はありません',
+          zero_results: '「[SEARCH_TERM]」に一致する記事はありません',
           many_results: '[COUNT] 件の記事が見つかりました',
           one_result: '1 件の記事が見つかりました',
           searching: '検索中...',
