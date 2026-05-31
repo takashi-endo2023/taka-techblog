@@ -23,15 +23,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <li>
               <span class="inquiry-icon">💼</span>
               <div>
-                <p class="inquiry-label">副業</p>
-                <p class="inquiry-desc">TypeScript / React / NestJS / AWS / LangChain などの開発・設計相談</p>
+                <p class="inquiry-label">副業・技術相談</p>
+                <p class="inquiry-desc">TypeScript / React / NestJS / AWS / LangChain などの開発・設計レビュー・AI導入支援・スポット相談</p>
               </div>
             </li>
             <li>
               <span class="inquiry-icon">🔍</span>
               <div>
                 <p class="inquiry-label">採用・スカウト</p>
-                <p class="inquiry-desc">興味のあるポジションはカジュアルにお声がけください</p>
+                <p class="inquiry-desc">テックリード・フルスタック・AI開発まわりのポジションはカジュアルにお声がけください</p>
+              </div>
+            </li>
+            <li>
+              <span class="inquiry-icon">✏️</span>
+              <div>
+                <p class="inquiry-label">執筆・登壇</p>
+                <p class="inquiry-desc">技術記事の寄稿・勉強会やイベントでの登壇のご相談も歓迎です</p>
               </div>
             </li>
             <li>
@@ -41,6 +48,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
                 <p class="inquiry-desc">ブログへのご意見・ご感想もお気軽にどうぞ</p>
               </div>
             </li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h2 class="info-title">対応について</h2>
+          <ul class="note-list">
+            <li>平日夜・週末を中心に対応しています</li>
+            <li>2〜3 営業日以内の返信を心がけています</li>
+            <li>経歴・スキルは <a href="/about" class="note-link">About</a> をご覧ください</li>
           </ul>
         </div>
 
@@ -154,6 +170,44 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-size: 0.78rem;
     color: var(--color-text-muted);
     line-height: 1.65;
+  }
+
+  .note-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .note-list li {
+    position: relative;
+    padding-left: 1.1rem;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .note-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 5px;
+    height: 5px;
+    background: var(--color-accent);
+    border-radius: 50%;
+  }
+
+  .note-link {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .note-link:hover {
+    color: var(--color-accent-hover);
   }
 
   .sns-card {
