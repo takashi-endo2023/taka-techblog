@@ -260,3 +260,24 @@ th {
   color: var(--color-accent);
   box-shadow: var(--glow-accent);
 }
+
+/* ── Skip link（キーボード/スクリーンリーダー用・本文へジャンプ）── */
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -3rem;
+  z-index: 1000;
+  padding: 0.6em 1em;
+  background: var(--color-accent-btn);
+  color: #fff;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: 0.5rem;
+  outline: 2px solid var(--color-accent-hover);
+  outline-offset: 2px;
+}
