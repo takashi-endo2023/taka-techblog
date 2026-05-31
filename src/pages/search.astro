@@ -78,38 +78,11 @@ const categories = [
 
 <!--
   Pagefind の CSS は静的アセットとして参照するだけなのでそのまま読み込む。
-  JS は Vite のバンドル対象外にするため is:inline + 動的 script 生成で読み込む。
+  JS は CSP (script-src 'self') 対応のため public/scripts/search.js に外部化。
+  インライン script は本番の CSP でブロックされるため使わない（CLAUDE.md ルール）。
 -->
 <link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
-
-<script is:inline>
-  // pagefind-ui.js はビルド後に dist/pagefind/ に生成される外部アセット。
-  // Vite のモジュール解析をバイパスするため script タグを動的生成して読み込む。
-  (function () {
-    var script = document.createElement('script');
-    script.src = '/pagefind/pagefind-ui.js';
-    script.onload = function () {
-      var note = document.getElementById('dev-note');
-      if (note) note.style.display = 'none';
-      // pagefind-ui.js は window.PagefindUI をグローバルに公開する
-      new window.PagefindUI({
-        element: '#search',
-        showImages: false,
-        showEmptyFilters: false,
-        resetStyles: false,
-        translations: {
-          placeholder: 'キーワードを入力...',
-          zero_results: '"[QUERY]" に一致する記事はありません',
-          many_results: '[COUNT] 件の記事が見つかりました',
-          one_result: '1 件の記事が見つかりました',
-          searching: '検索中...',
-        },
-      });
-    };
-    // pagefind 未生成（開発環境）の場合は dev-note がそのまま表示される
-    document.head.appendChild(script);
-  })();
-</script>
+<script is:inline src="/scripts/search.js"></script>
 
 <style>
   .page-content {
