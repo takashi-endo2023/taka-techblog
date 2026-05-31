@@ -1,10 +1,34 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const now = new Date();
+const allPosts = (await getCollection('blog')).filter((p) => p.data.pubDate <= now);
+const recentPosts = [...allPosts]
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 5);
+
+// タグを出現数順に集計（人気タグ）
+const tagCount = new Map<string, number>();
+for (const p of allPosts) {
+  for (const t of p.data.tags) tagCount.set(t, (tagCount.get(t) ?? 0) + 1);
+}
+const popularTags = [...tagCount.entries()]
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 12)
+  .map(([tag, count]) => ({ tag, count }));
+
+const categories = [
+  { label: 'AI・Claude Code', tag: 'AI開発' },
+  { label: 'テックリード・組織', tag: 'テックリード' },
+  { label: 'インフラ・DevOps', tag: 'DevOps' },
+  { label: '医療IT', tag: '医療IT' },
+];
 ---
 
 <BaseLayout
   title="Search | taka-techblog"
-  description="taka-techblog の記事をキーワードで検索できます"
+  description="taka-techblog の記事をキーワードで検索できます。カテゴリ・タグ・最近の記事からも探せます。"
 >
   <div class="container page-content">
     <header class="page-header animate-fade-in-up">
@@ -19,6 +43,36 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <p class="dev-note" id="dev-note">
       ※ 検索機能は <code>npm run build</code> 後に動作します（開発サーバーでは利用不可）
     </p>
+
+    <!-- 検索前のブラウズ導線（カテゴリ・人気タグ・最近の記事） -->
+    <div class="browse animate-fade-in-up delay-2">
+      <section class="browse-block">
+        <h2 class="browse-title">カテゴリから探す</h2>
+        <div class="browse-cats">
+          {categories.map((c) => (
+            <a href={`/blog/tags/${c.tag}/1`} class="browse-cat">{c.label}</a>
+          ))}
+        </div>
+      </section>
+
+      <section class="browse-block">
+        <h2 class="browse-title">人気のタグ</h2>
+        <div class="browse-tags">
+          {popularTags.map(({ tag, count }) => (
+            <a href={`/blog/tags/${tag}/1`} class="tag">{tag}<span class="tag-count">{count}</span></a>
+          ))}
+        </div>
+      </section>
+
+      <section class="browse-block">
+        <h2 class="browse-title">最近の記事</h2>
+        <ul class="browse-recent">
+          {recentPosts.map((p) => (
+            <li><a href={`/blog/${p.id}`}>{p.data.title}</a></li>
+          ))}
+        </ul>
+      </section>
+    </div>
   </div>
 </BaseLayout>
 
@@ -90,6 +144,76 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .dev-note code {
     font-family: var(--font-mono);
     color: var(--color-accent-hover);
+  }
+
+  .browse {
+    margin-top: 3.5rem;
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .browse-title {
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .browse-cats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .browse-cat {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    text-decoration: none;
+    padding: 0.5em 1em;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .browse-cat:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .browse-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tag-count {
+    margin-left: 0.4em;
+    font-size: 0.75em;
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .browse-recent {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .browse-recent a {
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .browse-recent a:hover {
+    color: var(--color-accent);
   }
 
   /* ── Pagefind UI テーマ上書き（ダークテーマに合わせる） ── */
