@@ -1,59 +1,138 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const now = new Date();
+const recentPosts = (await getCollection('blog'))
+  .filter((p) => p.data.pubDate <= now)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 4);
+
+const categories = [
+  { label: 'AI・Claude Code', tag: 'AI開発' },
+  { label: 'テックリード・組織', tag: 'テックリード' },
+  { label: 'インフラ・DevOps', tag: 'DevOps' },
+  { label: '医療IT', tag: '医療IT' },
+];
 ---
 
-<BaseLayout title="404 - ページが見つかりません | taka-techblog">
-  <div class="container not-found">
-    <p class="code animate-fade-in-up">404</p>
-    <h1 class="animate-fade-in-up delay-1">ページが見つかりません</h1>
-    <p class="message animate-fade-in-up delay-2">
-      お探しのページは移動・削除されたか、URLが間違っている可能性があります。
-    </p>
-    <div class="actions animate-fade-in-up delay-3">
-      <a href="/" class="btn btn-primary">トップへ戻る</a>
-      <a href="/blog" class="btn btn-outline">記事一覧へ</a>
+<BaseLayout title="404 - ページが見つかりません | taka-techblog" description="お探しのページは見つかりませんでした。">
+  <div class="container notfound-page">
+    <div class="notfound-content">
+      <p class="error-code">404</p>
+      <h1 class="error-title">ページが見つかりません</h1>
+      <p class="error-message">
+        お探しのページは移動または削除された可能性があります。<br />
+        以前の URL でアクセスされた場合、サイトリニューアルで変わっている場合があります。
+      </p>
+      <div class="error-actions">
+        <a href="/" class="btn btn-primary">ホームに戻る</a>
+        <a href="/blog" class="btn btn-outline">ブログ一覧へ</a>
+        <a href="/search" class="btn btn-outline">記事を検索</a>
+      </div>
+    </div>
+
+    <div class="notfound-recovery">
+      <section class="recovery-block">
+        <h2 class="recovery-title">最近の記事</h2>
+        <ul class="recovery-list">
+          {recentPosts.map((p) => (
+            <li>
+              <a href={`/blog/${p.id}`}>{p.data.title}</a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="recovery-block">
+        <h2 class="recovery-title">カテゴリから探す</h2>
+        <div class="recovery-cats">
+          {categories.map((c) => (
+            <a href={`/blog/tags/${c.tag}/1`} class="tag">{c.label}</a>
+          ))}
+        </div>
+      </section>
     </div>
   </div>
 </BaseLayout>
 
 <style>
-  .not-found {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  .notfound-page {
+    padding: 4rem 0 5rem;
+  }
+
+  .notfound-content {
     text-align: center;
-    padding: 6rem 1.5rem;
-    min-height: 60vh;
+    max-width: 560px;
+    margin: 0 auto;
   }
 
-  .code {
-    font-size: clamp(5rem, 15vw, 9rem);
-    font-weight: 700;
+  .error-code {
     font-family: var(--font-mono);
-    background: linear-gradient(135deg, #7c6af7, #a78bfa, #60a5fa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--color-accent);
     line-height: 1;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
   }
 
-  h1 {
-    font-size: clamp(1.5rem, 4vw, 2rem);
+  .error-title {
+    font-size: 1.6rem;
     margin-bottom: 1rem;
   }
 
-  .message {
+  .error-message {
     color: var(--color-text-muted);
-    max-width: 400px;
-    margin-bottom: 2.5rem;
+    line-height: 1.85;
+    margin-bottom: 2rem;
   }
 
-  .actions {
+  .error-actions {
     display: flex;
     gap: 0.75rem;
-    flex-wrap: wrap;
     justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .notfound-recovery {
+    max-width: 720px;
+    margin: 4rem auto 0;
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .recovery-title {
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .recovery-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .recovery-list a {
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .recovery-list a:hover {
+    color: var(--color-accent);
+  }
+
+  .recovery-cats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
   }
 </style>
