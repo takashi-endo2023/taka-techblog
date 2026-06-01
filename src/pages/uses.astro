@@ -7,6 +7,8 @@ interface AffiliateItem {
   name: string;
   description: string;
   asin?: string;
+  url?: string;        // Amazon以外のアフィリリンク（Udemy等）
+  linkLabel?: string;  // url使用時のボタン文言（例: 'Udemyで見る →'）
 }
 
 const sections: { title: string; items: AffiliateItem[] }[] = [
@@ -580,7 +582,9 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
       },
       {
         name: 'Udemy',
-        description: '技術領域のキャッチアップにサブスクリプションで契約。AWS・AI系のコースを中心に活用している。',
+        description: '技術領域のキャッチアップに利用。AWS・AI系のコースを中心に活用している。セール時（1,200円〜）を狙うとコスパがいい。',
+        url: 'https://trk.udemy.com/Pz44mq',
+        linkLabel: 'Udemyを見る →',
       },
       {
         name: 'AWS Skill Builder',
@@ -712,6 +716,8 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
                 <p class="item-name">
                   {item.asin
                     ? <a href={`https://www.amazon.co.jp/dp/${item.asin}?tag=${associateId}`} target="_blank" rel="noopener noreferrer sponsored" class="item-link">{item.name}</a>
+                    : item.url
+                    ? <a href={item.url} target="_blank" rel="noopener noreferrer sponsored" class="item-link">{item.name}</a>
                     : item.name
                   }
                 </p>
@@ -725,6 +731,17 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
                   >
                     <span class="amazon-pr">PR</span>
                     Amazonで見る →
+                  </a>
+                )}
+                {!item.asin && item.url && (
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer sponsored"
+                    class="amazon-btn"
+                  >
+                    <span class="amazon-pr">PR</span>
+                    {item.linkLabel ?? '公式サイト →'}
                   </a>
                 )}
               </li>
