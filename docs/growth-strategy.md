@@ -138,10 +138,13 @@
 |---|---|---|
 | Amazon アソシエイト | 直接 | ✅ 稼働中（書評記事） |
 | GEEKLY | A8.net | ✅ 稼働中（15記事配置・A8掲載URL登録要） |
-| Udemy | impact.com | ✅ 登録済（サイト認証完了待ち・配置はこれから） |
+| Udemy | impact.com | ✅ 稼働中（career-change+書評3+uses に配置・W-8BEN提出済） |
 | Google AdSense | 直接 | ⏳ 審査待ち（実装済み。CSP/デプロイ要確認・operations.md参照） |
 | レバテックキャリア | A8.net | ⏳ 審査中 |
 | レバテックフリーランス | A8.net | ⏳ 審査中 |
+| Audible | A8.net | 📝 提携予定（書評/学習記事に「耳で聴く選択肢」・優先度低） |
+| ConoHa WING | A8.net | 📝 提携予定（会社IT記事の執筆時・初心者向け対比） |
+| お名前.com | A8.net | 📝 提携予定（会社IT記事の執筆時・ドメイン取得） |
 
 > このテーブルが収益源ステータスの **正（single source of truth）**。
 > 他ドキュメントはここを参照する。
