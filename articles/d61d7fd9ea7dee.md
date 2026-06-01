@@ -3,7 +3,8 @@ title: "「記録を見せろ」と「機密だから見せられない」の攻
 emoji: "🔍"
 type: "idea"
 topics: ["医療","セキュリティ","監査","ポエム"]
-published: false
+published: true
+published_at: "2026-06-28 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/cro-audit-tech-response"
 ---
 
