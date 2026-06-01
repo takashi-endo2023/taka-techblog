@@ -168,12 +168,57 @@ GEEKLY（転職＝経験者向け）が置けない**未経験・学習中の読
 
 ### 配置ルール
 - 記事**末尾**のみ（本文中への埋め込みは行わない）
-- 1記事につき **最大2プログラム**
+- 1記事につき **最大2プログラム**（書籍カード + 転職/学習 の組み合わせは可。同種は重ねない）
 - 自然な文脈でつながる記事にのみ貼る
+- **実体験・組織論の記事に書籍/転職を無理に入れない**（物語性を優先）
 
 ### nofollow 属性
 - アフィリエイトリンクには必ず `rel="nofollow sponsored"` を付ける
-- AmazonCard は対応済み
+- AmazonCard / GeeklyAffiliate は対応済み。手書きの `<a>` は `rel="nofollow sponsored noopener"` を明記
+
+---
+
+## 新記事作成時のアフィリ選定ルール（自動判定フロー）
+
+新しい記事を書いたら、**記事のテーマと読者層**から下表で機械的に判定して配置する。
+迷ったら「読者がその記事を読んだ後に自然に欲しくなるもの」を基準にする。
+
+| 記事タイプ | 第1候補 | 第2候補 | 例 |
+|---|---|---|---|
+| 技術解説（JS/TS/React/AWS/HTTP等） | Amazon（関連技術書） | — | javascript-array-methods |
+| 書評 | Amazon（その本） | Udemy（同テーマ講座） | javascript-honkaku-nyumon-review |
+| テックリード/組織/マネジメント | GEEKLY（経験者転職） | レバテックキャリア（承認後） | code-review-culture |
+| フロント/TS実務 | GEEKLY | Amazon（関連書） | react-nextjs-selection |
+| AWS/DevOps/インフラ実務 | レバテックフリーランス（承認後） | Amazon | github-actions-oidc-aws |
+| 学習・キャリア（**未経験向け**） | **Udemy**（独学教材） | — | career-change-to-engineer |
+| 体験談・ストーリー（純粋な物語） | **なし**（物語性優先） | — | git-chaos / 本部長モンスター |
+| AI/Claude Code 体験 | なし or Udemy（AI講座） | — | solo-techlead-ai-survival は GEEKLY |
+| 医療IT/治験/規制 | なし（ニッチ・教材と乖離） | — | cro-audit-tech-response |
+
+### 判定の原則
+- **未経験・学習中の読者 → Udemy**（GEEKLY は未経験NG規約。ここを Udemy で埋める）
+- **経験者・転職検討 → GEEKLY**（承認後はレバテックも）
+- **技術を深めたい → Amazon の関連書**
+- **純粋な体験談 → アフィリを入れない**（読み物として残す。信頼の土台）
+- 書籍(Amazon)と転職/学習(GEEKLY/Udemy)は**種類が違うので併存可**。ただし同種は重ねない
+
+### 実装手段
+- Amazon → `<AmazonCard asin=... />`（.mdx 必須）
+- GEEKLY → `<GeeklyAffiliate variant="inline|banner" />`（.mdx 必須）
+- Udemy → 手書き `<a rel="nofollow sponsored noopener">`（.md でも可）。将来 `UdemyCard.astro`
+- **Zenn には載せない**: sync-zenn.js が AmazonCard/GeeklyAffiliate/「## この記事を読んだ方へ」セクションを自動除去。Udemy も同セクション内に置けば除去される
+
+---
+
+## 現状の配置実績（2026-06 時点・棚卸し済み）
+
+| プログラム | 配置数 | 状態 |
+|---|---|---|
+| Amazon | 約45記事 + usesページ | 各記事に関連技術書1冊。適切 |
+| GEEKLY | 15記事（テックリード/組織/フロント実務） | 適切 |
+| Udemy | 1記事（career-change） | 1本目。反応を見て学習系へ横展開予定 |
+
+> 監査結果: 詰め込み・規約違反なし。Geekly+Amazon併存4記事は「書籍＋転職」で種類が違うため許容範囲。
 
 ---
 
