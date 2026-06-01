@@ -127,15 +127,5 @@ export async function generateStaticParams() {
 
 ---
 
-## この記事を読んだ方へ
-
-> **PR** 似た領域で実務に関わる方へ
-
-似た領域で実務に関わる方は、定期的に外の市場感を把握しておくと判断軸が増える。今すぐ動く動かないは別として、自分のスキルがどう評価されるかを知っておく価値はある。
-
-IT/WEB/ゲーム業界専門のエージェントならが分かりやすい。エンジニアに特化しているので、年収レンジを掴む目的だけでも使える。
-
----
-
 他の記事も読む → [taka-techblog.com](https://www.taka-techblog.com?utm_source=zenn&utm_medium=referral)
 X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)
