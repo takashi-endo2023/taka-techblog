@@ -580,17 +580,17 @@ ai-team-adoption-monster / git-chaos-1hour-before-release / claude-code-workflow
 #### 手動申請キュー（未登録 × 価値高・上から処理）
 | 記事 | 種別 | 申請日 |
 |---|---|---|
-| aws-operation-introduction-review | 書評 |  |
-| typescript-react-nextjs-beginner-review | 書評 |  |
-| communicating-it-value-to-executives | 体験談 |  |
-| playing-manager-reality | 体験談 |  |
-| engineer-hiring-lessons | 体験談 |  |
-| technical-debt-strategy | 体験談 |  |
-| coaching-junior-engineers | 体験談 |  |
-| junior-engineer-spec-before-code | 体験談 |  |
-| release-flow-regulated-industry | 医療IT |  |
-| clinical-trial-system-performance | 医療IT |  |
-| csv-validation-guide | 医療IT |  |
+| aws-operation-introduction-review | 書評 | 2026-06-02 |
+| typescript-react-nextjs-beginner-review | 書評 | 2026-06-02 |
+| communicating-it-value-to-executives | 体験談 | 2026-06-02 |
+| playing-manager-reality | 体験談 | 2026-06-02 |
+| engineer-hiring-lessons | 体験談 | 2026-06-02 |
+| technical-debt-strategy | 体験談 | 2026-06-02 |
+| coaching-junior-engineers | 体験談 | 2026-06-02 |
+| junior-engineer-spec-before-code | 体験談 | 2026-06-02 |
+| release-flow-regulated-industry | 医療IT | 2026-06-02 |
+| clinical-trial-system-performance | 医療IT | 2026-06-02 |
+| csv-validation-guide | 医療IT | 2026-06-02 |
 
 > 汎用技術記事（JS/AWS/REST解説）は手動申請せず自然インデックス待ちでよい
 > （クロール待ち120本に含まれる。時間で順次登録される）。
