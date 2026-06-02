@@ -1,6 +1,6 @@
 # 週次運用ガイド
 
-最終更新: 2026-05-25
+最終更新: 2026-06-02
 
 ---
 
@@ -558,6 +558,43 @@ search.google.com/search-console を開く
 ③ インデックス作成 → ページ
    → 「インデックス未登録」が多い場合はURLインスペクションで申請
 ```
+
+---
+
+### 手動インデックス申請ログ
+
+**目的**: 新ドメイン（旧さくら→AWS）でインデックスが育つまで、代表作を手動申請して優先掲載させる。
+URL検査は1日10本程度が目安。申請したら日付を記入する。
+
+**やり方**: Search Console上部の検索窓に記事URLを入れる → 「インデックス登録をリクエスト」。
+「登録済み」と出たら飛ばす。
+
+**現状（2026-06-02 照合）**: 公開85本中インデックス29本。看板・おすすめ体験談は登録済み。
+
+#### 登録済み（確認済み・申請不要）
+career-change-to-engineer / solo-techlead-ai-survival / techlead-first-90-days /
+naisei-kansei / javascript-honkaku-nyumon-review / typescript-react-nextjs-book-review /
+web-technology-book-review / server-infra-book-review / system-audit-experience /
+ai-team-adoption-monster / git-chaos-1hour-before-release / claude-code-workflow / 他
+
+#### 手動申請キュー（未登録 × 価値高・上から処理）
+| 記事 | 種別 | 申請日 |
+|---|---|---|
+| aws-operation-introduction-review | 書評 |  |
+| typescript-react-nextjs-beginner-review | 書評 |  |
+| communicating-it-value-to-executives | 体験談 |  |
+| playing-manager-reality | 体験談 |  |
+| engineer-hiring-lessons | 体験談 |  |
+| technical-debt-strategy | 体験談 |  |
+| coaching-junior-engineers | 体験談 |  |
+| junior-engineer-spec-before-code | 体験談 |  |
+| release-flow-regulated-industry | 医療IT |  |
+| clinical-trial-system-performance | 医療IT |  |
+| csv-validation-guide | 医療IT |  |
+
+> 汎用技術記事（JS/AWS/REST解説）は手動申請せず自然インデックス待ちでよい
+> （クロール待ち120本に含まれる。時間で順次登録される）。
+> 申請キューが尽きたら、Search Console で「登録済み」数の増加を確認して終了判断。
 
 ---
 
