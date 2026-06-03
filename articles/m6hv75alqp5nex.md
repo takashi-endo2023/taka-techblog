@@ -3,8 +3,8 @@ title: "テックリードと係長を兼任するプレイングマネージャ
 emoji: "⚖️"
 type: "idea"
 topics: ["マネジメント","キャリア","チーム開発"]
-published: false
-published_at: "2025-04-22 09:00"
+published: true
+published_at: "2026-06-30 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/playing-manager-reality"
 ---
 

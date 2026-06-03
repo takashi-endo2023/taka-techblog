@@ -3,8 +3,8 @@ title: "製薬メーカーのシステム監査に技術者として対応した
 emoji: "🔍"
 type: "idea"
 topics: ["DevOps","品質保証","セキュリティ"]
-published: false
-published_at: "2025-03-11 09:00"
+published: true
+published_at: "2026-07-19 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/system-audit-experience"
 ---
 

@@ -3,8 +3,8 @@ title: "AIを社内に広めたら、本部長がモンスターになった話"
 emoji: "👾"
 type: "idea"
 topics: ["AI","LLM","チーム開発"]
-published: false
-published_at: "2026-05-21 09:00"
+published: true
+published_at: "2026-07-26 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/ai-team-adoption-monster"
 ---
 

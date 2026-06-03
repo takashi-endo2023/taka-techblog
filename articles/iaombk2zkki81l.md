@@ -3,8 +3,8 @@ title: "React×Next.jsの選択基準を実務から考える —SPA・SSR・SSG
 emoji: "⚛️"
 type: "tech"
 topics: ["React","Next.js","TypeScript"]
-published: false
-published_at: "2026-05-12 09:00"
+published: true
+published_at: "2026-10-13 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/react-nextjs-selection"
 ---
 

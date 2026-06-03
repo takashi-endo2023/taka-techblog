@@ -3,8 +3,8 @@ title: "望ましいURIとは何か——Webを支える技術で学んだURL設
 emoji: "🔗"
 type: "tech"
 topics: ["Web","バックエンド","設計"]
-published: false
-published_at: "2024-01-30 09:00"
+published: true
+published_at: "2026-08-25 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/uri-design-best-practices"
 ---
 

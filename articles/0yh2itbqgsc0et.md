@@ -3,8 +3,8 @@ title: "コードより先に要件を言語化させる——会話が成立し
 emoji: "📐"
 type: "idea"
 topics: ["チーム開発","マネジメント"]
-published: false
-published_at: "2025-02-04 09:00"
+published: true
+published_at: "2026-07-09 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/junior-engineer-spec-before-code"
 ---
 
