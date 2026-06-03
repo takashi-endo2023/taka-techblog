@@ -11,7 +11,8 @@
     "preview": "astro preview",
     "check": "astro check",
     "typecheck": "tsc --noEmit",
-    "sync:zenn": "node scripts/sync-zenn.js"
+    "sync:zenn": "node scripts/sync-zenn.js",
+    "docs:html": "node scripts/build-docs-html.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "marked": "^18.0.4",
     "pagefind": "^1.3.0",
     "typescript": "^5.5.0"
   },

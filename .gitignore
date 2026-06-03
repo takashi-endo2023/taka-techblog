@@ -12,3 +12,6 @@ infra/node_modules/
 infra/dist/
 infra/cdk.out/
 infra/.cdk.staging/
+
+# 運営ドキュメントの閲覧用HTML（生成物・npm run docs:html で作る）
+docs/index.html
