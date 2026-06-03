@@ -54,7 +54,8 @@ npm run sync:zenn
 - cadence は現在 **7日（週1）**。`scripts/content-plan.js` の `CADENCE_DAYS` 1箇所で変更可。ネタ詰まり時は 14（隔週）や 30（月1）に落とす
 - **既存記事の pubDate は書き換えない**（時系列は構築済み。SEOリスク回避）
 - Zenn の `published_at` と X 告知も、その記事の pubDate に揃える（同じ日に公開・告知）
-- 出稿の優先度は **書評・体験談 > 技術記事**（技術記事は Zenn では埋もれやすく、ブログSEO流入に任せる）
+- **Zenn 在庫消化は別レーン（週3・月水金）**。新規記事の cadence（週1）とは独立。既存記事の Zenn 未公開分は 2026-06-04〜12-01 に週3で予約公開済み（`articles/*.md` の `published_at`）。詳細は `docs/operations.md` の出稿スケジュール
+- 出稿の優先度は **書評・体験談 > 技術記事**（技術記事は Zenn では埋もれやすく、ブログSEO流入に任せる）。**X告知は書評・体験談のみ**（技術記事は告知せず検索流入に任せる）
 - 公開計画の確認は `node scripts/content-plan.js`（cadence違反検出・予約キュー・Zenn未公開キュー・在庫週数を表示）
 
 ### ブログ記事の frontmatter（全フィールド必須）

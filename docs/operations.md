@@ -1,6 +1,6 @@
 # 週次運用ガイド
 
-最終更新: 2026-06-02
+最終更新: 2026-06-03
 
 ---
 
@@ -113,7 +113,47 @@ X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)
 
 ## X/Zenn 出稿スケジュール
 
-### 直近スケジュール
+### Zenn公開（自動・週3予約済み）
+
+Zenn下書き74本は **2026-06-04〜12-01 に週3（月水金 09:00）で予約公開済み**
+（各 `articles/*.md` の `published_at` 設定済み。Zenn が自動公開する。手動操作・cron不要）。
+
+- 優先度順に消化：**書評6 → 体験談14 → 技術54**
+- 新記事を書いたら、その新記事は別途ブログ pubDate と同日に Zenn 予約（在庫スケジュールとは別レーン）
+- 公開状況の確認は `node scripts/content-plan.js`
+
+### X告知スケジュール（Zenn公開日に合わせて告知）
+
+**書評・体験談の20本のみ**、Zenn公開日にXで告知する（技術記事54本は告知不要・検索流入に任せる）。
+既にブログ公開済みの記事も、見逃し対応・フォロワー増を狙って再告知してよい。
+告知文はその都度「X 投稿フォーマット」（上記）に沿って作る。リンクは**ブログURL**。
+
+| 告知日 | 種別 | 記事 | slug |
+|---|---|---|---|
+| 6/04 | 書評 | ES6+新構文（JS本格入門） | `javascript-es6-modern-syntax` |
+| 6/09 | 書評 | 改訂3版 JavaScript本格入門 | `javascript-honkaku-nyumon-review` |
+| 6/11 | 書評 | Webを支える技術 | `web-technology-book-review` |
+| 6/16 | 書評 | サーバ/インフラを支える技術 | `server-infra-book-review` |
+| 6/18 | 書評 | TypeScript×React/Next.js（未経験視点）| `typescript-react-nextjs-beginner-review` |
+| 6/23 | 書評 | AWS運用入門 | `aws-operation-introduction-review` |
+| 6/25 | 体験談 | 経営層への技術翻訳 | `communicating-it-value-to-executives` |
+| 6/30 | 体験談 | プレイングマネージャーの現実 | `playing-manager-reality` |
+| 7/02 | 体験談 | 3人で回すということ | `small-elite-team-design` |
+| 7/05 | 体験談 | コードレビューを3年一人で | `code-review-culture` |
+| 7/07 | 体験談 | 誰も採用をやらないから | `engineer-hiring-lessons` |
+| 7/09 | 体験談 | コードより先に要件を言語化 | `junior-engineer-spec-before-code` |
+| 7/12 | 体験談 | 未経験2名をコーチング | `coaching-junior-engineers` |
+| 7/14 | 体験談 | 技術的負債と向き合う3年間 | `technical-debt-strategy` |
+| 7/16 | 体験談 | 内製化で480万円削減 | `naisei-kansei` |
+| 7/19 | 体験談 | システム監査に技術者として対応 | `system-audit-experience` |
+| 7/21 | 体験談 | AI議事録で会議が変わった | `ai-meeting-notes-structured` |
+| 7/23 | 体験談 | 仮面を被ったテックリード3年 | `techlead-mask-3years` |
+| 7/26 | 体験談 | 本部長がモンスターになった | `ai-team-adoption-monster` |
+| 7/28 | 体験談 | AIがなかったら死んでた | `solo-techlead-ai-survival` |
+
+> 7/30以降は技術記事54本（12/1まで）でX告知なし。告知の合間（週2〜3）に「一言投稿ストック」（下記）を挟む。
+
+#### （参考）過去の直近スケジュール — 消化済み
 
 | 日付 | アクション | 内容 |
 |------|-----------|------|
@@ -123,68 +163,6 @@ X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)
 | 6/2 火 | **X 記事告知** | #6「AIがなかったら死んでた」|
 | 6/4 木 | Zenn公開 + **X 記事告知** | #4「AIを社内に広めたら」|
 | 6/6 土 | **X 一言** | 下記ストックから1本 |
-
-**5/29 X投稿文（コピペ用）**
-```
-ある日、同僚だった人が部下になった。
-
-テックリードに就任した瞬間、
-「横並び」が「縦関係」に変わる違和感。
-
-最初の90日で何をすべきか、
-誰も教えてくれなかった →
-https://www.taka-techblog.com/blog/techlead-first-90-days
-
-#テックリード
-```
-
-**6/2 X投稿文（コピペ用）**
-```
-一人テックリードは「孤独」じゃない。
-「孤立」だ。
-
-設計・コードレビュー・採用・経営折衝。
-全部が自分に来る環境で3年、
-AIツールがなかったら本当に詰んでいた。
-
-実際にどう使い分けたか書きました →
-https://www.taka-techblog.com/blog/solo-techlead-ai-survival
-
-#テックリード
-```
-
-**6/4 X投稿文（コピペ用）**
-```
-「AIを使えばラクになる」と言って社内展開したら、
-本部長がAIの言いなりになって
-誰も止められなくなった話がある。
-
-技術の普及には「使い方の設計」が必要だと痛感した経験です →
-https://www.taka-techblog.com/blog/ai-team-adoption-monster
-
-#AI活用
-```
-
----
-
-### 6/8 以降の X 告知優先リスト
-
-週2本ペースで上から消化する。
-
-| 優先 | 記事 | ブログURL末尾 |
-|------|------|-------------|
-| 1 | みんなの安定のために仮面を被った | `techlead-mask-3years` |
-| 2 | Claude Code実務導入 | `claude-code-workflow` |
-| 3 | Cursor実務レビュー2025 | `cursor-review-2025` |
-| 4 | Claude Codeを設計の壁打ち相手に | `claude-code-as-design-partner` |
-| 5 | プレイングマネージャーの現実 | `playing-manager-reality` |
-| 6 | コードレビューを3年一人でやった話 | `code-review-culture` |
-| 7 | 未経験エンジニア2名をコーチング | `coaching-junior-engineers` |
-| 8 | 経営層への技術翻訳 | `communicating-it-value-to-executives` |
-| 9 | 技術的負債と向き合う3年間 | `technical-debt-strategy` |
-| 10 | 外部ベンダーから内製化した3年間 | `naisei-kansei` |
-
-> 技術チュートリアル系（AWS・React・JS）は上記10本の後。検索流入に任せてよい。
 
 ---
 
@@ -396,125 +374,17 @@ AI議事録に切り替えたら、誰が出ても品質が同じになった。
 
 ## 出稿キュー（Zenn × X）
 
-> **公開計画は `node scripts/content-plan.js` で自動生成**。
-> cadence違反・予約公開キュー・Zenn未公開キュー（書評/体験談優先）・在庫週数が出る。
-> 下の表は全記事の出稿状況の記録用（チェックボックス）。次に何を出すかはスクリプトを見る。
+> **Zenn 74本は週3で予約公開済み**（2026-06-04〜12-01）。詳細は上の「Zenn公開（自動・週3予約済み）」「X告知スケジュール」を参照。
+> 公開状況の確認は `node scripts/content-plan.js`。
+> 旧・手動チェックボックス管理（全80記事）は **2026-06-03 に廃止**し、予約スケジュールへ移行した
+> （手動管理ではhashと記事名の食い違いが発生していたため）。
 
-**週1本ペース（cadence 7日）**。ブログは pubDate 未来日 + 日次cronで自動公開。Zenn出稿とX告知は記事の pubDate に揃える。
+### 新記事を出すときのルール
 
-### ルール
-
-- Zenn出稿済み・X未投稿の記事はX告知だけ行う（pushは不要）
-- 書評記事は対応するスピンオフが先にZennに出ていることを確認してから出す（下表参照）
-- 新記事を書いた週は新記事を優先し、既存記事の出稿は翌週にずらす
-- 同じ系統の記事は連続させない（キャリア→AI→キャリア→技術のように散らす）
-- 内容が近い記事（#30と#33）は間に別ジャンルを挟む
-
-#### 書評スピンオフ対応表
-
-| 書評 | 先にZennに出すスピンオフ |
-|------|----------------------|
-| #49 サーバ/インフラを支える技術 | #72（フロントエンドエンジニアがサーバを学んで） |
-| #50 Webを支える技術 | #46（WebアーキテクチャとREST）・#75（REST API設計）・#76（望ましいURIとは） |
-| #51 JavaScript本格入門 | #58（非同期処理）・#61（Array高階関数）・#64（クラスとモジュール）・#67（スコープとthis）・#70（ES6+） |
-| #52 TypeScript×React×Next.js | #68（SSR・SSG・ISR）・#69（React×Next.js選択基準）・#71（Next.jsでSEO） |
-
----
-
-### キャリア・AI・チーム・医療IT系（高優先度）
-
-| # | タイトル | Zennファイル | Zenn | X |
-|---|---------|------------|------|---|
-| 1 | 島流しの先にエンジニアがあった——30歳からの転身の現実 | `e4d8874f0c25b0.md` | [x] | [ ] |
-| 2 | 同僚が部下になった日——テックリード就任、最初の90日の現実 | `c456bbb0adeb5d.md` | [x] | [ ] |
-| 3 | mainブランチを捨てた——リリース1時間前のgit修羅場 | `4yshjgf1hghg6y.md` | [x] | [x] |
-| 4 | AIを社内に広めたら、本部長がモンスターになった話 | `5tnkntl5zu16g8.md` | [ ] | [ ] |
-| 5 | 外部ベンダーから内製化した3年間——年間480万円の固定費をゼロにするまで | `46a0ca17e07591.md` | [ ] | [ ] |
-| 6 | AIがなかったら死んでた——一人で全部背負うテックリードの現実 | `bza7y402pjd6vf.md` | [x] | [ ] |
-| 7 | みんなの安定のために仮面を被った——テックリード3年間の全記録 | `1ctkpuxzu93b5z.md` | [ ] | [ ] |
-| 8 | Claude Codeを実務導入して開発フローが変わった話 | `ed32a95b5e4802.md` | [ ] | [ ] |
-| 9 | Cursor実務レビュー2025：Claude Codeと使い分けて気づいたこと | `5137l1okz0o0z7.md` | [ ] | [ ] |
-| 10 | Claude Codeを設計の壁打ち相手として使う | `pl5avffh5822vx.md` | [ ] | [ ] |
-| 11 | フロントエンドのテスト戦略——「全部書く」をやめてから品質が上がった話 | `i6ku6o5ybx42nq.md` | [ ] | [ ] |
-| 12 | 目標は私が暇になること——コードレビューを3年一人でやってきた話 | `tzdy9xycv9enn3.md` | [ ] | [ ] |
-| 13 | テックリードと係長を兼任するプレイングマネージャーの現実 | `m6hv75alqp5nex.md` | [ ] | [ ] |
-| 14 | StorybookをReactチームに導入して見えてきたこと | `kvflkjtgoifgbu.md` | [ ] | [ ] |
-| 15 | 誰も採用をやらないから、自分でやることにした | `h9rsspjmuru38j.md` | [ ] | [ ] |
-| 16 | グループ会社のIT環境をゼロから整備した話——MakeShopとGA4と諸々 | `yv2vibdwa2jq4z.md` | [ ] | [ ] |
-| 17 | Atomic Designを実務で使って気づいたこと——設計の共通言語はチームを助ける | `rqvg1li6z2s154.md` | [ ] | [ ] |
-| 18 | 未経験エンジニア2名をコーチング型で育てた方法 | `n98llcuymohyie.md` | [ ] | [ ] |
-| 19 | コードより先に要件を言語化させる——会話が成立しない部下への対処 | `0yh2itbqgsc0et.md` | [ ] | [ ] |
-| 20 | 「理屈が通れば動く人」との3年——経営層への技術翻訳の実際 | `2vrbzlg894c017.md` | [ ] | [ ] |
-| 21 | 3人で回すということ——少人数チームを機能させるための工夫 | `6ct9fn4dtmi8a4.md` | [ ] | [ ] |
-| 22 | 直したいのに直せない——技術的負債と向き合う3年間 | `bxbuu3zypx5k2i.md` | [ ] | [ ] |
-| 23 | 治験データが増えるにつれてシステムが遅くなった | `f35fbfd57c2bf9.md` | [ ] | [ ] |
-| 24 | 製薬メーカーのシステム監査に技術者として対応した話 | `80gsybo71sanbn.md` | [ ] | [ ] |
-| 25 | CSV（コンピュータ化システムバリデーション）とは何か——医療ITエンジニア目線で解説 | `0ojtx3rb4ppf91.md` | [ ] | [ ] |
-| 26 | 医療系CRMにLangChain×NestJSでAI連携を実装した話 | `01p9p3ef1ioouy.md` | [ ] | [ ] |
-| 27 | AIで議事録を構造化する | `d9df9kag6qxx9s.md` | [ ] | [ ] |
-| 28 | NestJS + LangChainで治験CRMにAI機能を追加した構成メモ | `9brfxkct0afcsg.md` | [ ] | [ ] |
-| 29 | NestJSの治験CRMを引き継いで学んだバックエンド設計 | `2rq66b1w1t1rp4.md` | [ ] | [ ] |
-| 30 | GitHub ActionsとAWS OIDCでキーレスデプロイを実現する | `t4n0ltv5ya47hr.md` | [ ] | [ ] |
-| 31 | GitLab CI/CDを実務で運用するときの設計パターン | `dnrvjkvr3lbykv.md` | [ ] | [ ] |
-| 32 | Docker開発環境を標準化してチームの「動かない」を減らす | `3b3k0kxr0bvqfz.md` | [ ] | [ ] |
-| 33 | GitHub Actions + AWSでCI/CDを構築する——OIDCでアクセスキーなしの安全なデプロイ | `dwhllpuryowgdo.md` | [ ] | [ ] |
-| 34 | 引き継いだリリースフローが、監査で初めて意味を持った | `kfsbi9rdmo6u7z.md` | [ ] | [ ] |
-
-### 技術・チュートリアル系
-
-| # | タイトル | Zennファイル | Zenn | X |
-|---|---------|------------|------|---|
-| 35 | MySQLレプリケーション設計——障害復旧・読み取り分散・RDS Multi-AZとの比較 | `79279979f9fe68.md` | [ ] | [ ] |
-| 36 | Linuxロードアベレージを正確に理解する——sar・vmstat・psで障害の原因を特定する | `08428d8bf20838.md` | [x] | [ ] |
-| 37 | HTTPキャッシュを正しく設計する——Cache-Control・ETag・CDN連携 | `721c49e186f713.md` | [x] | [ ] |
-| 38 | リバースプロキシの役割と設計——Nginx・CDN・キャッシュ戦略 | `7ee61b358adca8.md` | [x] | [ ] |
-| 39 | TypeScriptのユーティリティ型を実務で使いこなす | `945f46c541fbdb.md` | [ ] | [ ] |
-| 40 | REST APIの書き込み設計——冪等性・トランザクション・楽観的ロックの実装パターン | `d850972b4a7b49.md` | [ ] | [ ] |
-| 41 | JavaScript Fetch APIの実践パターン——エラーハンドリング・リトライ・タイムアウト | `28fac32146d7b9.md` | [ ] | [ ] |
-| 42 | Next.jsのデプロイ戦略——Vercel・AWS Amplify・セルフホスト比較 | `103c1c4d7b0a43.md` | [ ] | [ ] |
-| 43 | JavaScriptのMapとSetを使いこなす——Objectとの使い分けと実践パターン | `f38804b70d22be.md` | [ ] | [ ] |
-| 44 | JavaScriptの正規表現を実務で使う——メールバリデーション・URL解析・テンプレート置換 | `60fa04f1663c92.md` | [ ] | [ ] |
-| 45 | CSS-in-JSとCSS Modules——styled-componentsからCSS Modulesへ移行した理由 | `d3ce068b762988.md` | [ ] | [ ] |
-| 46 | WebアーキテクチャとRESTの歴史——HTTPとURIが生まれた背景 | `c6c4de13a0cdb2.md` | [ ] | [ ] |
-| 47 | フロントエンドのアクセシビリティ入門——WAI-ARIA・キーボード操作・スクリーンリーダー対応 | `d5e66fde2ad28d.md` | [ ] | [ ] |
-| 48 | Next.js × Stripeで決済機能を実装する——Checkout・Webhook・定期課金 | `657f7c4b4cebfd.md` | [ ] | [ ] |
-| 49 | サーバ/インフラを支える技術——書評 ※#72を先に出す | `47dc7ddfc7c40f.md` | [ ] | [ ] |
-| 50 | Webを支える技術——書評 ※#46・#75・#76を先に出す | `0d3f099034a005.md` | [ ] | [ ] |
-| 51 | JavaScript本格入門——書評 ※#58・#61・#64・#67・#70を先に出す | `ec31073bda0f55.md` | [ ] | [ ] |
-| 52 | TypeScriptとReact/Next.js実践本——書評（テックリード視点）※#68・#69・#71を先に出す | `6fd4ae4ee5f36f.md` | [x] | [ ] |
-| 53 | TypeScriptとReact/Next.js実践本——書評（未経験エンジニア視点） | `q8x3hfvup5y9oq.md` | [ ] | [ ] |
-
-### その他技術系（JS記事は散らして配置）
-
-| # | タイトル | Zennファイル | Zenn | X |
-|---|---------|------------|------|---|
-| 54 | LangChain.js 2025年の現状：実務で使って感じたこと | `sz3gex2rssvfzm.md` | [ ] | [ ] |
-| 55 | TypeScriptで型安全なLangChainアプリを作る——LangChain.jsの型定義と実装パターン | `ifgf7vdg029g81.md` | [ ] | [ ] |
-| 56 | Webサービスのパフォーマンスチューニング入門——計測・キャッシュ・DBが三本柱 | `h5o212dqrld831.md` | [ ] | [ ] |
-| 57 | 高可用性設計の基本——SPOF排除とフェイルオーバーで「止まらないサービス」を作る | `2qcgmv2036l8f6.md` | [ ] | [ ] |
-| 58 | JavaScriptの非同期処理を整理する——コールバック・Promise・async/awaitの使い分け | `3azb0d7pw0j2j7.md` | [ ] | [ ] |
-| 59 | AWSのIAM設計を正しく理解する——最小権限の原則と実務での落とし穴 | `g5dv70sh8xke97.md` | [ ] | [ ] |
-| 60 | AWS VPCのサブネット設計を理解する——パブリック・プライベートの分け方とセキュリティ設定 | `c099vkx1pyctk1.md` | [ ] | [ ] |
-| 61 | JavaScriptのArray高階関数を実務で使いこなす——map・filter・reduceの使い分け | `cm7jxr07ym45sc.md` | [ ] | [ ] |
-| 62 | EC2・Lambda・ECSをどう使い分けるか——AWSコンピューティングの選択基準 | `djngfh546mws59.md` | [ ] | [ ] |
-| 63 | AWS CDKを初めて使って詰まった5つのこと | `nax4pimbscwtuv.md` | [ ] | [ ] |
-| 64 | JavaScriptのクラスとモジュールを理解する——TypeScriptに活きるOOPの基礎 | `tlvoq3nbynkjsn.md` | [ ] | [ ] |
-| 65 | RDSとDynamoDBの使い分け——データ構造とアクセスパターンで選ぶ基準 | `xzo4o2ni2li073.md` | [ ] | [ ] |
-| 66 | CloudWatchでAWSを監視する——メトリクス・アラーム・ログの実務パターン | `zyt8o7jjngndev.md` | [ ] | [ ] |
-| 67 | JavaScriptのスコープとthisで詰まったこと——本格入門で理解が深まった概念 | `f94ge9rimbbzhm.md` | [ ] | [ ] |
-| 68 | Next.jsのSSR・SSG・ISRを実務でどう使い分けるか | `pgx1eyar7sz704.md` | [ ] | [ ] |
-| 69 | React×Next.jsの選択基準を実務から考える——SPA・SSR・SSGをどう使い分けるか | `iaombk2zkki81l.md` | [ ] | [ ] |
-| 70 | ES6+の新構文を実務でどう使うか——JavaScript本格入門で整理した基礎知識 | `xvqj79l8si2hjc.md` | [ ] | [ ] |
-| 71 | Next.jsでSEOを実装するときに押さえるべきこと——メタデータからJSON-LDまで | `8i6stlb8pi3elw.md` | [ ] | [ ] |
-| 72 | フロントエンドエンジニアがサーバ/インフラを学んで気づいたこと | `rmexysupjs9kbf.md` | [ ] | [ ] |
-| 73 | ESLint・Jest・Viteを最初に整備する——JavaScriptプロジェクトの開発環境構築 | `docl9fhy5l5a0c.md` | [ ] | [ ] |
-| 74 | HTTPを正しく理解する——メソッド・ステータスコード・ヘッダーの実務知識 | `7j8pifif6qo9e0.md` | [ ] | [ ] |
-| 75 | REST APIの設計原則を学び直す——URLの考え方から冪等性まで | `ryo8mzr03y1riu.md` | [ ] | [ ] |
-| 76 | 望ましいURIとは何か——Webを支える技術で学んだURL設計のベストプラクティス | `zckgo5nbv3y7k8.md` | [ ] | [ ] |
-| 77 | Linux運用で最低限知るべきこと——ターミナル作業を怖くなくするための基礎知識 | `jljolfilkvew6s.md` | [ ] | [ ] |
-| 78 | AstroとAWS CDK + CloudFrontで技術ブログを構築した話 | `1odauls9e91b4d.md` | [ ] | [ ] |
-| 79 | S3 + CloudFrontで静的サイトを本番運用する——このブログを構築して学んだこと | `exbsg4n2xcksh2.md` | [ ] | [ ] |
-| 80 | AstroサイトのS3+CloudFrontキャッシュ戦略：静的サイトを最速にする | `ub7xsifddzdvwm.md` | [ ] | [ ] |
+- 新記事はブログ pubDate と同日に Zenn も予約（`published: true` + `published_at`）。在庫スケジュールとは別レーン
+- **書評・体験談は Zenn 公開日に X 告知**。技術記事は告知不要（検索流入に任せる）
+- 同じ系統を連続させない（キャリア→AI→技術と散らす）
+- 書評記事内のスピンオフ記事リンクは**ブログURL**（全記事公開済み）なので、Zenn公開順が前後してもリンク切れの心配はない
 
 ---
 
