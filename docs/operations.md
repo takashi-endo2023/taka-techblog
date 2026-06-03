@@ -591,10 +591,16 @@ ai-team-adoption-monster / git-chaos-1hour-before-release / claude-code-workflow
 | release-flow-regulated-industry | 医療IT | 2026-06-02 |
 | clinical-trial-system-performance | 医療IT | 2026-06-02 |
 | csv-validation-guide | 医療IT | 2026-06-02 |
+| claude-code-as-design-partner | AI体験 | 2026-06-03 |
+| cursor-review-2025 | AI | （6/3に割当上限・6/4予定）|
 
-> 汎用技術記事（JS/AWS/REST解説）は手動申請せず自然インデックス待ちでよい
-> （クロール待ち120本に含まれる。時間で順次登録される）。
-> 申請キューが尽きたら、Search Console で「登録済み」数の増加を確認して終了判断。
+> **割当上限**: URL検査の手動申請はアカウント単位で1日十数本まで。
+> 6/2に11本＋6/3に1本で上限到達。残りは翌日以降。
+>
+> **方針（重要）**: 価値高記事（書評・体験談・AI）の手動申請は cursor-review-2025 で完了とする。
+> **残りの汎用技術記事（約41本）は手動申請しない**——サイトマップ送信済みなので
+> Google が自然クロールで登録する（「検出-未登録」が時間で消化される）。
+> 数日後に Search Console で「登録済み」数の増加を確認し、AdSense再申請のタイミング（100超え目安）を判断する。
 
 ---
 
