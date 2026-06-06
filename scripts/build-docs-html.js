@@ -17,6 +17,7 @@ const DOCS = join(ROOT, 'docs');
 // 表示順とタイトル
 const FILES = [
   { file: 'status.md',             title: '現在地・今週', emoji: '🎯' },
+  { file: 'post-log.md',           title: '日次ログ',     emoji: '✍️' },
   { file: 'operations.md',         title: '週次運用',     emoji: '🗓' },
   { file: 'growth-strategy.md',    title: 'グロース戦略', emoji: '📈' },
   { file: 'career-roadmap.md',     title: 'キャリアロードマップ', emoji: '🧭' },
