@@ -113,14 +113,24 @@ X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)
 
 ## X/Zenn 出稿スケジュール
 
-### Zenn公開（自動・週3予約済み）
+### Zenn公開（自前のGitHub Actionで自動公開）
 
-Zenn下書き74本は **2026-06-04〜12-01 に週3（月水金 09:00）で予約公開済み**
-（各 `articles/*.md` の `published_at` 設定済み。Zenn が自動公開する。手動操作・cron不要）。
+> ⚠️ **Zenn純正の `published_at` 自動公開は不安定**（6/9・6/11が取りこぼされた実績あり）。
+> そのため**予約公開は自前のGitHub Actionで管理**する（2026-06-13移行）。
 
-- 優先度順に消化：**書評6 → 体験談14 → 技術54**
-- 新記事を書いたら、その新記事は別途ブログ pubDate と同日に Zenn 予約（在庫スケジュールとは別レーン）
-- 公開状況の確認は `node scripts/content-plan.js`
+**仕組み**:
+- 在庫記事は `published: false` ＋ `published_at`（予約日）で**待機**状態にしておく
+- `.github/workflows/zenn-publish.yml` が**毎朝 09:05 JST**に実行
+  → `scripts/zenn-publish-due.js` が「`published_at` が来た待機記事」を `published: true` に切替
+  → push → Zenn が同期して**確実に公開**
+- 既に公開済みの記事には触らない
+
+**運用ルール**:
+- 在庫は週3ペースで `published_at` を割り当て済み（書評6 → 体験談14 → 技術54の優先度順）
+- 新記事を書いたら、`published: false` ＋ ブログ pubDate と同日の `published_at` で待機させる（Actionが自動公開）
+- **絶対にやらない**: 在庫に `published: true` を直接付けて一括push（Zennの不安定な予約に乗ってしまう）
+- 手動で今すぐ公開したいときは、その記事の `published_at` を消して `published: true` で push
+- 動作確認: GitHub の Actions タブ →「Zenn scheduled publish」→ Run workflow（手動実行可）
 
 ### X告知スケジュール（Zenn公開日に合わせて告知）
 
