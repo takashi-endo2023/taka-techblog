@@ -3,7 +3,7 @@ title: "未経験エンジニア2名をコーチング型で育てた方法"
 emoji: "🌱"
 type: "idea"
 topics: ["チーム開発","マネジメント","キャリア"]
-published: true
+published: false
 published_at: "2026-07-12 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/coaching-junior-engineers"
 ---

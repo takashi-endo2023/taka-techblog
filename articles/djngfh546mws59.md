@@ -3,7 +3,7 @@ title: "EC2・Lambda・ECSをどう使い分けるか——AWSコンピューテ
 emoji: "☁️"
 type: "tech"
 topics: ["AWS","インフラ"]
-published: true
+published: false
 published_at: "2026-09-13 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/aws-compute-ec2-lambda-ecs"
 ---

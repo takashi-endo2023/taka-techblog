@@ -1,0 +1,40 @@
+name: Zenn scheduled publish
+
+# Zenn 記事の予約公開（自前実装）。
+# published: false ＋ published_at が来た記事を published: true に切り替えて push し、
+# Zenn に同期させて確実に公開する（Zenn 純正の published_at 自動公開は不安定なため）。
+
+on:
+  schedule:
+    # 毎日 00:05 UTC（09:05 JST）。ブログ用 deploy.yml（09:00 JST）の5分後に走らせる。
+    - cron: '5 0 * * *'
+  workflow_dispatch:   # 手動実行も可（動作確認・臨時公開用）
+
+permissions:
+  contents: write       # 記事の published 書き換えを commit & push するため
+
+jobs:
+  publish:
+    name: Publish due Zenn articles
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Flip due articles to published
+        run: node scripts/zenn-publish-due.js
+
+      - name: Commit & push if changed
+        run: |
+          if git diff --quiet articles/; then
+            echo "本日公開する記事はありません"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add articles/
+            git commit -m "chore(zenn): 公開日到来の記事を自動公開 [skip ci]"
+            git push
+          fi
