@@ -3,7 +3,7 @@ title: "TypeScriptとReact/Next.js実践本を未経験エンジニアが読ん�
 emoji: "📚"
 type: "idea"
 topics: ["TypeScript","React","Next.js"]
-published: false
+published: true
 published_at: "2026-06-18 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/typescript-react-nextjs-beginner-review"
 ---
