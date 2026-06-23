@@ -261,7 +261,16 @@
       "Bash(find ~/Desktop ~/Downloads -iname \"*トラフィック*\" -o -iname \"*traffic*\" 2>/dev/null | head; echo \"--- 最近のcsv ---\"; find ~/Desktop ~/Downloads -name \"*.csv\" -mtime -1 2>/dev/null | head)",
       "Bash(node -e \"require.resolve\\('marked'\\); console.log\\('marked: あり'\\)\")",
       "Bash(open docs/index.html)",
-      "Bash(perl -0pi -e 's/## 4\\\\. ブランド軸の維持/## 5. ブランド軸の維持/; s/## 5\\\\. KPI と振り返り/## 6. KPI と振り返り/; s/## 6\\\\. 関連ドキュメント/## 7. 関連ドキュメント/' docs/growth-strategy.md)"
+      "Bash(perl -0pi -e 's/## 4\\\\. ブランド軸の維持/## 5. ブランド軸の維持/; s/## 5\\\\. KPI と振り返り/## 6. KPI と振り返り/; s/## 6\\\\. 関連ドキュメント/## 7. 関連ドキュメント/' docs/growth-strategy.md)",
+      "Bash(curl -sI \"https://images-fe.ssl-images-amazon.com/images/P/4815631085.09._SL160_.jpg\")",
+      "Bash(curl -sI \"https://m.media-amazon.com/images/P/4815631085._SL160_.jpg\")",
+      "Bash(curl -sI \"https://images-na.ssl-images-amazon.com/images/P/4815631085.09._SL160_.jpg\")",
+      "Bash(curl -sI \"https://m.media-amazon.com/images/P/4815631085._SL200_.jpg\")",
+      "Bash(git pull *)",
+      "Bash(perl -0pi -e 's/最終更新: 2026-0[0-9]-[0-9][0-9]/最終更新: 2026-06-14/' docs/career-roadmap.md)",
+      "Bash(node scripts/zenn-publish-due.js)",
+      "Bash(perl -0pi -e 's/\\(毎朝 09:05 JST\\)/毎日 9:05・12:05・15:05 JST（1日3回・遅延スキップ対策）/' docs/operations.md)",
+      "Bash(perl -i -ne 'print unless /^published_at:/' articles/c6620304a6ef21.md)"
     ]
   }
 }

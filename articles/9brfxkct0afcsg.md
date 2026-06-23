@@ -3,7 +3,7 @@ title: "NestJS + LangChainで治験CRMにAI機能を追加した構成メモ"
 emoji: "⚙️"
 type: "tech"
 topics: ["NestJS","LangChain","AI"]
-published: false
+published: true
 published_at: "2026-11-24 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/nestjs-langchain-crm-architecture"
 ---

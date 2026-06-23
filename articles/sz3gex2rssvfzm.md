@@ -3,7 +3,7 @@ title: "LangChain.js 2025年の現状：実務で使って感じたこと"
 emoji: "⛓️"
 type: "tech"
 topics: ["AI","LLM","LangChain","TypeScript"]
-published: false
+published: true
 published_at: "2026-11-17 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/langchain-js-2025"
 ---

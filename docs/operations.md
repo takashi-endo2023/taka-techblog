@@ -113,24 +113,26 @@ X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)
 
 ## X/Zenn 出稿スケジュール
 
-### Zenn公開（自前のGitHub Actionで自動公開）
+### Zenn公開（Zenn純正の予約投稿を使う）
 
-> ⚠️ **Zenn純正の `published_at` 自動公開は不安定**（6/9・6/11が取りこぼされた実績あり）。
-> そのため**予約公開は自前のGitHub Actionで管理**する（2026-06-13移行）。
+> 経緯: 一時「自前GitHub Actionで published:false→true」方式にしたが、
+> **`published: false` ＋ `published_at` は不正な組み合わせでZennデプロイが中断**し、
+> 公開が止まる実害が出た（2026-06-24）。**Zen純正の予約投稿に戻した**（Action撤回）。
 
-**仕組み**:
-- 在庫記事は `published: false` ＋ `published_at`（予約日）で**待機**状態にしておく
-- `.github/workflows/zenn-publish.yml` が**毎日 9:05・12:05・15:05 JST（1日3回・遅延スキップ対策）**に実行
-  → `scripts/zenn-publish-due.js` が「`published_at` が来た待機記事」を `published: true` に切替
-  → push → Zenn が同期して**確実に公開**
-- 既に公開済みの記事には触らない
+**正しい予約方法（Zen純正）**:
+- 在庫記事は `published: true` ＋ `published_at: "YYYY-MM-DD HH:MM"`（未来日時）にしておく
+- → Zenn がその日時に**自動で予約公開**する（GitHub連携・追加の仕組み不要）
+- 過去日時なら push 時点で即公開
+
+**⚠️ やってはいけない**:
+- `published: false` ＋ `published_at` の組み合わせ → **デプロイ中断**（他記事の公開も巻き添えで止まる）
+- 「下書きで寝かせる」なら `published_at` を**書かない**（`published: false` のみ）
 
 **運用ルール**:
-- 在庫は週3ペースで `published_at` を割り当て済み（書評6 → 体験談14 → 技術54の優先度順）
-- 新記事を書いたら、`published: false` ＋ ブログ pubDate と同日の `published_at` で待機させる（Actionが自動公開）
-- **絶対にやらない**: 在庫に `published: true` を直接付けて一括push（Zennの不安定な予約に乗ってしまう）
-- 手動で今すぐ公開したいときは、その記事の `published_at` を消して `published: true` で push
-- 動作確認: GitHub の Actions タブ →「Zenn scheduled publish」→ Run workflow（手動実行可）
+- 在庫は週3ペースで `published: true` ＋ `published_at` を割り当て済み（書評6 → 体験談14 → 技術54）
+- 新記事は `published: true` ＋ ブログ pubDate と同日の `published_at`（未来）で予約
+- **確認**: 公開がおかしいと思ったら、Zenn記事管理の「デプロイ」ログを見る（中断エラーが出ていないか）。
+  記事一覧は必ず `git pull` で最新にしてから「記事の管理」画面で確認する（古いローカルで判断しない）
 
 ### X告知スケジュール（Zenn公開日に合わせて告知）
 

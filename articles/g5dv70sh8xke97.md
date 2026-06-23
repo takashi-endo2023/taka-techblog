@@ -3,7 +3,7 @@ title: "AWSのIAM設計を正しく理解する——最小権限の原則と実
 emoji: "🔐"
 type: "tech"
 topics: ["AWS","セキュリティ"]
-published: false
+published: true
 published_at: "2026-09-17 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/aws-iam-least-privilege"
 ---

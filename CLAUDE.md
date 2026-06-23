@@ -54,8 +54,9 @@ npm run sync:zenn
 - cadence は現在 **7日（週1）**。`scripts/content-plan.js` の `CADENCE_DAYS` 1箇所で変更可。ネタ詰まり時は 14（隔週）や 30（月1）に落とす
 - **既存記事の pubDate は書き換えない**（時系列は構築済み。SEOリスク回避）
 - Zenn の `published_at` と X 告知も、その記事の pubDate に揃える（同じ日に公開・告知）
-- **Zenn 在庫消化は別レーン（週3）**。新規記事の cadence（週1）とは独立。既存記事の Zenn 未公開分は `published: false` ＋ `published_at`（予約日）で待機させる
-- **Zenn 予約公開は自前の GitHub Action（`.github/workflows/zenn-publish.yml`）で行う**。Zenn 純正の `published_at` 自動公開は不安定なため使わない。毎朝 09:05 JST に `scripts/zenn-publish-due.js` が「公開日が来た待機記事」を `published: true` に切替→push→Zenn 同期で確実公開。**在庫に `published: true` を直接付けて一括 push しない**（詳細は `docs/operations.md`）
+- **Zenn 在庫消化は別レーン（週3）**。新規記事の cadence（週1）とは独立
+- **Zenn 予約公開は Zenn 純正機能を使う**：`published: true` ＋ `published_at: "YYYY-MM-DD HH:MM"`（未来日時）。Zenn がその日時に自動公開する。過去日時なら push 時点で即公開
+- ⚠️ **`published: false` ＋ `published_at` は不正な組み合わせ**。Zenn が**デプロイを中断**し、他の記事の公開も止まる（2026-06 に実害）。`published_at` を付けるなら必ず `published: true`。逆に「下書きで寝かせる」なら `published_at` を**書かない**（published: false のみ）
 - 出稿の優先度は **書評・体験談 > 技術記事**（技術記事は Zenn では埋もれやすく、ブログSEO流入に任せる）。**X告知は書評・体験談のみ**（技術記事は告知せず検索流入に任せる）
 - 公開計画の確認は `node scripts/content-plan.js`（cadence違反検出・予約キュー・Zenn未公開キュー・在庫週数を表示）
 
