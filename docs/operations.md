@@ -120,7 +120,7 @@ X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)
 
 **仕組み**:
 - 在庫記事は `published: false` ＋ `published_at`（予約日）で**待機**状態にしておく
-- `.github/workflows/zenn-publish.yml` が**毎朝 09:05 JST**に実行
+- `.github/workflows/zenn-publish.yml` が**毎日 9:05・12:05・15:05 JST（1日3回・遅延スキップ対策）**に実行
   → `scripts/zenn-publish-due.js` が「`published_at` が来た待機記事」を `published: true` に切替
   → push → Zenn が同期して**確実に公開**
 - 既に公開済みの記事には触らない

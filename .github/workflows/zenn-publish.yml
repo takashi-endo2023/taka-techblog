@@ -6,8 +6,11 @@ name: Zenn scheduled publish
 
 on:
   schedule:
-    # 毎日 00:05 UTC（09:05 JST）。ブログ用 deploy.yml（09:00 JST）の5分後に走らせる。
-    - cron: '5 0 * * *'
+    # GitHubのcronは混雑で4〜5時間遅延・時にスキップされる（best-effort）。
+    # そのため1日3回走らせ、1回遅延・スキップしても次で確実に拾う（処理は冪等）。
+    - cron: '5 0 * * *'    # 09:05 JST（本命）
+    - cron: '5 3 * * *'    # 12:05 JST（朝が遅延・スキップ時の保険）
+    - cron: '5 6 * * *'    # 15:05 JST（さらに保険）
   workflow_dispatch:   # 手動実行も可（動作確認・臨時公開用）
 
 permissions:
