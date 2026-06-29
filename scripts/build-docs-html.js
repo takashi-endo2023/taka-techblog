@@ -16,15 +16,11 @@ const DOCS = join(ROOT, 'docs');
 
 // 表示順とタイトル
 const FILES = [
-  { file: 'status.md',             title: '現在地・今週', emoji: '🎯' },
-  { file: 'post-log.md',           title: '日次ログ',     emoji: '✍️' },
-  { file: 'operations.md',         title: '週次運用',     emoji: '🗓' },
-  { file: 'growth-strategy.md',    title: 'グロース戦略', emoji: '📈' },
-  { file: 'career-roadmap.md',     title: 'キャリアロードマップ', emoji: '🧭' },
-  { file: 'affiliate-strategy.md', title: 'アフィリ戦略', emoji: '💰' },
-  { file: 'article-plan.md',       title: '記事計画',     emoji: '📝' },
-  { file: 'note-strategy.md',      title: 'note戦略',     emoji: '🔖' },
-  { file: '../CLAUDE.md',          title: '開発ルール',   emoji: '⚙️' },
+  { file: 'status.md',     title: '現在地・今週',     emoji: '🎯' },
+  { file: 'post-log.md',   title: '日次ログ',         emoji: '✍️' },
+  { file: 'strategy.md',   title: '戦略・キャリア',   emoji: '🧭' },
+  { file: 'operations.md', title: '実務ハンドブック', emoji: '🗓' },
+  { file: '../CLAUDE.md',  title: '開発ルール',       emoji: '⚙️' },
 ];
 
 marked.setOptions({ headerIds: true, mangle: false });
