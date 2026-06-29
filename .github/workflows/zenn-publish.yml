@@ -1,0 +1,48 @@
+name: Zenn publish due
+
+# 公開日（published_at）が到来した Zenn 記事を自動公開する。
+# 仕組み: scripts/zenn-publish-due.js が「published:true かつ published_at が過去」の記事から
+#         published_at を外し、[skip ci] 付きで push → Zenn の GitHub 連携が即公開する。
+# 安全設計: published_at を外すだけ。published:false を作らないのでデプロイ中断は起きない。
+
+on:
+  schedule:
+    # 記事の published_at は 09:00(JST) を基準にしているため、その直後に走らせる。
+    # 発火漏れ対策で1日2回（処理は冪等なので二重実行でも安全）。
+    - cron: '10 0 * * *' # 09:10 JST
+    - cron: '0 6 * * *' # 15:00 JST
+  workflow_dispatch: {} # 手動実行も可能（公開漏れの即時リカバリ用）
+
+permissions:
+  contents: write # 記事を書き換えて push するため
+
+# 同時実行を防ぐ（二重 push 防止）
+concurrency:
+  group: zenn-publish
+  cancel-in-progress: false
+
+jobs:
+  publish-due:
+    name: Publish due articles
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: 公開日到来の記事から published_at を外す
+        run: node scripts/zenn-publish-due.js
+
+      - name: commit & push（変更があるときだけ）
+        run: |
+          if [ -n "$(git status --porcelain articles/)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add articles/
+            git commit -m "chore(zenn): 公開日到来の記事を自動公開 [skip ci]"
+            git push
+          else
+            echo "公開日到来の記事なし。何もしない。"
+          fi
