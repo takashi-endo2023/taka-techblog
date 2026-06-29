@@ -19,7 +19,7 @@ export async function GET({ params }: APIContext) {
   const truncatedDesc = description.length > 80 ? description.slice(0, 80) + '…' : description;
   const fontSize = title.length > 30 ? 48 : 58;
 
-  const fontPath = path.resolve('./public/fonts/NotoSansJP-Bold.ttf');
+  const fontPath = path.resolve('./fonts/NotoSansJP-Bold.ttf');
   const fontData = fs.readFileSync(fontPath);
 
   const svg = await satori(

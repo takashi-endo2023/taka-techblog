@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 export async function GET(_ctx: APIContext) {
-  const fontPath = path.resolve('./public/fonts/NotoSansJP-Bold.ttf');
+  const fontPath = path.resolve('./fonts/NotoSansJP-Bold.ttf');
   const fontData = fs.readFileSync(fontPath);
 
   const svg = await satori(

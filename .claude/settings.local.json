@@ -285,7 +285,12 @@
       "Bash(kill 15712)",
       "Bash(lsof -ti:4321)",
       "Bash(xargs kill)",
-      "WebFetch(domain:www.amazon.co.jp)"
+      "WebFetch(domain:www.amazon.co.jp)",
+      "Bash(break)",
+      "Bash(npm ls *)",
+      "Bash(npm view *)",
+      "Bash(git mv *)",
+      "Bash(echo \"exit: $?\")"
     ]
   }
 }

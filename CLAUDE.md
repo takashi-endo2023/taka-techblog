@@ -2,7 +2,7 @@
 
 ## プロジェクト概要
 
-- **サイト**: https://taka-techblog.com
+- **サイト**: https://www.taka-techblog.com
 - **フレームワーク**: Astro (SSG, `output: 'static'`)
 - **ホスティング**: S3 + CloudFront (AWS)
 - **インフラ**: AWS CDK (`infra/` ディレクトリ)
@@ -158,12 +158,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ```
 src/
   content/blog/       ← ブログ記事（.md / .mdx）
-  components/         ← 共通コンポーネント（BlogCard, AmazonCard, Header, Footer, Pagination）
+  components/         ← 共通コンポーネント（BlogCard, AmazonCard, GeeklyAffiliate, Header, Footer, Pagination）
   layouts/            ← BaseLayout, BlogLayout
   lib/
-    db.ts             ← IndexedDB CRUD ユーティリティ（idb使用・ポートフォリオページで使用）
+    readingTime.ts    ← 読了時間の算出（カード・記事・一覧で共通利用）
   data/
-    mock-projects.json ← ポートフォリオのモックデータ（デモ環境用）
+    featured.json     ← トップの「おすすめ記事」管理（index.astro と content-plan.js が共有）
   pages/
     blog/             ← 一覧（ページネーション）・記事詳細・タグ・RSS
     portfolios/       ← 実績一覧
@@ -176,21 +176,23 @@ src/
     404.astro         ← 404エラーページ
   styles/global.css   ← グローバルスタイル・CSS変数
 articles/             ← Zenn記事（push で自動公開）
-books/                ← Zenn本（現在未使用）
 infra/                ← AWS CDK
 docs/                 ← 運営ドキュメント（strategy.md=方針, operations.md=手順 ＋ index.html生成物）
 public/
   scripts/
     menu.js           ← ハンバーガーメニュー（CSP対応・Header.astroから読込）
     ui.js             ← バックトゥトップボタン（BaseLayout.astroから読込）
-    blog.js           ← 記事ページ制御（進捗バー・コードコピー・TOC）
+    blog.js           ← 記事ページ制御（進捗バー・コードコピー・TOC・テーブル横スクロール）
     ga.js             ← Google Analytics 初期化
+    search.js         ← Pagefind 検索UI 初期化（search.astroから読込）
+  fonts/              ← self-host webフォント（Inter / JetBrains Mono の woff2）
   images/portfolio/   ← ポートフォリオのスクリーンショット（PNG + WebP）
   logo.png            ← 猫ロゴ（OGP・アバターに使用）
   logo-small.png      ← ヘッダー用小サイズロゴ
   logo-small.webp     ← ヘッダー用小サイズロゴ（WebP版）
   favicon.svg         ← ファビコン
-  og-default.svg      ← OGPデフォルト画像（SVG）
+  robots.txt          ← クローラ制御
+fonts/                ← OG画像生成用の日本語フォント（NotoSansJP・ビルド時のみ読込／配信対象外）
 ```
 
 ---
@@ -209,8 +211,9 @@ public/
 |---|---|---|
 | `menu.js` | `Header.astro` | ハンバーガーメニュー開閉・スクロールロック |
 | `ui.js` | `BaseLayout.astro` | バックトゥトップボタンの表示制御 |
-| `blog.js` | `BlogLayout.astro` | 進捗バー・コードコピーボタン・TOCハイライト |
+| `blog.js` | `BlogLayout.astro` | 進捗バー・コードコピーボタン・TOCハイライト・テーブル横スクロール化 |
 | `ga.js` | `BaseLayout.astro` | Google Analytics（gtag）初期化 |
+| `search.js` | `search.astro` | Pagefind 検索UIの初期化 |
 
 ---
 
@@ -275,7 +278,7 @@ public/
 |---|---|---|
 | `strategy.md` | **方針＝北極星・X運用戦略・マネタイズ（収益源ステータス/KPI）・長期キャリア（38→45・勤務先シナリオ）・情報源** | 月次・方向に迷ったとき |
 | `operations.md` | **手順＝記事を作って出す実務（手順・Zenn公開・X告知スケジュール・記事ネタ・資格・タグ・アフィリ配置）** | 記事を書く/出すとき |
-| `x-content-examples.html` | X投稿の実例（画像・スレッド）。アーカイブ参照用 | 必要時 |
+| `index.html` | 上記2docをダークテーマ・タブUIで一覧する閲覧用HTML（`npm run docs:html` で生成・git管理外）| 必要時 |
 
 ### ルール
 
