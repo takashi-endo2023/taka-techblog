@@ -16,6 +16,9 @@
   --max-width: 860px;
   --header-height: 60px;
   --glow-accent: 0 0 0 1px rgba(124, 106, 247, 0.3), 0 8px 32px rgba(124, 106, 247, 0.14);
+  --color-surface-raised: #20242f;  /* カード用・surfaceより1段持ち上げて奥行きを出す */
+  --color-text-secondary: #a6b0c2;  /* ミュートより読みやすい二次テキスト（長文向け・本文プレビューや説明文） */
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.28), 0 6px 18px rgba(0, 0, 0, 0.22);  /* カードを浮かせる平常時シャドウ */
 }
 
 *, *::before, *::after {
@@ -45,6 +48,20 @@ a {
 
 a:hover {
   color: var(--color-accent-hover);
+}
+
+/* キーボード操作時のフォーカスリング（WCAG 2.4.7）。
+   マウスクリックでは出さず、Tab 操作のときだけ表示する */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+.tag:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-accent-hover);
+  outline-offset: 2px;
+  border-radius: 3px;
 }
 
 img {
@@ -280,4 +297,25 @@ th {
   top: 0.5rem;
   outline: 2px solid var(--color-accent-hover);
   outline-offset: 2px;
+}
+
+/* ── コードブロック ── */
+/* Shiki(github-dark) はインラインで温かいグレー(#24292e)の背景を当てるため、
+   サイトの寒色パレット(--color-code-bg)に揃える。トークン色はそのまま活かす */
+pre.astro-code {
+  background-color: var(--color-code-bg) !important;
+}
+
+/* ── Reduced motion（動きを減らす設定の人にアニメ・自動スクロールを抑制）── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

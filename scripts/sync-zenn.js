@@ -49,6 +49,8 @@ function stripBlogSpecific(body) {
     .replace(/<AmazonCard[\s\S]*?\/>/g, '')
     // GeeklyAffiliate コンポーネントを除去（A8 アフィリエイトは Zenn には掲載しない）
     .replace(/<GeeklyAffiliate[\s\S]*?\/>/g, '')
+    // RecruitDirectScout コンポーネントを除去（A8 アフィリエイトは Zenn には掲載しない）
+    .replace(/<RecruitDirectScout[\s\S]*?\/>/g, '')
     // アフィリエイト訴求セクションを除去
     //  - 後ろに別セクション(---)がある場合はそこまで（関連記事等は残す）
     //  - 末尾にある場合は最後まで

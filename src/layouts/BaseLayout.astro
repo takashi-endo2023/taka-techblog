@@ -26,6 +26,28 @@ const {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImageURL = new URL(ogImage, Astro.site);
+
+// サイト全体の構造化データ（WebSite + 著者 Person）。E-E-A-T と検索の指名認識に効く
+const siteUrl = (Astro.site?.toString() ?? 'https://www.taka-techblog.com/').replace(/\/$/, '');
+const siteJsonLd = JSON.stringify([
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'taka-techblog',
+    url: siteUrl,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Taka',
+    url: siteUrl,
+    jobTitle: 'テックリード',
+    sameAs: [
+      'https://x.com/_taka_tech',
+      'https://github.com/takashi-endo2023',
+    ],
+  },
+]);
 ---
 
 <!doctype html>
@@ -33,6 +55,7 @@ const ogImageURL = new URL(ogImage, Astro.site);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f1117" />
     <link rel="canonical" href={canonicalURL} />
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -68,6 +91,9 @@ const ogImageURL = new URL(ogImage, Astro.site);
     <link rel="apple-touch-icon" href="/logo.png" />
 
     <ClientRouter />
+
+    <!-- サイト全体の構造化データ（WebSite + Person） -->
+    <script type="application/ld+json" is:inline set:html={siteJsonLd} />
 
     <!-- グローバルCSS インライン化（追加のネットワークリクエストを排除） -->
     <Fragment set:html={`<style>${globalCSS}</style>`} />

@@ -44,7 +44,8 @@ const formattedDate = pubDate.toLocaleDateString('ja-JP', {
     position: relative;
     border: 1px solid var(--color-border);
     border-radius: var(--radius);
-    background: var(--color-surface);
+    background: var(--color-surface-raised);
+    box-shadow: var(--shadow-card);
     overflow: hidden;
     transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
   }
@@ -136,7 +137,7 @@ const formattedDate = pubDate.toLocaleDateString('ja-JP', {
 
   .card-description {
     font-size: 0.9rem;
-    color: var(--color-text-muted);
+    color: var(--color-text-secondary);
     margin-bottom: 1rem;
     display: -webkit-box;
     -webkit-line-clamp: 2;

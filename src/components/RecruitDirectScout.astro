@@ -1,0 +1,170 @@
+---
+// リクルートダイレクトスカウト（A8.net）アフィリエイト部品。GeeklyAffiliate と同型。
+// ⚠️ 骨組み（プレースホルダ）。A8 の承認が下りたら下記 LINKS を実コードに差し替える。
+//    A8 管理画面 → 広告リンク → 各素材の「素材を選択」で取得できる:
+//      - href  : px.a8.net/svt/ejp?a8mat=XXXX のクリック先URL
+//      - img   : www*.a8.net/svt/bgt?aid=... のバナー画像URL（banner のみ）
+//      - pixel : www*.a8.net/0.gif?a8mat=XXXX のインプレッション計測gif
+//    差し替え後にこの注意書きを削除する。未importのため現状は本番に一切出ない。
+interface Props {
+  variant?: 'banner' | 'cta' | 'inline';
+}
+
+const { variant = 'banner' } = Astro.props;
+
+const LINKS = {
+  banner: {
+    href: 'TODO_A8_BANNER_HREF',
+    img: 'TODO_A8_BANNER_IMG',
+    pixel: 'TODO_A8_BANNER_PIXEL',
+  },
+  cta: {
+    href: 'TODO_A8_CTA_HREF',
+    pixel: 'TODO_A8_CTA_PIXEL',
+    text: 'ハイクラス転職スカウトサービス「リクルートダイレクトスカウト」',
+  },
+  inline: {
+    href: 'TODO_A8_INLINE_HREF',
+    pixel: 'TODO_A8_INLINE_PIXEL',
+    text: 'リクルートダイレクトスカウト',
+  },
+} as const;
+---
+
+{variant === 'banner' && (
+  <div class="rds-banner">
+    <span class="pr-label">PR</span>
+    <a href={LINKS.banner.href} rel="nofollow sponsored" target="_blank">
+      <img
+        src={LINKS.banner.img}
+        width="300"
+        height="250"
+        alt="リクルートダイレクトスカウト - ハイクラス向け転職スカウトサービス"
+        loading="lazy"
+      />
+    </a>
+    <img class="tracking-pixel" src={LINKS.banner.pixel} width="1" height="1" alt="" aria-hidden="true" />
+  </div>
+)}
+
+{variant === 'cta' && (
+  <div class="rds-cta">
+    <span class="pr-label">PR</span>
+    <a href={LINKS.cta.href} rel="nofollow sponsored" target="_blank" class="rds-cta-link">
+      {LINKS.cta.text}
+      <span class="rds-cta-arrow">→</span>
+    </a>
+    <img class="tracking-pixel" src={LINKS.cta.pixel} width="1" height="1" alt="" aria-hidden="true" />
+  </div>
+)}
+
+{variant === 'inline' && (
+  <span class="rds-inline">
+    <a href={LINKS.inline.href} rel="nofollow sponsored" target="_blank">{LINKS.inline.text}</a>
+    <img class="tracking-pixel" src={LINKS.inline.pixel} width="1" height="1" alt="" aria-hidden="true" />
+  </span>
+)}
+
+<style>
+  .rds-banner {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: fit-content;
+    max-width: 100%;
+    margin: 2rem auto;
+    padding: 1.25rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+  }
+
+  .rds-banner:hover {
+    border-color: var(--color-accent);
+  }
+
+  .rds-banner a {
+    display: block;
+    line-height: 0;
+  }
+
+  .rds-banner a img {
+    display: block;
+    width: 300px;
+    height: 250px;
+    max-width: 100%;
+    border: 0 !important;
+    border-radius: 4px;
+    margin: 0 !important;
+  }
+
+  .rds-cta {
+    position: relative;
+    margin: 2rem 0;
+    padding: 1.25rem 1.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    transition: border-color 0.2s;
+  }
+
+  .rds-cta:hover {
+    border-color: var(--color-accent);
+  }
+
+  .rds-cta-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .rds-cta:hover .rds-cta-link {
+    color: var(--color-accent);
+  }
+
+  .rds-cta-arrow {
+    color: var(--color-accent);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .pr-label {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    line-height: 1.4;
+  }
+
+  .rds-inline a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .rds-inline a:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .tracking-pixel {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+    border: 0;
+  }
+</style>

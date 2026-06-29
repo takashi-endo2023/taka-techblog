@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import BlogCard from '../components/BlogCard.astro';
 import type { MarkdownHeading } from 'astro';
 import type { CollectionEntry } from 'astro:content';
+import { getReadingTime } from '../lib/readingTime';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -13,7 +14,7 @@ interface Props {
 const { post, headings = [], allPosts = [] } = Astro.props;
 const { title, description, pubDate, updatedDate, tags } = post.data;
 
-const readingTime = Math.max(1, Math.ceil((post.body ?? '').length / 500));
+const readingTime = getReadingTime(post.body ?? '');
 
 const formattedPubDate = pubDate.toLocaleDateString('ja-JP', {
   year: 'numeric',
@@ -39,10 +40,6 @@ const prevPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
 const nextPost = currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
 
 // Related posts: same tags, sorted by match count then date, max 3
-function getReadingTime(body: string): number {
-  return Math.max(1, Math.ceil(body.length / 300));
-}
-
 const relatedPosts = allPosts
   .filter((p) => p.id !== post.id)
   .map((p) => ({
@@ -60,25 +57,36 @@ const relatedPosts = allPosts
 // JSON-LD
 const siteUrl = 'https://www.taka-techblog.com';
 const pageUrl = `${siteUrl}/blog/${post.id}`;
-const jsonLd = JSON.stringify({
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: title,
-  description: description,
-  url: pageUrl,
-  datePublished: pubDate.toISOString(),
-  ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
-  author: {
-    '@type': 'Person',
-    name: 'Taka',
-    url: siteUrl,
+const jsonLd = JSON.stringify([
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description: description,
+    url: pageUrl,
+    datePublished: pubDate.toISOString(),
+    ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
+    author: {
+      '@type': 'Person',
+      name: 'Taka',
+      url: siteUrl,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'taka-techblog',
+      url: siteUrl,
+    },
   },
-  publisher: {
-    '@type': 'Organization',
-    name: 'taka-techblog',
-    url: siteUrl,
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'ホーム', item: siteUrl },
+      { '@type': 'ListItem', position: 2, name: 'ブログ', item: `${siteUrl}/blog/1` },
+      { '@type': 'ListItem', position: 3, name: title, item: pageUrl },
+    ],
   },
-});
+]);
 
 // X share URL
 const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(pageUrl)}&via=_taka_tech`;
@@ -410,6 +418,18 @@ const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tit
     margin: 1.5rem 0;
     color: var(--color-text-muted);
     font-style: italic;
+  }
+
+  /* blog.js が幅広テーブルをこのラッパーで包む。スマホで横スクロールさせ、
+     レイアウトのはみ出しを防ぐ */
+  .post-body :global(.table-wrap) {
+    overflow-x: auto;
+    margin-bottom: 1.25rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .post-body :global(.table-wrap) table {
+    margin-bottom: 0;
   }
 
   /* Code copy button */

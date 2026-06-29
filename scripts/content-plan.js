@@ -134,11 +134,15 @@ const CATEGORIES = [
   { label: 'インフラ・DevOps', tag: 'DevOps' },
   { label: '医療IT', tag: '医療IT' },
 ];
-console.log('\n■ トップページ「カテゴリ」（タグ+新着・各3本）');
+// index.astro と同じ重複排除：おすすめ・最近・既出カテゴリで出した記事は除外して表示
+console.log('\n■ トップページ「カテゴリ」（おすすめ・最近・既出を除外した実表示）');
+const usedInCat = new Set([...featured, ...visibleDesc.slice(0, 3).map((p) => p.slug)]);
 for (const c of CATEGORIES) {
-  const m = visibleDesc.filter((p) => p.tags.includes(`"${c.tag}"`) || p.tags.includes(c.tag));
-  console.log(`  [${c.label}] ${m.length}本`);
-  m.slice(0, 3).forEach((p) => console.log(`     ${fmtDate(p.pubDate)}  ${p.slug}`));
+  const all = visibleDesc.filter((p) => p.tags.includes(`"${c.tag}"`) || p.tags.includes(c.tag));
+  const shown = all.filter((p) => !usedInCat.has(p.slug)).slice(0, 3);
+  shown.forEach((p) => usedInCat.add(p.slug));
+  console.log(`  [${c.label}] 在庫${all.length}本 → 表示${shown.length}本`);
+  shown.forEach((p) => console.log(`     ${fmtDate(p.pubDate)}  ${p.slug}`));
 }
 
 // 1. cadence 違反検出（理想間隔から大きくズレてる箇所）

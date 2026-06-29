@@ -276,7 +276,16 @@
       "Bash(command -v gh)",
       "Bash(gh workflow *)",
       "Bash(grep -rhA10 '^tags:' src/content/blog/)",
-      "Bash(xargs -n1 basename)"
+      "Bash(xargs -n1 basename)",
+      "mcp__Claude_in_Chrome__list_connected_browsers",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(kill 81362)",
+      "Bash(grep -rl '```' src/content/blog/)",
+      "Bash(kill 5075)",
+      "Bash(kill 15712)",
+      "Bash(lsof -ti:4321)",
+      "Bash(xargs kill)",
+      "WebFetch(domain:www.amazon.co.jp)"
     ]
   }
 }

@@ -181,7 +181,7 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
         asin: 'B0C65F55K5',
       },
       {
-        name: 'Logicool MX Master 2',
+        name: 'Logicool MX Master 2S（MX2100sGR）',
         description:
           '多ボタン・高精度トラッキングのワイヤレスマウス。ホイールのフリースピンモードが地味に便利で、長いコードのスクロールが快適になった。',
         asin: 'B071Z2TFHX',
@@ -713,6 +713,9 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
         仕事はオフィス、自宅は個人開発・ブログ・勉強の場。
         このページは主に<strong>自宅の作業環境</strong>と、<strong>仕事で使うツール</strong>をまとめたものです。
       </p>
+      <p class="uses-affiliate-note">
+        ※ 本ページには Amazon アソシエイト等のアフィリエイトリンクを含みます。リンク経由の購入で運営者に収益が発生する場合があります。
+      </p>
     </div>
 
     <nav class="uses-toc animate-fade-in-up" aria-label="セクション一覧">
@@ -817,6 +820,15 @@ const sections: { title: string; items: AffiliateItem[] }[] = [
     color: var(--color-text-muted);
     font-size: 0.95rem;
     line-height: 1.85;
+  }
+
+  .uses-affiliate-note {
+    margin-top: 0.9rem;
+    font-size: 0.8rem !important;
+    color: var(--color-text-muted);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius);
+    padding: 0.7rem 1rem;
   }
 
   .uses-toc {

@@ -44,6 +44,16 @@ function initBlogPage() {
     });
   });
 
+  // Wrap wide tables so they scroll horizontally on small screens instead of
+  // overflowing the layout
+  document.querySelectorAll('.post-body table').forEach((table) => {
+    if (table.parentElement?.classList.contains('table-wrap')) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'table-wrap';
+    table.parentNode.insertBefore(wrap, table);
+    wrap.appendChild(table);
+  });
+
   // Sidebar TOC: active link highlight on scroll
   const tocLinks = document.querySelectorAll('[data-toc-link]');
   if (tocLinks.length > 0) {

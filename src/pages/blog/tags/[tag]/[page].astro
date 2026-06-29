@@ -3,6 +3,7 @@ import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import BlogCard from '../../../../components/BlogCard.astro';
 import Pagination from '../../../../components/Pagination.astro';
 import { getCollection } from 'astro:content';
+import { getReadingTime } from '../../../../lib/readingTime';
 
 import type { GetStaticPaths, Page } from 'astro';
 import type { CollectionEntry } from 'astro:content';
@@ -41,10 +42,6 @@ const { tag, topTags, totalTagPosts } = Astro.props as {
   totalTagPosts: number;
 };
 const { page } = Astro.props as { page: Page<CollectionEntry<'blog'>> };
-
-function getReadingTime(body: string): number {
-  return Math.max(1, Math.ceil(body.length / 300));
-}
 ---
 
 <BaseLayout
