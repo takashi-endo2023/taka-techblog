@@ -55,8 +55,9 @@ npm run sync:zenn
 - **既存記事の pubDate は書き換えない**（時系列は構築済み。SEOリスク回避）
 - Zenn の `published_at` と X 告知も、その記事の pubDate に揃える（同じ日に公開・告知）
 - **Zenn 在庫消化は別レーン（週3）**。新規記事の cadence（週1）とは独立
-- **Zenn 予約公開は Zenn 純正機能を使う**：`published: true` ＋ `published_at: "YYYY-MM-DD HH:MM"`（未来日時）。Zenn がその日時に自動公開する。過去日時なら push 時点で即公開
-- ⚠️ **`published: false` ＋ `published_at` は不正な組み合わせ**。Zenn が**デプロイを中断**し、他の記事の公開も止まる（2026-06 に実害）。`published_at` を付けるなら必ず `published: true`。逆に「下書きで寝かせる」なら `published_at` を**書かない**（published: false のみ）
+- **Zenn 予約公開は自前の Action で行う**（`.github/workflows/zenn-publish.yml` + `scripts/zenn-publish-due.js`）。在庫記事は `published: true` ＋ `published_at: "YYYY-MM-DD HH:MM"`（未来日時）で寝かせておく。⚠️ **Zenn 純正の「published_at で自動公開」は、このリポジトリでは当日に発火しなかった（2026-06 に公開漏れの実害）。純正機能を当てにしない。** 毎日 cron（09:10 / 15:00 JST）で公開日が過去になった記事から `published_at` を外して push → Zenn が即公開する仕組み。過去5日窓で既公開記事は触らない
+- 公開漏れを手動リカバリするとき：その記事の `published_at` 行を**外すだけ**（`published: true` は残す）→ push で即公開。`articles/<hash>.md` を直接編集してよい唯一のケース（公開制御メタなので sync:zenn 対象外）
+- ⚠️ **`published: false` ＋ `published_at` は不正な組み合わせ**。Zenn が**デプロイを中断**し、他の記事の公開も止まる（2026-06 に実害）。`published_at` を付けるなら必ず `published: true`。逆に「下書きで寝かせる」なら `published_at` を**書かない**（published: false のみ）。自前 Action も「published_at を外すだけ・published:false は絶対作らない」設計でこの罠を回避している
 - 出稿の優先度は **書評・体験談 > 技術記事**（技術記事は Zenn では埋もれやすく、ブログSEO流入に任せる）。**X告知は書評・体験談のみ**（技術記事は告知せず検索流入に任せる）
 - 公開計画の確認は `node scripts/content-plan.js`（cadence違反検出・予約キュー・Zenn未公開キュー・在庫週数を表示）
 

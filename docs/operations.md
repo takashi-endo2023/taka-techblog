@@ -113,20 +113,23 @@ X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)
 
 ## X/Zenn 出稿スケジュール
 
-### Zenn公開（Zenn純正の予約投稿を使う）
+### Zenn公開（自前の安全版Actionで予約公開する）
 
-> 経緯: 一時「自前GitHub Actionで published:false→true」方式にしたが、
-> **`published: false` ＋ `published_at` は不正な組み合わせでZennデプロイが中断**し、
-> 公開が止まる実害が出た（2026-06-24）。**Zen純正の予約投稿に戻した**（Action撤回）。
+> 経緯（2026-06）:
+> ① 一時「自前Actionで published:false→true」方式 → **`published: false` ＋ `published_at` でデプロイ中断**の実害（6/24）。
+> ② そこで「Zenn純正の予約（published:true + published_at）に任せる」方式に変更 → **純正予約が当日に発火せず公開漏れ**（6/25・6/28が止まった、6/30に発覚）。
+> ③ 最終形 = **安全版の自前Action**（`zenn-publish.yml` + `scripts/zenn-publish-due.js`）。published_at を「外すだけ」で published:false は作らない → ①の罠も②の取りこぼしも回避。
 
-**正しい予約方法（Zen純正）**:
-- 在庫記事は `published: true` ＋ `published_at: "YYYY-MM-DD HH:MM"`（未来日時）にしておく
-- → Zenn がその日時に**自動で予約公開**する（GitHub連携・追加の仕組み不要）
-- 過去日時なら push 時点で即公開
+**現在の予約方法（自前Action）**:
+- 在庫記事は `published: true` ＋ `published_at: "YYYY-MM-DD HH:MM"`（未来日時）で寝かせる
+- 毎日 cron（09:10 / 15:00 JST）で Action が走り、`published_at` が過去になった記事から **`published_at` 行を外して push** → Zenn が即公開
+- 過去5日窓で判定（既公開の古い記事は触らない）。手動リカバリは GitHub の Actions タブから `Zenn publish due` を `Run workflow`
+- **純正の「published_at で自動公開」は当てにしない**（このリポジトリでは発火しなかった）
 
 **⚠️ やってはいけない**:
 - `published: false` ＋ `published_at` の組み合わせ → **デプロイ中断**（他記事の公開も巻き添えで止まる）
 - 「下書きで寝かせる」なら `published_at` を**書かない**（`published: false` のみ）
+- 公開漏れの手動対応は **`published_at` を外すだけ**（`published: false` にはしない）
 
 **運用ルール**:
 - 在庫は週3ペースで `published: true` ＋ `published_at` を割り当て済み（書評6 → 体験談14 → 技術54）
