@@ -270,7 +270,13 @@
       "Bash(perl -0pi -e 's/最終更新: 2026-0[0-9]-[0-9][0-9]/最終更新: 2026-06-14/' docs/career-roadmap.md)",
       "Bash(node scripts/zenn-publish-due.js)",
       "Bash(perl -0pi -e 's/\\(毎朝 09:05 JST\\)/毎日 9:05・12:05・15:05 JST（1日3回・遅延スキップ対策）/' docs/operations.md)",
-      "Bash(perl -i -ne 'print unless /^published_at:/' articles/c6620304a6ef21.md)"
+      "Bash(perl -i -ne 'print unless /^published_at:/' articles/c6620304a6ef21.md)",
+      "Bash(brew install *)",
+      "Bash(perl -0pi -e 's/最終更新: 2026-06-1[0-9]/最終更新: 2026-06-26/; s/最終更新: 2026-06-2[0-5]/最終更新: 2026-06-26/' docs/career-roadmap.md)",
+      "Bash(command -v gh)",
+      "Bash(gh workflow *)",
+      "Bash(grep -rhA10 '^tags:' src/content/blog/)",
+      "Bash(xargs -n1 basename)"
     ]
   }
 }
