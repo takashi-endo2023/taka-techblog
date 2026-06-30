@@ -4,7 +4,6 @@ emoji: "⚖️"
 type: "idea"
 topics: ["マネジメント","キャリア","チーム開発"]
 published: true
-published_at: "2026-06-30 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/playing-manager-reality"
 ---
 
