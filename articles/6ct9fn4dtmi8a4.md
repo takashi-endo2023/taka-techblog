@@ -4,7 +4,6 @@ emoji: "👥"
 type: "idea"
 topics: ["チーム開発","マネジメント"]
 published: true
-published_at: "2026-07-02 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/small-elite-team-design"
 ---
 
