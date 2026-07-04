@@ -290,7 +290,14 @@
       "Bash(npm ls *)",
       "Bash(npm view *)",
       "Bash(git mv *)",
-      "Bash(echo \"exit: $?\")"
+      "Bash(echo \"exit: $?\")",
+      "Bash(git fetch *)",
+      "Bash(git rev-list *)",
+      "Bash(awk '{print \"  behind\\(remote側の新規\\):\", $2, \" ahead\\(local側の未push\\):\", $1}')",
+      "WebFetch(domain:zenn.dev)",
+      "Bash(xargs -I{} sh -c '[ {} = 0 ] && echo \"  ✓ 不要依存の削除済み\" || echo \"  ⚠️ 依存が残存\"')",
+      "Bash(awk '{print \"  ahead:\",$1,\" behind:\",$2}')",
+      "Bash(awk '{print \"  ahead:\",$1,\" behind:\",$2,\" \\(0/0なら同期完了\\)\"}')"
     ]
   }
 }
