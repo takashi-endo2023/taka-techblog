@@ -2,8 +2,12 @@ name: Zenn publish due
 
 # 公開日（published_at）が到来した Zenn 記事を自動公開する。
 # 仕組み: scripts/zenn-publish-due.js が「published:true かつ published_at が過去」の記事から
-#         published_at を外し、[skip ci] 付きで push → Zenn の GitHub 連携が即公開する。
+#         published_at を外して push → Zenn の GitHub 連携が即公開する。
 # 安全設計: published_at を外すだけ。published:false を作らないのでデプロイ中断は起きない。
+# ⚠️ コミットメッセージに [skip ci] を付けてはいけない。Zenn も skip マーカーを尊重して
+#    デプロイをスキップするため、公開 push が Zenn に届かない（2026-07 に実害:
+#    6/30・7/2 公開分が未反映になった）。ブログCIの抑止は deploy.yml 側の
+#    paths-ignore: articles/** で行う。
 
 on:
   schedule:
@@ -41,7 +45,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add articles/
-            git commit -m "chore(zenn): 公開日到来の記事を自動公開 [skip ci]"
+            git commit -m "chore(zenn): 公開日到来の記事を自動公開"
             git push
           else
             echo "公開日到来の記事なし。何もしない。"

@@ -3,6 +3,11 @@ name: Deploy to AWS
 on:
   push:
     branches: [main]
+    # articles/（Zenn記事）だけの変更ではブログの再ビルドは不要。
+    # zenn-publish Action の自動公開 push でここが走るのを防ぐ
+    # （旧方式の [skip ci] は Zenn のデプロイまでスキップしてしまうため廃止）。
+    paths-ignore:
+      - 'articles/**'
   workflow_dispatch:
   schedule:
     # 毎日 00:00 UTC（09:00 JST）にビルド&デプロイ。
