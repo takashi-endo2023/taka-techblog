@@ -69,3 +69,4 @@ canonical_url: "https://www.taka-techblog.com/blog/playing-manager-reality"
 
 他の記事も読む → [taka-techblog.com](https://www.taka-techblog.com?utm_source=zenn&utm_medium=referral)
 X でも発信中 → [@_taka_tech](https://x.com/_taka_tech)
+
