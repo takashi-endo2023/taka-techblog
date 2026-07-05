@@ -4,7 +4,6 @@ emoji: "👀"
 type: "idea"
 topics: ["チーム開発","マネジメント"]
 published: true
-published_at: "2026-07-05 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/code-review-culture"
 ---
 
