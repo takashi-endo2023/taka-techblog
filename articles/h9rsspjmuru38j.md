@@ -4,7 +4,6 @@ emoji: "🙋"
 type: "idea"
 topics: ["マネジメント","キャリア"]
 published: true
-published_at: "2026-07-07 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/engineer-hiring-lessons"
 ---
 
