@@ -38,6 +38,7 @@ const topTags = Object.entries(tagCounts)
     ? `Blog — ${page.currentPage}ページ目 | taka-techblog`
     : 'Blog | taka-techblog'}
   description="フルスタック・AI・チームビルディングの現場知識を言語化した記事一覧"
+  noindex={page.currentPage > 1}
 >
   <div class="container page-content">
     <header class="page-header animate-fade-in-up">

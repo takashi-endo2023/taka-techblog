@@ -49,6 +49,7 @@ const { page } = Astro.props as { page: Page<CollectionEntry<'blog'>> };
     ? `${tag}の記事一覧 — ${page.currentPage}ページ目 | taka-techblog`
     : `${tag}の記事一覧 (${totalTagPosts}件) | taka-techblog`}
   description={`${tag}に関する技術記事・現場知見を${totalTagPosts}件掲載。医療系スタートアップのテックリードが実務から得た${tag}の知識を発信しています。`}
+  noindex={true}
 >
   <div class="container page-content">
     <header class="page-header animate-fade-in-up">

@@ -9,7 +9,14 @@ export default defineConfig({
     format: 'directory',
   },
   integrations: [
-    sitemap(),
+    sitemap({
+      // noindex にした一覧ページ（タグ全ページ・ブログ2ページ目以降）はサイトマップからも除外。
+      // 「sitemap=index推奨」と「meta robots=noindex」の矛盾シグナルを避け、クロール予算を記事本体に集中させる。
+      // /blog/1（一覧トップ）と記事本体は残す。
+      filter: (page) =>
+        !page.includes('/blog/tags/') &&
+        !/\/blog\/(?!1\/?$)\d+\/?$/.test(page),
+    }),
     mdx(),
   ],
 });
