@@ -297,7 +297,13 @@
       "WebFetch(domain:zenn.dev)",
       "Bash(xargs -I{} sh -c '[ {} = 0 ] && echo \"  ✓ 不要依存の削除済み\" || echo \"  ⚠️ 依存が残存\"')",
       "Bash(awk '{print \"  ahead:\",$1,\" behind:\",$2}')",
-      "Bash(awk '{print \"  ahead:\",$1,\" behind:\",$2,\" \\(0/0なら同期完了\\)\"}')"
+      "Bash(awk '{print \"  ahead:\",$1,\" behind:\",$2,\" \\(0/0なら同期完了\\)\"}')",
+      "Bash(git ls-tree *)",
+      "Bash(awk '{print \" ahead:\",$1,\" behind:\",$2}')",
+      "WebFetch(domain:www.taka-techblog.com)",
+      "Bash(cd /Users/takashi/projects/taka-techblog *)",
+      "Read(//tmp/**)",
+      "Bash(awk '{print \"  ahead:\",$1,\" behind:\",$2,\"（0/0で同期完了）\"}')"
     ]
   }
 }

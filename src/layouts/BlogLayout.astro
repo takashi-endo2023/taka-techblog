@@ -64,6 +64,8 @@ const jsonLd = JSON.stringify([
     headline: title,
     description: description,
     url: pageUrl,
+    image: `${siteUrl}/og/${post.id}.png`,
+    mainEntityOfPage: pageUrl,
     datePublished: pubDate.toISOString(),
     ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
     author: {
@@ -108,6 +110,13 @@ const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tit
 
   <div class="blog-page-wrap container">
     <article class="blog-post">
+      <nav class="breadcrumb" aria-label="パンくずリスト">
+        <a href="/">ホーム</a>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <a href="/blog/1">ブログ</a>
+        <span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <span class="breadcrumb-current">{title}</span>
+      </nav>
       <header class="post-header">
         <div class="post-meta">
           <time datetime={pubDate.toISOString()}>{formattedPubDate}</time>
@@ -252,6 +261,40 @@ const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tit
 
   .blog-post {
     min-width: 0;
+  }
+
+  /* パンくず（BreadcrumbList schema と対の可視表示）*/
+  .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-accent-hover);
+  }
+
+  .breadcrumb-sep {
+    color: var(--color-border);
+  }
+
+  .breadcrumb-current {
+    color: var(--color-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 60%;
   }
 
   .post-header {
