@@ -4,7 +4,6 @@ emoji: "🌱"
 type: "idea"
 topics: ["チーム開発","マネジメント","キャリア"]
 published: true
-published_at: "2026-07-12 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/coaching-junior-engineers"
 ---
 
