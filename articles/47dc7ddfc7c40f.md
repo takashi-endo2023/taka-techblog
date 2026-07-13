@@ -4,7 +4,6 @@ emoji: "🖥️"
 type: "tech"
 topics: ["インフラ","Linux","AWS","チーム開発"]
 published: true
-published_at: "2026-06-16 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/server-infra-book-review"
 ---
 
