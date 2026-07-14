@@ -4,7 +4,6 @@ emoji: "💸"
 type: "idea"
 topics: ["チーム開発","マネジメント","テックリード"]
 published: true
-published_at: "2026-07-14 09:00"
 canonical_url: "https://www.taka-techblog.com/blog/technical-debt-strategy"
 ---
 
