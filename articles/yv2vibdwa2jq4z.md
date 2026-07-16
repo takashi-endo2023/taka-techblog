@@ -3,8 +3,7 @@ title: "グループ会社のIT環境をゼロから整備した話——MakeSho
 emoji: "🏪"
 type: "tech"
 topics: ["JavaScript","DevOps"]
-published: true
-published_at: "2026-11-05 09:00"
+published: false
 canonical_url: "https://www.taka-techblog.com/blog/makeshop-technical-notes"
 ---
 

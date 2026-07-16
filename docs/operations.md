@@ -32,10 +32,12 @@
 
 > 経緯：純正の「published_at 自動公開」は当リポジトリで当日発火せず公開漏れの実害（2026-06）。自前Actionに移行。
 
-- 在庫は `published: true` ＋ `published_at: "YYYY-MM-DD HH:MM"`（未来）で寝かせる
-- 毎日 cron（09:10 / 15:00 JST）で `scripts/zenn-publish-due.js` が「公開日が過去になった記事から `published_at` を外して push」→ Zenn が即公開（過去5日窓で既公開記事は触らない）
-- 手動リカバリ：GitHub Actions → `Zenn publish due` を Run workflow、または該当記事の `published_at` を外して push
-- ⚠️ **`published: false` ＋ `published_at` は禁止**（デプロイ中断）。公開漏れ対応は「`published_at` を外すだけ・`published: false` にしない」
+- 在庫は **`published: false`（下書き）** で寝かせる。**`published_at` は書かない**
+- 公開予定日は **`scripts/zenn-schedule.json`**（`"<hash>": "YYYY-MM-DD HH:MM"`）で管理
+- 毎日 cron（09:10 / 15:00 JST）で `scripts/zenn-publish-due.js` が「予定日が来た記事を `published: false → true` に反転して push」→ Zenn が公開（**1回2本まで**＝レート制限の安全弁）
+- 手動リカバリ：GitHub Actions → `Zenn publish due` を Run workflow、または該当記事を `published: true` にして push
+- ⚠️ **旧方式（`published: true` ＋ 未来 `published_at`）は禁止**。Zenn がデプロイ毎に未作成の published:true 記事を全部作りにいき、**24時間5本の投稿レート制限**を毎回超過 → その日公開すべき記事まで巻き添えでブロック（2026-07 に12日間ゼロ本の実害）
+- ⚠️ **`published: false` ＋ `published_at` は禁止**（デプロイ中断）。新方式は published_at を書かないので構造的に発生しない
 
 ---
 

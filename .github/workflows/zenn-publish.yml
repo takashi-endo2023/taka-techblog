@@ -1,9 +1,15 @@
 name: Zenn publish due
 
-# 公開日（published_at）が到来した Zenn 記事を自動公開する。
-# 仕組み: scripts/zenn-publish-due.js が「published:true かつ published_at が過去」の記事から
-#         published_at を外して push → Zenn の GitHub 連携が即公開する。
-# 安全設計: published_at を外すだけ。published:false を作らないのでデプロイ中断は起きない。
+# 公開予定日が到来した Zenn 記事を自動公開する。
+# 仕組み: scripts/zenn-publish-due.js が scripts/zenn-schedule.json（hash → 公開予定日）を読み、
+#         予定日が来た記事を published:false → true に反転して push → Zenn が公開する。
+# 在庫は published:false（下書き・published_at は書かない）で寝かせる。
+# ⚠️ 旧方式（published:true + 未来の published_at で寝かせる）は使わない。Zenn はデプロイ毎に
+#    未作成の published:true 記事を"全部"作りにいくため、在庫が増えると投稿レート制限
+#    （24時間に5本）を毎回超過し、その日公開すべき記事まで巻き添えでブロックされる
+#    （2026-07 に12日間ゼロ本の実害）。
+# 安全設計: published_at を書かないので「published:false + published_at」の禁止コンボを作れない。
+#          1回の実行で反転するのは2本まで（レート制限の安全弁）。
 # ⚠️ コミットメッセージに [skip ci] を付けてはいけない。Zenn も skip マーカーを尊重して
 #    デプロイをスキップするため、公開 push が Zenn に届かない（2026-07 に実害:
 #    6/30・7/2 公開分が未反映になった）。ブログCIの抑止は deploy.yml 側の
@@ -36,7 +42,7 @@ jobs:
         with:
           node-version: '22'
 
-      - name: 公開日到来の記事から published_at を外す
+      - name: 公開予定日が到来した記事を published:true に反転
         run: node scripts/zenn-publish-due.js
 
       - name: commit & push（変更があるときだけ）

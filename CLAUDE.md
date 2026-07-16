@@ -55,8 +55,10 @@ npm run sync:zenn
 - **既存記事の pubDate は書き換えない**（時系列は構築済み。SEOリスク回避）
 - Zenn の `published_at` と X 告知も、その記事の pubDate に揃える（同じ日に公開・告知）
 - **Zenn 在庫消化は別レーン（週3）**。新規記事の cadence（週1）とは独立
-- **Zenn 予約公開は自前の Action で行う**（`.github/workflows/zenn-publish.yml` + `scripts/zenn-publish-due.js`）。在庫記事は `published: true` ＋ `published_at: "YYYY-MM-DD HH:MM"`（未来日時）で寝かせておく。⚠️ **Zenn 純正の「published_at で自動公開」は、このリポジトリでは当日に発火しなかった（2026-06 に公開漏れの実害）。純正機能を当てにしない。** 毎日 cron（09:10 / 15:00 JST）で公開日が過去になった記事から `published_at` を外して push → Zenn が即公開する仕組み。過去5日窓で既公開記事は触らない
-- 公開漏れを手動リカバリするとき：その記事の `published_at` 行を**外すだけ**（`published: true` は残す）→ push で即公開。`articles/<hash>.md` を直接編集してよい唯一のケース（公開制御メタなので sync:zenn 対象外）
+- **Zenn 予約公開は自前の Action で行う**（`.github/workflows/zenn-publish.yml` + `scripts/zenn-publish-due.js`）。**在庫記事は `published: false`（下書き）で寝かせ、`published_at` は書かない**。公開予定日は **`scripts/zenn-schedule.json`**（`"<hash>": "YYYY-MM-DD HH:MM"`）で管理する。毎日 cron（09:10 / 15:00 JST）で、予定日が来た記事を `published: false → true` に反転して push → Zenn が公開する。**1回の実行で反転は2本まで**（レート制限の安全弁）
+- ⚠️ **旧方式（`published: true` ＋ 未来の `published_at` で寝かせる）は禁止**。Zenn はデプロイ毎に「未作成の published:true 記事」を**全部**作りにいくため、在庫が増えると投稿レート制限（24時間に5本）を毎回超過し、**その日公開すべき記事まで巻き添えでブロックされる**（2026-07 に12日間ゼロ本の実害）。`published_at` は原則もう使わない
+- 新記事を Zenn 在庫に積むとき：`articles/<hash>.md` は `published: false`、`scripts/zenn-schedule.json` に公開予定日を追記する
+- 公開漏れを手動リカバリするとき：その記事を `published: true` にする（`published_at` は書かない）→ push で即公開。`articles/<hash>.md` を直接編集してよい唯一のケース（公開制御メタなので sync:zenn 対象外）
 - ⚠️ **`published: false` ＋ `published_at` は不正な組み合わせ**。Zenn が**デプロイを中断**し、他の記事の公開も止まる（2026-06 に実害）。`published_at` を付けるなら必ず `published: true`。逆に「下書きで寝かせる」なら `published_at` を**書かない**（published: false のみ）。自前 Action も「published_at を外すだけ・published:false は絶対作らない」設計でこの罠を回避している
 - ⚠️ **コミットメッセージに `[skip ci]` を付けると Zenn のデプロイもスキップされる**（2026-07 に実害: 自動公開 push が Zenn に届かず 6/30・7/2 公開分が未反映）。articles/ を触る push に skip マーカーは使わない。ブログCIの抑止は `deploy.yml` の `paths-ignore: articles/**` で行う
 - ⚠️ **大量の記事を一度に published 化しない**。Zenn の「投稿数の上限」（レート制限）に当たり、超過分は**デプロイからスキップ**される（2026-06-30 に実害: 在庫一括修正で21記事が弾かれた）。弾かれた記事は「更新されたファイル」として再 push しないと再処理されない → レート制限が解けた頃に**数本ずつ**ファイルを更新して push する

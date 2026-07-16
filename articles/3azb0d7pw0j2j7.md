@@ -3,8 +3,7 @@ title: "JavaScriptの非同期処理を整理する——コールバック・Pr
 emoji: "⏳"
 type: "tech"
 topics: ["JavaScript","TypeScript"]
-published: true
-published_at: "2026-08-02 09:00"
+published: false
 canonical_url: "https://www.taka-techblog.com/blog/javascript-async-promise"
 ---
 

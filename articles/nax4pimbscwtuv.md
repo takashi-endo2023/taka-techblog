@@ -3,8 +3,7 @@ title: "AWS CDKを初めて使って詰まった5つのこと"
 emoji: "🔧"
 type: "tech"
 topics: ["AWS","TypeScript"]
-published: true
-published_at: "2026-10-20 09:00"
+published: false
 canonical_url: "https://www.taka-techblog.com/blog/aws-cdk-first-pitfalls"
 ---
 

@@ -3,8 +3,7 @@ title: "S3 + CloudFrontで静的サイトを本番運用する——このブロ
 emoji: "🌐"
 type: "tech"
 topics: ["AWS","DevOps"]
-published: true
-published_at: "2026-10-22 09:00"
+published: false
 canonical_url: "https://www.taka-techblog.com/blog/aws-s3-cloudfront-static-site"
 ---
 
