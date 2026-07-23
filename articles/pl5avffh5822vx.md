@@ -3,7 +3,7 @@ title: "みんなの安定のために仮面を被った——テックリード
 emoji: "🎭"
 type: "idea"
 topics: ["テックリード","キャリア","AI","チーム開発"]
-published: false
+published: true
 canonical_url: "https://www.taka-techblog.com/blog/techlead-mask-3years"
 ---
 
